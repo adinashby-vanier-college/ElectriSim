@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StartMenuController">
+
+    <top>
+        <HBox styleClass="menu-bar">
+            <Label styleClass="menu-logo" text="ElectriSim" />
+            <MenuBar prefHeight="0.0" prefWidth="612.0" styleClass="menu-bar-content">
+                <Menu text="File">
+                    <MenuItem onAction="#handleExit" text="Close" />
+                </Menu>
+                <Menu text="Settings">
+                    <MenuItem onAction="#handleHelp" text="Help" />
+                    <Menu text="Preferences">
+                        <MenuItem onAction="#handleBackground" text="Background" />
+                        <MenuItem onAction="#handleKeybinds" text="Keybinds" />
+                    </Menu>
+                </Menu>
+            </MenuBar>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" prefWidth="737.0" spacing="10">
+            <Label prefHeight="79.0" prefWidth="329.0" styleClass="center-logo" text="ElectriSim" />
+            <Button onAction="#handleNewSimulation" styleClass="menu-button" text="New Simulation" />
+            <Button onAction="#handleLoadSimulation" styleClass="menu-button" text="Load Simulation" />
+            <Button onAction="#handleExit" styleClass="menu-button" text="Quit" />
+        </VBox>
+    </center>
+</BorderPane>
