@@ -1,3 +1,4 @@
+/* ---------------- MENU BAR ---------------- */
 .menu-logo {
     -fx-font-family: "Helvetica Neue";
     -fx-font-size: 20px;
@@ -48,6 +49,12 @@
     -fx-text-fill: #FFFFFF !important;
 }
 
+/* ---------------- PAGE BACKGROUND ---------------- */
+BorderPane {
+    -fx-background-color: #111111;
+}
+
+/* ---------------- MAIN HEADING ---------------- */
 .center-logo {
     -fx-font-family: "Helvetica Neue";
     -fx-font-size: 48px;
@@ -57,6 +64,7 @@
     -fx-translate-x: -47px;
 }
 
+/* ---------------- BUTTONS ---------------- */
 .menu-button {
     -fx-font-size: 20px;
     -fx-background-color: #D9D9D9;
@@ -75,11 +83,47 @@
     -fx-background-color: #BFBFBF;
 }
 
+/* ---------------- NEW SIMULATION BUTTON ---------------- */
+.name-button {
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+    -fx-padding: 5px 15px;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 70px;
+    -fx-background-color: #D9D9D9;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.name-button:hover {
+    -fx-background-color: #BFBFBF;
+}
+
+/* TextField inside the name button */
+.name-field {
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 16px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 320px;
+    -fx-focus-traversable: false;
+    -fx-alignment: center-left;
+}
+
+/* Right arrow inside the name button */
+.name-arrow {
+    -fx-alignment: center-right;
+    -fx-fit-height: 22px;
+    -fx-fit-width: 29px;
+    -fx-padding: 0 10px;
+}
+
+/* ---------------- LAYOUT ALIGNMENT ---------------- */
 VBox {
     -fx-alignment: center;
     -fx-spacing: 10px;
-}
-
-BorderPane {
-    -fx-background-color: #111111;
 }

@@ -1,13 +1,295 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.LoadSimulationController">
-
-    <center>
-        <Label text="Load Simulation Screen"/>
-    </center>
-</BorderPane>
+<AnchorPane prefHeight="440.0" prefWidth="726.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="26.0" prefWidth="382.0">
+         <children>
+            <Label text="ElectriSim" />
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Settings">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Help" />
+                      <Menu mnemonicParsing="false" text="Preferences">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Background" />
+                              <MenuItem mnemonicParsing="false" text="Keyboard" />
+                        </items>
+                      </Menu>
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </HBox>
+      <VBox layoutX="30.0" layoutY="92.0" prefHeight="242.0" prefWidth="659.0">
+         <children>
+            <Label text="Select Load File" />
+            <ScrollPane prefHeight="194.0" prefWidth="580.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="639.0">
+                     <children>
+                        <VBox prefHeight="188.0" prefWidth="641.0">
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="657.0">
+                                 <graphic>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label prefHeight="47.0" prefWidth="155.0" text="simulation_3" />
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Date Created:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Last Opened: " />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Hours Spent:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Components:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ImageView fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Right_Arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="657.0">
+                                 <graphic>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label prefHeight="47.0" prefWidth="155.0" text="simulation_3" />
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Date Created:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Last Opened: " />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Hours Spent:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Components:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ImageView fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Right_Arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="657.0">
+                                 <graphic>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label prefHeight="47.0" prefWidth="155.0" text="simulation_3" />
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Date Created:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Last Opened: " />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Hours Spent:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Components:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ImageView fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Right_Arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="657.0">
+                                 <graphic>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label prefHeight="47.0" prefWidth="155.0" text="simulation_3" />
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Date Created:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Last Opened: " />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Hours Spent:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Components:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ImageView fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Right_Arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="657.0">
+                                 <graphic>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label prefHeight="47.0" prefWidth="155.0" text="simulation_3" />
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Date Created:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Last Opened: " />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="47.0" prefWidth="171.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="171.0">
+                                                   <children>
+                                                      <Label text="Hours Spent:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Components:" />
+                                                      <Label prefHeight="17.0" prefWidth="91.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ImageView fitHeight="19.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Right_Arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <HBox prefHeight="37.0" prefWidth="253.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Quit" />
+                  <Button mnemonicParsing="false" text="Back" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
