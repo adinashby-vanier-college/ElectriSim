@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -14,6 +15,9 @@ public class NewSimulationController {
 
     @FXML
     private TextField simulationNameField;
+
+    @FXML
+    private Label errorLabel;
 
     public void handleExit(ActionEvent event) {
         System.exit(0);
@@ -33,10 +37,14 @@ public class NewSimulationController {
 
     public void handleNewSimulation(ActionEvent event) {
         String simulationName = simulationNameField.getText().trim();
+
         if (simulationName.isEmpty()) {
-            System.out.println("Simulation name cannot be empty.");
+            errorLabel.setText("Error: Simulation name is required.");
+            errorLabel.setStyle("-fx-text-fill: red;");
         } else {
+            errorLabel.setText("");
             System.out.println("Starting new simulation: " + simulationName);
+            switchRoot("/fxml/simulation.fxml", event);
         }
     }
 

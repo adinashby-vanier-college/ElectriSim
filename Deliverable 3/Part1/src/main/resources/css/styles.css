@@ -54,17 +54,17 @@ BorderPane {
     -fx-background-color: #111111;
 }
 
-/* ---------------- MAIN HEADING ---------------- */
+/* ---------------- MAIN HEADER (New Simulation) ---------------- */
 .center-logo {
     -fx-font-family: "Helvetica Neue";
     -fx-font-size: 48px;
     -fx-font-weight: bold;
     -fx-text-fill: #FFFFFF;
     -fx-padding: 10px;
-    -fx-translate-x: -47px;
+    -fx-translate-x: 20px; /* Moves the header 20px to the right */
 }
 
-/* ---------------- BUTTONS ---------------- */
+/* ---------------- BUTTON STYLES ---------------- */
 .menu-button {
     -fx-font-size: 20px;
     -fx-background-color: #D9D9D9;
@@ -101,25 +101,23 @@ BorderPane {
     -fx-background-color: #BFBFBF;
 }
 
-/* TextField inside the name button */
+/* ---------------- TEXT FIELD INSIDE NEW SIMULATION BUTTON ---------------- */
 .name-field {
     -fx-background-color: white;
     -fx-border-color: gray;
     -fx-border-radius: 5px;
-    -fx-padding: 5px;
+    -fx-padding: 2px; /* Adds 2px padding on all sides */
     -fx-font-size: 16px;
     -fx-pref-height: 40px;
-    -fx-pref-width: 320px;
     -fx-focus-traversable: false;
-    -fx-alignment: center-left;
 }
 
-/* Right arrow inside the name button */
+/* ---------------- IMAGE POSITIONING INSIDE BUTTON ---------------- */
 .name-arrow {
     -fx-alignment: center-right;
     -fx-fit-height: 22px;
     -fx-fit-width: 29px;
-    -fx-padding: 0 10px;
+    -fx-padding: 0px 2px 0px 0px; /* Keeps 2px from the right, 0px on the left */
 }
 
 /* ---------------- LAYOUT ALIGNMENT ---------------- */
@@ -127,3 +125,12 @@ VBox {
     -fx-alignment: center;
     -fx-spacing: 10px;
 }
+
+/* ---------------- ERROR MESSAGE LABEL ---------------- */
+.error-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: red;
+    -fx-padding: 5px;
+    -fx-alignment: center;
+}
+

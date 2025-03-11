@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
+<BorderPane prefHeight="555.0" prefWidth="737.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
    <top>
       <HBox styleClass="menu-bar">
          <children>
@@ -43,7 +43,7 @@
    <center>
       <VBox alignment="CENTER" prefWidth="737.0" spacing="10">
          <children>
-            <Label prefHeight="79.0" prefWidth="401.0" styleClass="center-logo" text="New Simulation" />
+            <Label prefHeight="79.0" prefWidth="457.0" styleClass="center-logo" text="New Simulation" />
             <Button onAction="#handleNewSimulation" styleClass="menu-button">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10" styleClass="name-button">
@@ -58,6 +58,7 @@
             </Button>
             <Button onAction="#handleBackToStartMenu" styleClass="menu-button" text="Main Menu" />
             <Button onAction="#handleExit" styleClass="menu-button" text="Quit" />
+            <Label fx:id="errorLabel" styleClass="error-label" text="" />
          </children>
       </VBox>
    </center>

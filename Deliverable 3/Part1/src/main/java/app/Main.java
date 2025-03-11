@@ -24,8 +24,8 @@ public class Main extends Application {
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
             // changing stage propreties
-            primaryStage.initStyle(StageStyle.UNDECORATED); // Removes window borders
-            primaryStage.setFullScreen(true); // Enables true fullscreen
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.setFullScreen(true);
             primaryStage.setFullScreenExitHint("");
             primaryStage.setScene(scene);
             primaryStage.show();

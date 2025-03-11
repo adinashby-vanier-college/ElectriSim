@@ -31,10 +31,11 @@
 
     <center>
         <VBox alignment="CENTER" prefWidth="737.0" spacing="10">
-            <Label prefHeight="79.0" prefWidth="329.0" styleClass="center-logo" text="ElectriSim" />
+            <Label prefHeight="79.0" prefWidth="456.0" styleClass="center-logo" text="ElectriSim" />
             <Button onAction="#handleNewSimulation" styleClass="menu-button" text="New Simulation" />
             <Button onAction="#handleLoadSimulation" styleClass="menu-button" text="Load Simulation" />
             <Button onAction="#handleExit" styleClass="menu-button" text="Quit" />
+         <Label />
         </VBox>
     </center>
 </BorderPane>
