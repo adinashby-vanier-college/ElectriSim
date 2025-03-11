@@ -15,44 +15,46 @@ public class NewSimulationController {
     @FXML
     private TextField simulationNameField;
 
-    // Closes the application
     public void handleExit(ActionEvent event) {
         System.exit(0);
     }
 
-    // Debugging for menu buttons (Help)
     public void handleHelp(ActionEvent event) {
         System.out.println("Help clicked!");
     }
 
-    // Debugging for menu buttons (Background)
     public void handleBackground(ActionEvent event) {
         System.out.println("Change background clicked!");
     }
 
-    // Debugging for menu buttons (Keybinds)
     public void handleKeybinds(ActionEvent event) {
         System.out.println("Keybinds clicked!");
     }
 
-    // Start a new simulation
     public void handleNewSimulation(ActionEvent event) {
         String simulationName = simulationNameField.getText().trim();
         if (simulationName.isEmpty()) {
             System.out.println("Simulation name cannot be empty.");
         } else {
             System.out.println("Starting new simulation: " + simulationName);
-            // TODO: Add logic to initialize a new simulation
         }
     }
 
-    // Navigate back to the start menu
     public void handleBackToStartMenu(ActionEvent event) {
+        switchRoot("/fxml/start_menu.fxml", event);
+    }
+
+    private void switchRoot(String fxmlFile, ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/start_menu.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            Scene scene = stage.getScene();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            scene.setRoot(root);
+
+            stage.setFullScreen(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

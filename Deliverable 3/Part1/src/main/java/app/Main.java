@@ -4,9 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
     @Override
@@ -15,22 +15,19 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/start_menu.fxml"));
             Parent root = loader.load();
 
-            Scene scene = new Scene(root);
+            // screen dimensions for scene width and height
+            double screenWidth = Screen.getPrimary().getBounds().getWidth();
+            double screenHeight = Screen.getPrimary().getBounds().getHeight();
+
+            // new scene
+            Scene scene = new Scene(root, screenWidth, screenHeight);
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
-            primaryStage.setTitle("ElectriSim");
-            primaryStage.setScene(scene);
-            primaryStage.setFullScreen(true);
+            // changing stage propreties
+            primaryStage.initStyle(StageStyle.UNDECORATED); // Removes window borders
+            primaryStage.setFullScreen(true); // Enables true fullscreen
             primaryStage.setFullScreenExitHint("");
-
-            //added this lambda since clicking escape minimizes the screen (temporary)
-            scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    event.consume();
-                    primaryStage.setFullScreen(true);
-                }
-            });
-
+            primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (Exception e) {
