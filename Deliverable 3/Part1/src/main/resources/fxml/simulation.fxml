@@ -70,61 +70,69 @@
       </HBox>
    </top>
    <center>
-      <SplitPane dividerPositions="0.7165991902834008" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.3770903010033445" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
          <items>
-            <SplitPane dividerPositions="0.19147157190635453, 0.7282608695652174" prefHeight="251.0" prefWidth="598.0">
+            <SplitPane dividerPositions="0.7695530726256983" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                <items>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane prefHeight="274.0" prefWidth="439.0" styleClass="simulation-background">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="136.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="101.0" styleClass="simulation-background" />
                      </content>
                   </ScrollPane>
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <ScrollPane prefHeight="282.0" prefWidth="220.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="453.0" prefWidth="75.0" />
-                     </content>
-                  </ScrollPane>
-               </items>
-            </SplitPane>
-            <SplitPane dividerPositions="0.28678929765886285, 0.7081939799331104" prefHeight="116.0" prefWidth="600.0">
-               <items>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="81.0" prefWidth="693.0" styleClass="simulation-background">
                      <children>
-                        <Label text="Simulation Controls" />
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="159.0" prefWidth="164.0">
+                        <Label prefHeight="22.0" prefWidth="417.0" styleClass="simulation-label" text="Simulation Controls" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="159.0" prefWidth="164.0" styleClass="simulation-background">
                            <children>
-                              <HBox layoutX="-1.0" layoutY="2.0" prefHeight="68.0" prefWidth="168.0">
+                              <HBox layoutX="-1.0" layoutY="2.0" prefHeight="202.0" prefWidth="487.0" styleClass="simulation-background">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Simuate" />
-                                    <Button mnemonicParsing="false" text="Node" />
-                                    <Button mnemonicParsing="false" text="Reset" />
+                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Simuate" />
+                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Node" />
+                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Reset" />
                                  </children>
                               </HBox>
                            </children>
                         </AnchorPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="102.0" prefWidth="414.0">
-                     <children>
-                        <Label text="Simulated Graphs" />
-                        <ScrollPane prefHeight="446.0" prefWidth="245.0">
+               </items>
+            </SplitPane>
+            <SplitPane dividerPositions="0.755586592178771" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
+               <items>
+                  <SplitPane dividerPositions="0.7750582750582751" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
+                     <items>
+                        <Pane prefHeight="254.0" prefWidth="48.0" styleClass="simulation-background" />
+                        <ScrollPane prefHeight="282.0" prefWidth="220.0" styleClass="simulation-background">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="536.0" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="496.0" prefWidth="84.0" styleClass="simulation-background" />
                            </content>
                         </ScrollPane>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Circuit Feedback" />
-                        <ScrollPane prefHeight="432.0" prefWidth="171.0">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="143.0" />
-                           </content>
-                        </ScrollPane>
-                     </children>
-                  </VBox>
+                     </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.7713987473903967" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
+                     <items>
+                        <VBox prefHeight="102.0" prefWidth="414.0" styleClass="simulation-background">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="1312.0" styleClass="simulation-label" text="Simulated Graphs" />
+                              <ScrollPane prefHeight="446.0" prefWidth="245.0" styleClass="simulation-background">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="1225.0" styleClass="simulation-background" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" styleClass="simulation-background">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" text="Circuit Feedback" />
+                              <ScrollPane prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="85.0" styleClass="simulation-background" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </items>
+                  </SplitPane>
                </items>
             </SplitPane>
          </items>

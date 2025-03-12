@@ -61,7 +61,7 @@ BorderPane {
     -fx-font-weight: bold;
     -fx-text-fill: #FFFFFF;
     -fx-padding: 10px;
-    -fx-translate-x: 20px; /* Moves the header 20px to the right */
+    -fx-translate-x: 20px;
 }
 
 /* ---------------- BUTTON STYLES ---------------- */
@@ -106,7 +106,7 @@ BorderPane {
     -fx-background-color: white;
     -fx-border-color: gray;
     -fx-border-radius: 5px;
-    -fx-padding: 2px; /* Adds 2px padding on all sides */
+    -fx-padding: 2px;
     -fx-font-size: 16px;
     -fx-pref-height: 40px;
     -fx-focus-traversable: false;
@@ -117,7 +117,7 @@ BorderPane {
     -fx-alignment: center-right;
     -fx-fit-height: 22px;
     -fx-fit-width: 29px;
-    -fx-padding: 0px 2px 0px 0px; /* Keeps 2px from the right, 0px on the left */
+    -fx-padding: 0px 2px 0px 0px;
 }
 
 /* ---------------- LAYOUT ALIGNMENT ---------------- */
@@ -126,4 +126,108 @@ VBox {
     -fx-spacing: 10px;
 }
 
+/* ---------------- SIMULATION BACKGROUND ---------------- */
+.simulation-background {
+    -fx-background-color: #1E1E1E;
+}
+
+.simulation-label {
+    -fx-background-color: #111111;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* ---------------- SCROLL PANE ---------------- */
+.scroll-pane {
+    -fx-background-color: #1E1E1E;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #1E1E1E;
+}
+
+/* ---------------- SPLIT PANE DIVIDER ---------------- */
+.split-pane {
+    -fx-divider-position: 10px;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: #111111;
+    -fx-pref-width: 3px;
+    -fx-pref-height:0px;
+}
+
+/* ---------------- SCROLL BAR ---------------- */
+.scroll-bar {
+    -fx-background-color: #1E1E1E;
+    -fx-background-radius: 7px;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #5C5C5C;
+    -fx-background-radius: 7px;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane .corner,
+.scroll-bar:horizontal .corner,
+.scroll-bar:vertical .corner {
+    -fx-background-color: #1E1E1E;
+    -fx-border-color: transparent;
+    -fx-opacity: 1;
+}
+
+.scroll-bar .corner {
+    -fx-background-color: transparent;
+    -fx-opacity: 0;
+    -fx-background-insets: 0;
+}
+
+/* ---------------- SIMULATION LABEL ---------------- */
+.simulation-label {
+    -fx-background-color: #111111;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-padding: 0px 2px 5px 5px;
+    -fx-alignment: top-left;
+}
+
+.simulation-background VBox {
+    -fx-alignment: top-left;
+}
+
+/* Button container (HBox inside Simulation Controls) */
+.hbox-controls {
+    -fx-alignment: center; /* Centers buttons both horizontally and vertically */
+    -fx-spacing: 5px; /* Ensures 2px space between buttons */
+}
+
+/* Buttons inside Simulation Controls */
+.simulation-button {
+    -fx-background-color: #5C5C5C;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-padding: 5px 8px; /* Adjust padding for a good size */
+    -fx-border-radius: 5px; /* Optional: makes the buttons rounded */
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+}
+
+/* Button hover effect */
+.simulation-button:hover {
+    -fx-background-color: #777777; /* Slightly lighter on hover */
+}
+
+/* Button pressed effect */
+.simulation-button:pressed {
+    -fx-background-color: #424242; /* Darker when pressed */
+}
 
