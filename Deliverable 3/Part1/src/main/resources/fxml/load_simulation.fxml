@@ -18,7 +18,7 @@
       <HBox prefHeight="26.0" prefWidth="382.0" styleClass="menu-bar" stylesheets="@../css/styles.css" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="menu-logo" text="ElectriSim" />
-            <MenuBar prefHeight="40.0" prefWidth="164.0">
+            <MenuBar prefHeight="40.0" prefWidth="199.0">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
@@ -383,7 +383,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <HBox prefHeight="49.0" prefWidth="1218.0">
+            <HBox prefHeight="49.0" prefWidth="1218.0" styleClass="load-button-hbox">
                <children>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleExit" styleClass="load-button" text="Quit" />
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBackToStartMenu" prefHeight="49.0" prefWidth="390.0" styleClass="load-button" text="Back" />

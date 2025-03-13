@@ -252,11 +252,6 @@ VBox {
     -fx-background-color: #BFBFBF;
 }
 
-HBox {
-    -fx-alignment: center;
-    -fx-spacing: 10px;
-}
-
 /* ---------------- LOAD SAVE BUTTON ---------------- */
 .load-save {
     -fx-background-color: #D9D9D9;
