@@ -8,7 +8,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class Main extends Application {
+import java.util.Objects;
+
+public class  Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -21,9 +23,9 @@ public class Main extends Application {
 
             // new scene
             Scene scene = new Scene(root, screenWidth, screenHeight);
-            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
 
-            // changing stage propreties
+            // changing stage properties
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setFullScreen(true);
             primaryStage.setFullScreenExitHint("");

@@ -12,12 +12,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="555.0" prefWidth="737.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
+<BorderPane prefHeight="555.0" prefWidth="737.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
    <top>
       <HBox styleClass="menu-bar">
          <children>
             <Label styleClass="menu-logo" text="ElectriSim" />
-            <MenuBar prefHeight="40.0" prefWidth="156.0" styleClass="menu-bar-content">
+            <MenuBar prefHeight="40.0" prefWidth="189.0" styleClass="menu-bar-content">
                <menus>
                   <Menu text="File">
                      <items>

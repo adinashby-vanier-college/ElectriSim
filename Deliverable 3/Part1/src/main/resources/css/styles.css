@@ -204,30 +204,89 @@ VBox {
     -fx-alignment: top-left;
 }
 
-/* Button container (HBox inside Simulation Controls) */
 .hbox-controls {
-    -fx-alignment: center; /* Centers buttons both horizontally and vertically */
-    -fx-spacing: 5px; /* Ensures 2px space between buttons */
+    -fx-alignment: center;
+    -fx-spacing: 5px;
 }
 
-/* Buttons inside Simulation Controls */
 .simulation-button {
     -fx-background-color: #5C5C5C;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 13px;
-    -fx-padding: 5px 8px; /* Adjust padding for a good size */
-    -fx-border-radius: 5px; /* Optional: makes the buttons rounded */
+    -fx-padding: 5px 8px;
+    -fx-border-radius: 5px;
     -fx-background-radius: 5px;
     -fx-alignment: center;
 }
 
-/* Button hover effect */
 .simulation-button:hover {
-    -fx-background-color: #777777; /* Slightly lighter on hover */
+    -fx-background-color: #777777;
 }
 
-/* Button pressed effect */
 .simulation-button:pressed {
-    -fx-background-color: #424242; /* Darker when pressed */
+    -fx-background-color: #424242;
 }
 
+/* ---------------- LOAD PANE ---------------- */
+.load-pane {
+    -fx-background-color: #1E1E1E;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+}
+
+/* ---------------- LOAD BUTTON ---------------- */
+.load-button {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 50px;
+    -fx-background-color: #D9D9D9;
+    -fx-text-fill: #111111;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.load-button:hover {
+    -fx-background-color: #BFBFBF;
+}
+
+HBox {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+
+/* ---------------- LOAD SAVE BUTTON ---------------- */
+.load-save {
+    -fx-background-color: #D9D9D9;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px;
+    -fx-alignment: center-left;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.load-save:hover {
+    -fx-background-color: #BFBFBF;
+}
+
+/* ---------------- LOAD TITLE ---------------- */
+.load-title {
+    -fx-text-fill: #111111;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* ---------------- LOAD LABEL ---------------- */
+.load-label {
+    -fx-text-fill: #111111;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* ---------------- LOAD VARIABLE ---------------- */
+.load-variable {
+    -fx-text-fill: #111111;
+    -fx-font-size: 12px;
+}
