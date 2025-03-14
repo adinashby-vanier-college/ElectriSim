@@ -13,41 +13,39 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="807.0" prefWidth="1218.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoadSimulationController">
-   <top>
-      <HBox prefHeight="26.0" prefWidth="382.0" styleClass="menu-bar" stylesheets="@../css/styles.css" BorderPane.alignment="CENTER">
-         <children>
-            <Label styleClass="menu-logo" text="ElectriSim" />
-            <MenuBar prefHeight="40.0" prefWidth="199.0">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Settings">
-                  <items>
-                    <MenuItem mnemonicParsing="false" onAction="#handleHelp" text="Help" />
-                      <Menu mnemonicParsing="false" text="Preferences">
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.layout.StackPane?>
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoadSimulationController">
+   <children>
+      <BorderPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/styles.css">
+         <top>
+            <HBox prefHeight="26.0" prefWidth="382.0" styleClass="menu-bar" stylesheets="@../css/styles.css" BorderPane.alignment="CENTER">
+               <children>
+                  <Label styleClass="menu-logo" text="ElectriSim" />
+                  <MenuBar prefHeight="40.0" prefWidth="199.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Background" />
-                              <MenuItem mnemonicParsing="false" onAction="#handleKeybinds" text="Keyboard" />
+                          <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
                         </items>
                       </Menu>
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <VBox prefHeight="827.0" prefWidth="1384.0" styleClass="load-vbox" BorderPane.alignment="CENTER">
-         <children>
-            <Label styleClass="center-logo" text="Select Load File" />
-            <AnchorPane prefHeight="460.0" prefWidth="1218.0" styleClass="load-anchor">
+                      <Menu mnemonicParsing="false" text="Settings">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#handleOpenSettings" text="Open" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <VBox prefHeight="827.0" prefWidth="1920.0" styleClass="load-vbox" BorderPane.alignment="CENTER">
                <children>
-                  <HBox layoutX="295.0" layoutY="3.0" styleClass="load-hbox">
+                  <Label styleClass="center-logo" text="Select Load File" />
+                  <HBox styleClass="load-hbox">
                      <children>
                         <ScrollPane prefHeight="438.0" prefWidth="770.0" styleClass="load-pane">
                           <content>
@@ -381,15 +379,65 @@
                         </ScrollPane>
                      </children>
                   </HBox>
+                  <HBox prefHeight="49.0" prefWidth="1218.0" styleClass="load-button-hbox">
+                     <children>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleExit" styleClass="load-button" text="Quit" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBackToStartMenu" prefHeight="49.0" prefWidth="390.0" styleClass="load-button" text="Back" />
+                     </children>
+                  </HBox>
                </children>
-            </AnchorPane>
-            <HBox prefHeight="49.0" prefWidth="1218.0" styleClass="load-button-hbox">
-               <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleExit" styleClass="load-button" text="Quit" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBackToStartMenu" prefHeight="49.0" prefWidth="390.0" styleClass="load-button" text="Back" />
-               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+      <StackPane fx:id="settingsOverlay" prefHeight="600.0" prefWidth="800.0" styleClass="settings-overlay" stylesheets="@../css/settings.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+         <VBox alignment="CENTER" maxHeight="616.0" maxWidth="853.0" prefHeight="616.0" prefWidth="853.0" spacing="20" style="-fx-padding: 20; -fx-background-radius: 10; -fx-background-color: WHITE; -fx-background-radius: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+               <Label prefHeight="29.0" prefWidth="699.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" styleClass="settings-label" text="Settings" />
+               <Button alignment="CENTER" onAction="#handleCloseSettings" prefHeight="28.0" prefWidth="78.0" styleClass="close-button" text="Close" />
             </HBox>
-         </children>
-      </VBox>
-   </center>
-</BorderPane>
+            <Accordion prefHeight="513.0" prefWidth="805.0">
+               <panes>
+                  <TitledPane animated="false" text="Help">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Keybinds">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Background">
+                     <content>
+                        <AnchorPane>
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                <RadioButton mnemonicParsing="false" />
+                                             </children>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                <RadioButton contentDisplay="CENTER" mnemonicParsing="false" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+         </VBox>
+      </StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,41 @@
+/* ---------------- OVERLAY ---------------- */
+#settingsOverlay {
+    -fx-background-color: #111111;
+}
+
+/* ---------------- SETTINGS LABEL ---------------- */
+.settings-label {
+    -fx-font-family: "Helvetica Neue";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111111;
+    -fx-padding: 5px 10px 5px 15px;
+}
+
+/* ---------------- CLOSE BUTTON ---------------- */
+.close-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #111111;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 15px;
+    -fx-font-size: 14px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+    -fx-background-color: #DDDDDD;
+    -fx-text-fill: #111111;
+}
+
+/* ---------------- TILTED PANE---------------- */
+.titled-pane > .title {
+    -fx-background-color: #F5F5F5;
+    -fx-font-family: "Helvetica Neue";
+    -fx-font-size: 15px;
+    -fx-padding: 5px 10px;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: #111111;
+}

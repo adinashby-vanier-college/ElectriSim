@@ -13,129 +13,183 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <HBox prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label prefHeight="35.0" prefWidth="196.0" styleClass="menu-logo" text="ElectriSim" />
-            <MenuBar prefHeight="21.0" prefWidth="546.0">
-               <menus>
-                  <Menu mnemonicParsing="false" text="File">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save and Quit" />
-                        <Menu mnemonicParsing="false" text="Export">
+
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.layout.StackPane?>
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SimulationController">
+   <children>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/styles.css">
+         <top>
+            <HBox prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label prefHeight="35.0" prefWidth="196.0" styleClass="menu-logo" text="ElectriSim" />
+                  <MenuBar prefHeight="21.0" prefWidth="546.0">
+                     <menus>
+                        <Menu mnemonicParsing="false" text="File">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="JSON" />
-                              <MenuItem mnemonicParsing="false" text="CSV" />
-                              <MenuItem mnemonicParsing="false" text="Text" />
-                              <MenuItem mnemonicParsing="false" text="Image" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleSaveAndExit" text="Save and Quit" />
+                              <Menu mnemonicParsing="false" text="Export">
+                                 <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#handleExportJSON" text="JSON" />
+                                    <MenuItem mnemonicParsing="false" onAction="#handleExportCSV" text="CSV" />
+                                    <MenuItem mnemonicParsing="false" onAction="#handleExportText" text="Text" />
+                                    <MenuItem mnemonicParsing="false" onAction="#handleExportImage" text="Image" />
+                                 </items>
+                              </Menu>
+                              <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Quit" />
                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" text="Quit" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Edit">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Undo" />
-                        <MenuItem mnemonicParsing="false" text="Redo" />
-                        <MenuItem mnemonicParsing="false" text="Copy" />
-                        <MenuItem mnemonicParsing="false" text="Paste" />
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                        <MenuItem mnemonicParsing="false" text="Select All" />
-                        <MenuItem mnemonicParsing="false" text="Color" />
-                        <MenuItem mnemonicParsing="false" text="Name" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="View">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Maximize Graph" />
-                        <MenuItem mnemonicParsing="false" text="Minimize Graph" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Settings">
-                     <items>
-                        <Menu mnemonicParsing="false" text="Preferences">
+                        <Menu mnemonicParsing="false" text="Edit">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Background" />
-                              <MenuItem mnemonicParsing="false" text="Keybinds" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleRedo" text="Redo" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleCopy" text="Copy" />
+                              <MenuItem mnemonicParsing="false" onAction="#handlePaste" text="Paste" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleSelectAll" text="Select All" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleColor" text="Color" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleName" text="Name" />
                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" text="Help" />
-                     </items>
-                  </Menu>
-               </menus>
-            </MenuBar>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <SplitPane dividerPositions="0.3770903010033445" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
-         <items>
-            <SplitPane dividerPositions="0.7695530726256983" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
+                        <Menu mnemonicParsing="false" text="View">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleMaximizeGraph" text="Maximize Graph" />
+                              <MenuItem mnemonicParsing="false" onMenuValidation="#handleMinimizeGraph" text="Minimize Graph" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Settings">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleOpenSettings" text="Open" />
+                           </items>
+                        </Menu>
+                     </menus>
+                  </MenuBar>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <SplitPane dividerPositions="0.14155370177267987" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
                <items>
-                  <ScrollPane prefHeight="274.0" prefWidth="439.0" styleClass="simulation-background">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="101.0" styleClass="simulation-background" />
-                     </content>
-                  </ScrollPane>
-                  <VBox prefHeight="81.0" prefWidth="693.0" styleClass="simulation-background">
-                     <children>
-                        <Label prefHeight="22.0" prefWidth="417.0" styleClass="simulation-label" text="Simulation Controls" />
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="159.0" prefWidth="164.0" styleClass="simulation-background">
-                           <children>
-                              <HBox layoutX="-1.0" layoutY="2.0" prefHeight="202.0" prefWidth="487.0" styleClass="simulation-background">
-                                 <children>
-                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Simuate" />
-                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Node" />
-                                    <Button mnemonicParsing="false" styleClass="simulation-button" text="Reset" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </VBox>
-               </items>
-            </SplitPane>
-            <SplitPane dividerPositions="0.755586592178771" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
-               <items>
-                  <SplitPane dividerPositions="0.7750582750582751" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
+                  <SplitPane dividerPositions="0.9099229287090559" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                      <items>
-                        <Pane prefHeight="254.0" prefWidth="48.0" styleClass="simulation-background" />
-                        <ScrollPane prefHeight="282.0" prefWidth="220.0" styleClass="simulation-background">
+                        <ScrollPane prefHeight="274.0" prefWidth="439.0" styleClass="simulation-background">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="496.0" prefWidth="84.0" styleClass="simulation-background" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="101.0" styleClass="simulation-background" />
                            </content>
                         </ScrollPane>
+                        <VBox prefHeight="81.0" prefWidth="693.0" styleClass="simulation-background">
+                           <children>
+                              <Label prefHeight="0.0" prefWidth="270.0" styleClass="simulation-label" text="Simulation Controls" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="159.0" prefWidth="164.0" styleClass="simulation-background">
+                                 <children>
+                                    <HBox layoutX="-1.0" layoutY="2.0" prefHeight="202.0" prefWidth="487.0" styleClass="simulation-background">
+                                       <children>
+                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Simuate" />
+                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Node" />
+                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Reset" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </VBox>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.7713987473903967" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
+                  <SplitPane dividerPositions="0.8068400770712909" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                      <items>
-                        <VBox prefHeight="102.0" prefWidth="414.0" styleClass="simulation-background">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="1312.0" styleClass="simulation-label" text="Simulated Graphs" />
-                              <ScrollPane prefHeight="446.0" prefWidth="245.0" styleClass="simulation-background">
+                        <SplitPane dividerPositions="0.8319148936170213" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
+                           <items>
+                              <Pane prefHeight="254.0" prefWidth="48.0" styleClass="simulation-background" />
+                              <ScrollPane prefHeight="282.0" prefWidth="220.0" styleClass="simulation-background">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="1225.0" styleClass="simulation-background" />
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="496.0" prefWidth="84.0" styleClass="simulation-background" />
                                  </content>
                               </ScrollPane>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" styleClass="simulation-background">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" text="Circuit Feedback" />
-                              <ScrollPane prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="85.0" styleClass="simulation-background" />
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </VBox>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.7713987473903967" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
+                           <items>
+                              <VBox prefHeight="102.0" prefWidth="414.0" styleClass="simulation-background">
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="1312.0" styleClass="simulation-label" text="Simulated Graphs" />
+                                    <ScrollPane prefHeight="446.0" prefWidth="245.0" styleClass="simulation-background">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="1225.0" styleClass="simulation-background" />
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="simulation-background">
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" text="Circuit Feedback" />
+                                    <ScrollPane prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="85.0" styleClass="simulation-background" />
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
                      </items>
                   </SplitPane>
                </items>
             </SplitPane>
-         </items>
-      </SplitPane>
-   </center>
-</BorderPane>
+         </center>
+      </BorderPane>
+      <StackPane fx:id="settingsOverlay" prefHeight="600.0" prefWidth="800.0" styleClass="settings-overlay" stylesheets="@../css/settings.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+         <VBox alignment="CENTER" maxHeight="616.0" maxWidth="853.0" prefHeight="616.0" prefWidth="853.0" spacing="20" style="-fx-padding: 20; -fx-background-radius: 10; -fx-background-color: WHITE; -fx-background-radius: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+               <Label prefHeight="29.0" prefWidth="699.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" styleClass="settings-label" text="Settings" />
+               <Button alignment="CENTER" onAction="#handleCloseSettings" prefHeight="28.0" prefWidth="78.0" styleClass="close-button" text="Close" />
+            </HBox>
+            <Accordion prefHeight="513.0" prefWidth="805.0">
+               <panes>
+                  <TitledPane animated="false" text="Help">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Keybinds">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Background">
+                     <content>
+                        <AnchorPane>
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                <RadioButton mnemonicParsing="false" />
+                                             </children>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                <RadioButton contentDisplay="CENTER" mnemonicParsing="false" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+         </VBox>
+      </StackPane>
+   </children>
+</AnchorPane>

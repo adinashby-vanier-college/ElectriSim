@@ -1,14 +1,19 @@
 package controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 public class StartMenuController {
+
+    @FXML
+    private StackPane settingsOverlay;
 
     public void handleNewSimulation(ActionEvent event) {
         switchRoot("/fxml/new_simulation.fxml", event);
@@ -22,16 +27,14 @@ public class StartMenuController {
         System.exit(0);
     }
 
-    public void handleHelp(ActionEvent event) {
-        System.out.println("Help clicked!");
+    @FXML
+    public void handleOpenSettings(ActionEvent event) {
+        settingsOverlay.setVisible(true);
     }
 
-    public void handleBackground(ActionEvent event) {
-        System.out.println("Change background clicked!");
-    }
-
-    public void handleKeybinds(ActionEvent event) {
-        System.out.println("Keybinds clicked!");
+    @FXML
+    public void handleCloseSettings(ActionEvent event) {
+        settingsOverlay.setVisible(false);
     }
 
     private void switchRoot(String fxmlFile, ActionEvent event) {
