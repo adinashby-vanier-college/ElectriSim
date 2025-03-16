@@ -233,7 +233,7 @@ VBox {
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-padding: 10px;
-    -fx-alignment: center;
+
 }
 
 /* ---------------- LOAD BUTTON ---------------- */
@@ -244,7 +244,6 @@ VBox {
     -fx-text-fill: #111111;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-alignment: center;
     -fx-transition: background-color 0.3s ease;
 }
 
