@@ -1,52 +1,55 @@
 package controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 public class StartMenuController {
 
-    // new simulation window
-    public void handleNewSimulation(ActionEvent event) throws IOException {
-        openWindow("/fxml/new_simulation.fxml", event);
+    @FXML
+    private StackPane settingsOverlay;
+
+    public void handleNewSimulation(ActionEvent event) {
+        switchRoot("/fxml/new_simulation.fxml", event);
     }
 
-    // load simulation window
-    public void handleLoadSimulation(ActionEvent event) throws IOException {
-        openWindow("/fxml/load_simulation.fxml", event);
+    public void handleLoadSimulation(ActionEvent event) {
+        switchRoot("/fxml/load_simulation.fxml", event);
     }
 
-    // close application
     public void handleExit(ActionEvent event) {
         System.exit(0);
     }
 
-    // debugging for menu buttons (help)
-    public void handleHelp(ActionEvent event) {
-        System.out.println("Help clicked!");
+    @FXML
+    public void handleOpenSettings(ActionEvent event) {
+        settingsOverlay.setVisible(true);
     }
 
-    // debugging for menu buttons (background)
-    public void handleBackground(ActionEvent event) {
-        System.out.println("Change background clicked!");
+    @FXML
+    public void handleCloseSettings(ActionEvent event) {
+        settingsOverlay.setVisible(false);
     }
 
-    // debugging for menu buttons (keybinds)
-    public void handleKeybinds(ActionEvent event) {
-        System.out.println("Keybinds clicked!");
-    }
+    private void switchRoot(String fxmlFile, ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
 
-    // method to load new windows
-    private void openWindow(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-        Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            scene.setRoot(root);
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+            stage.setFullScreen(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

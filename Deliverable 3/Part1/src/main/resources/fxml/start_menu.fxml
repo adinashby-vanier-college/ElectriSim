@@ -5,36 +5,94 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StartMenuController">
 
-    <top>
-        <HBox styleClass="menu-bar">
-            <Label styleClass="menu-logo" text="ElectriSim" />
-            <MenuBar prefHeight="40.0" prefWidth="156.0" styleClass="menu-bar-content">
-                <Menu text="File">
-                    <MenuItem onAction="#handleExit" text="Close" />
-                </Menu>
-                <Menu text="Settings">
-                    <MenuItem onAction="#handleHelp" text="Help" />
-                    <Menu text="Preferences">
-                        <MenuItem onAction="#handleBackground" text="Background" />
-                        <MenuItem onAction="#handleKeybinds" text="Keybinds" />
-                    </Menu>
-                </Menu>
-            </MenuBar>
-        </HBox>
-    </top>
-
-    <center>
-        <VBox alignment="CENTER" prefWidth="737.0" spacing="10">
-            <Label prefHeight="79.0" prefWidth="329.0" styleClass="center-logo" text="ElectriSim" />
-            <Button onAction="#handleNewSimulation" styleClass="menu-button" text="New Simulation" />
-            <Button onAction="#handleLoadSimulation" styleClass="menu-button" text="Load Simulation" />
-            <Button onAction="#handleExit" styleClass="menu-button" text="Quit" />
-        </VBox>
-    </center>
-</BorderPane>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StartMenuController">
+   <children>
+      <BorderPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/styles.css">
+      
+          <top>
+              <HBox styleClass="menu-bar">
+                  <Label styleClass="menu-logo" text="ElectriSim" />
+                  <MenuBar prefHeight="40.0" prefWidth="188.0" styleClass="menu-bar-content">
+                      <Menu text="File">
+                          <MenuItem onAction="#handleExit" text="Close" />
+                      </Menu>
+                      <Menu text="Settings">
+                          <MenuItem onAction="#handleOpenSettings" text="Open" />
+                      </Menu>
+                  </MenuBar>
+              </HBox>
+          </top>
+      
+          <center>
+              <VBox alignment="CENTER" prefWidth="737.0" spacing="10">
+                  <Label prefHeight="79.0" prefWidth="456.0" styleClass="center-logo" text="ElectriSim" />
+                  <Button onAction="#handleNewSimulation" styleClass="menu-button" text="New Simulation" />
+                  <Button onAction="#handleLoadSimulation" styleClass="menu-button" text="Load Simulation" />
+                  <Button onAction="#handleExit" styleClass="menu-button" text="Quit" />
+               <Label />
+              </VBox>
+          </center>
+      </BorderPane>
+       <StackPane fx:id="settingsOverlay" prefHeight="600.0" prefWidth="800.0" styleClass="settings-overlay" stylesheets="@../css/settings.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+           <VBox alignment="CENTER" maxHeight="616.0" maxWidth="853.0" prefHeight="616.0" prefWidth="853.0" spacing="20" style="-fx-padding: 20; -fx-background-radius: 10; -fx-background-color: WHITE; -fx-background-radius: 10;">
+               <HBox alignment="CENTER_LEFT" spacing="10">
+                   <Label prefHeight="29.0" prefWidth="699.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" styleClass="settings-label" text="Settings" />
+                   <Button alignment="CENTER" onAction="#handleCloseSettings" prefHeight="28.0" prefWidth="78.0" styleClass="close-button" text="Close" />
+               </HBox>
+               <Accordion prefHeight="513.0" prefWidth="805.0">
+                   <panes>
+                       <TitledPane animated="false" text="Help">
+                           <content>
+                               <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                           </content>
+                       </TitledPane>
+                       <TitledPane animated="false" text="Keybinds">
+                           <content>
+                               <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                           </content>
+                       </TitledPane>
+                       <TitledPane animated="false" text="Background">
+                           <content>
+                               <AnchorPane>
+                                   <children>
+                                       <VBox>
+                                           <children>
+                                               <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                       <VBox>
+                                                           <children>
+                                                               <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                               <RadioButton mnemonicParsing="false" />
+                                                           </children>
+                                                       </VBox>
+                                                       <VBox>
+                                                           <children>
+                                                               <ImageView fitHeight="150.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" />
+                                                               <RadioButton contentDisplay="CENTER" mnemonicParsing="false" />
+                                                           </children>
+                                                       </VBox>
+                                                   </children>
+                                               </HBox>
+                                           </children>
+                                       </VBox>
+                                   </children>
+                               </AnchorPane>
+                           </content>
+                       </TitledPane>
+                   </panes>
+               </Accordion>
+           </VBox>
+       </StackPane>
+   </children>
+</AnchorPane>
