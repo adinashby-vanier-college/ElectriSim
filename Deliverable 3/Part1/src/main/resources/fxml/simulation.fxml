@@ -76,34 +76,26 @@
             </HBox>
          </top>
          <center>
-            <SplitPane dividerPositions="0.2056830031282586" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.1540667361835245" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
                <items>
-                  <SplitPane dividerPositions="0.8704238921001927" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background" stylesheets="@../css/simulation.css">
+                  <SplitPane dividerPositions="0.9128131021194605" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background" stylesheets="@../css/simulation.css">
                      <items>
                         <VBox prefHeight="940.0" prefWidth="256.0">
                            <children>
-                              <HBox prefHeight="20.0" prefWidth="269.0">
+                              <HBox fx:id="searchHbox" alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="254.0">
-                                       <graphic>
-                                          <HBox prefHeight="31.0" prefWidth="154.0">
-                                             <children>
-                                                <TextField prefHeight="38.0" prefWidth="161.0" promptText="Search" />
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                    </Button>
+                                    <TextField fx:id="searchBar" prefHeight="36.0" prefWidth="267.0" promptText="Search" styleClass="search-bar" />
                                  </children>
                               </HBox>
                               <Accordion prefHeight="945.0" prefWidth="259.0" stylesheets="@../css/simulation.css">
                                 <panes>
                                   <TitledPane animated="false" text="Diagram Tools">
                                     <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="274.0">
+                                                <VBox prefHeight="728.0" prefWidth="274.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -121,11 +113,11 @@
                                   </TitledPane>
                                     <TitledPane animated="false" text="Switch and Relay">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -139,7 +131,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -153,7 +145,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -167,7 +159,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -181,7 +173,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -195,7 +187,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -209,7 +201,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -223,7 +215,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -237,7 +229,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -251,7 +243,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -273,11 +265,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Ground">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -291,7 +283,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -305,7 +297,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -327,11 +319,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Resistor">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -345,7 +337,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -359,7 +351,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -373,7 +365,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -387,7 +379,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -401,7 +393,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -415,7 +407,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -429,7 +421,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -451,11 +443,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Capacitor">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="251.0">
+                                                <VBox prefHeight="728.0" prefWidth="251.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -469,7 +461,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -483,7 +475,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -505,11 +497,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Inductor and Coil">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -523,7 +515,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -537,7 +529,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -559,11 +551,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Power Supply">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -577,7 +569,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -591,7 +583,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -605,7 +597,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -619,7 +611,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -633,7 +625,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -647,7 +639,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -669,11 +661,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Meter">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -687,7 +679,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -701,7 +693,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -715,7 +707,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -737,11 +729,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Diode and LED">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -755,7 +747,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -769,7 +761,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -783,7 +775,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -797,7 +789,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -811,7 +803,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -825,7 +817,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -847,11 +839,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Transistor">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -865,7 +857,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -879,7 +871,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -893,7 +885,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -907,7 +899,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -921,7 +913,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -935,7 +927,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -957,11 +949,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Logic Gate">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -975,7 +967,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -989,7 +981,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1003,7 +995,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1017,7 +1009,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1031,7 +1023,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1045,7 +1037,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1059,7 +1051,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1073,7 +1065,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1087,7 +1079,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1109,11 +1101,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Antenna">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1127,7 +1119,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1149,11 +1141,11 @@
                                     </TitledPane>
                                     <TitledPane animated="false" text="Miscellaneous">
                                        <content>
-                                          <ScrollPane prefHeight="773.0" prefWidth="325.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1167,7 +1159,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1181,7 +1173,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1195,7 +1187,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1209,7 +1201,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1223,7 +1215,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1237,7 +1229,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1251,7 +1243,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1265,7 +1257,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1279,7 +1271,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1293,7 +1285,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1319,14 +1311,13 @@
                         </VBox>
                         <SplitPane>
                            <items>
-                              <VBox prefHeight="81.0" prefWidth="693.0" styleClass="simulation-background">
+                              <VBox prefHeight="81.0" prefWidth="693.0" styleClass="simulation-button-vbox">
                                  <children>
                                     <Label prefHeight="0.0" prefWidth="270.0" styleClass="simulation-label" text="Simulation Controls" />
-                                    <HBox prefHeight="202.0" prefWidth="487.0" styleClass="simulation-background">
+                                    <HBox prefHeight="202.0" prefWidth="487.0" styleClass="simulation-button-hbox">
                                        <children>
-                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Simuate" />
-                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Node" />
-                                          <Button mnemonicParsing="false" styleClass="simulation-button" text="Reset" />
+                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Simuate" />
+                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Reset" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -1337,26 +1328,27 @@
                   </SplitPane>
                   <SplitPane dividerPositions="0.7644508670520231" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                      <items>
-                        <SplitPane dividerPositions="0.7894896719319563" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
+                        <SplitPane dividerPositions="0.8367655966081163" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
                            <items>
-                              <Pane prefHeight="254.0" prefWidth="48.0" styleClass="simulation-background" />
                               <Accordion prefHeight="75.0" prefWidth="375.0" />
+                              <Pane prefHeight="792.0" prefWidth="1268.0" styleClass="simulation-background" />
                            </items>
                         </SplitPane>
-                        <SplitPane dividerPositions="0.7645808019441069" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
+                        <SplitPane dividerPositions="0.8137492428831011" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
                            <items>
                               <VBox prefHeight="330.0" prefWidth="915.0" styleClass="simulation-background">
                                  <children>
-                                    <Label prefHeight="22.0" prefWidth="1800.0" styleClass="simulation-label" text="Simulated Graphs" />
+                                    <Label prefHeight="22.0" prefWidth="1800.0" styleClass="simulation-label" stylesheets="@../css/simulation.css" text="Simulated Graphs" />
                                     <ScrollPane prefHeight="446.0" prefWidth="245.0" styleClass="simulation-background">
                                        <content>
-                                          <HBox prefHeight="123.0" prefWidth="1308.0">
+                                          <HBox prefHeight="123.0" prefWidth="1308.0" styleClass="graph-hbox" stylesheets="@../css/simulation.css">
                                              <children>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart prefHeight="229.0" prefWidth="462.0">
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                               <xAxis>
                                                                 <CategoryAxis side="BOTTOM" />
                                                               </xAxis>
@@ -1364,16 +1356,16 @@
                                                                 <NumberAxis side="LEFT" />
                                                               </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 1 - Voltage vs Time" />
                                                          </children>
                                                       </VBox>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                                <xAxis>
                                                                   <CategoryAxis side="BOTTOM" />
                                                                </xAxis>
@@ -1381,16 +1373,16 @@
                                                                   <NumberAxis side="LEFT" />
                                                                </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 2 - Current vs Time" />
                                                          </children>
                                                       </VBox>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                                <xAxis>
                                                                   <CategoryAxis side="BOTTOM" />
                                                                </xAxis>
@@ -1398,16 +1390,16 @@
                                                                   <NumberAxis side="LEFT" />
                                                                </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 3 - Capacitance vs Time" />
                                                          </children>
                                                       </VBox>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                                <xAxis>
                                                                   <CategoryAxis side="BOTTOM" />
                                                                </xAxis>
@@ -1415,16 +1407,16 @@
                                                                   <NumberAxis side="LEFT" />
                                                                </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 4 - Charge vs Time" />
                                                          </children>
                                                       </VBox>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                                <xAxis>
                                                                   <CategoryAxis side="BOTTOM" />
                                                                </xAxis>
@@ -1432,16 +1424,16 @@
                                                                   <NumberAxis side="LEFT" />
                                                                </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 5 - Energy as a Curve" />
                                                          </children>
                                                       </VBox>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0">
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0">
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
                                                          <children>
-                                                            <LineChart>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
                                                                <xAxis>
                                                                   <CategoryAxis side="BOTTOM" />
                                                                </xAxis>
@@ -1449,7 +1441,40 @@
                                                                   <NumberAxis side="LEFT" />
                                                                </yAxis>
                                                             </LineChart>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" text="Node 6 - Resistance" />
+                                                         </children>
+                                                      </VBox>
+                                                   </graphic>
+                                                </Button>
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
+                                                   <graphic>
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
+                                                         <children>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
+                                                               <xAxis>
+                                                                  <CategoryAxis side="BOTTOM" />
+                                                               </xAxis>
+                                                               <yAxis>
+                                                                  <NumberAxis side="LEFT" />
+                                                               </yAxis>
+                                                            </LineChart>
+                                                         </children>
+                                                      </VBox>
+                                                   </graphic>
+                                                </Button>
+                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
+                                                   <graphic>
+                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
+                                                         <children>
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
+                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
+                                                               <xAxis>
+                                                                  <CategoryAxis side="BOTTOM" />
+                                                               </xAxis>
+                                                               <yAxis>
+                                                                  <NumberAxis side="LEFT" />
+                                                               </yAxis>
+                                                            </LineChart>
                                                          </children>
                                                       </VBox>
                                                    </graphic>
@@ -1462,7 +1487,7 @@
                               </VBox>
                               <VBox prefHeight="200.0" prefWidth="100.0" styleClass="simulation-background">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" text="Circuit Feedback" />
+                                    <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" stylesheets="@../css/simulation.css" text="Circuit Feedback" />
                                     <ScrollPane prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
                                        <content>
                                           <VBox>

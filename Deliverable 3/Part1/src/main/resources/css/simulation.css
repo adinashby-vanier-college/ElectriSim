@@ -1,6 +1,10 @@
-/* ---------------- TILTED PANE---------------- */
+/* ---------------- TILTED PANE ---------------- */
+.titled-pane {
+    -fx-background-color: #1E1E1E;
+}
+
 .titled-pane > .title {
-    -fx-background-color: #111111;
+    -fx-background-color: #5C5C5C;
     -fx-font-family: "Helvetica Neue";
     -fx-font-size: 15px;
     -fx-padding: 5px 10px;
@@ -8,6 +12,10 @@
 
 .titled-pane > .title > .text {
     -fx-fill: #FFFFFF;
+}
+
+.titled-pane > .content {
+    -fx-background-color: #1E1E1E;
 }
 
 /* ---------------- BUTTON STYLING ---------------- */
@@ -65,3 +73,161 @@
     -fx-border-color: transparent;
     -fx-pref-width: 100%;
 }
+
+/* ---------------- GRAPH SECTION ---------------- */
+.graph-hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.graph-button {
+    -fx-background-color: #5C5C5C;
+    -fx-text-fill: white;
+    -fx-padding: 10px 15px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-min-width: 400px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.graph-button:hover {
+    -fx-background-color: #777777;
+}
+
+.graph-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+}
+
+.graph-vbox {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+
+.graph-chart {
+    -fx-background-color: #5C5C5C;
+    -fx-pref-width: 500px;
+    -fx-pref-height: 300px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.graph-button:hover .graph-chart {
+    -fx-background-color: #777777;
+}
+
+.graph-chart .axis {
+    -fx-tick-label-fill: #FFFFFF;
+}
+
+.graph-chart .chart-horizontal-grid-lines,
+.graph-chart .chart-vertical-grid-lines {
+    -fx-stroke: #B0B0B0;
+    -fx-transition: stroke 0.3s ease;
+}
+
+.graph-chart .chart-series-line {
+    -fx-stroke: #D3D3D3;
+    -fx-stroke-width: 2px;
+    -fx-transition: stroke 0.3s ease;
+}
+
+.graph-button:hover .graph-chart .chart-series-line {
+    -fx-stroke: #FFFFFF;
+}
+
+.graph-chart .chart-plot-background {
+    -fx-background-color: #5C5C5C;
+}
+
+/* ---------------- SIMULATION LABELS ---------------- */
+.simulation-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 15px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 5px;
+    -fx-min-width: 100%;
+    -fx-max-width: infinity;
+}
+
+/* ---------------- SIMULATION BUTTON SECTION ---------------- */
+.simulation-button-hbox {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+
+.simulation-button-vbox {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-alignment: top-center;
+    -fx-background-color: #1E1E1E;
+}
+
+.simulation-button {
+    -fx-background-color: #515151;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+}
+
+.simulation-button-hbox {
+    -fx-alignment: center;
+}
+
+/* ---------------- ACCORDION BACKGROUND ---------------- */
+.accordion {
+    -fx-background-color: #1E1E1E;
+}
+
+/* ---------------- COMPONENT SECTION ---------------- */
+.component-vbox {
+    -fx-pref-height: -1;
+    -fx-pref-width: -1;
+    -fx-min-width: 100%;
+    -fx-alignment: top-center;
+    -fx-padding: 10px 15px 10px 15px;
+}
+
+.component-button {
+    -fx-background-color: #515151;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+}
+
+.component-vbox > .component-button {
+    -fx-spacing: 10px;
+}
+
+//* ---------------- SEARCH BAR ---------------- */
+ .search-bar {
+     -fx-background-color: #D3D3D3;
+     -fx-text-fill: #111111;
+     -fx-font-size: 14px;
+     -fx-padding: 5px 10px;
+     -fx-border-radius: 5px;
+     -fx-background-radius: 5px;
+     -fx-border-color: transparent;
+     -fx-pref-width: 267px;
+     -fx-pref-height: 36px;
+ }
+
+ /* ---------------- SEARCH BAR HOVER ---------------- */
+ .search-bar:hover {
+     -fx-background-color: #E0E0E0;
+ }
+
+ /* ---------------- SEARCH HBOX ---------------- */
+ .search-hbox {
+     -fx-alignment: center;
+     -fx-spacing: 10px;
+     -fx-padding: 20px 20px 0px 20px;
+ }

@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -14,6 +16,12 @@ import java.io.IOException;
 public class SimulationController {
     @FXML
     private StackPane settingsOverlay;
+
+    @FXML
+    private HBox searchHbox;
+
+    @FXML
+    private TextField searchBar;
 
     @FXML
     private void handleSave(ActionEvent event) {
