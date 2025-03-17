@@ -23,9 +23,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SimulationController">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SimulationController">
    <children>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/styles.css">
+      <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <HBox prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
@@ -1326,7 +1326,7 @@
                         </SplitPane>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.7644508670520231" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
+                  <SplitPane dividerPositions="0.7051971326164874" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                      <items>
                         <SplitPane dividerPositions="0.8367655966081163" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
                            <items>

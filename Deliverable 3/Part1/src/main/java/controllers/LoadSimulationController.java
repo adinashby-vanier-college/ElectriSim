@@ -3,6 +3,8 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,23 @@ public class LoadSimulationController {
 
     @FXML
     private StackPane settingsOverlay;
+
+    @FXML
+    private AnchorPane rootPane;
+
+    @FXML
+    private BorderPane mainPane;
+
+    @FXML
+    public void initialize() {
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefWidth(newVal.doubleValue());
+        });
+
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefHeight(newVal.doubleValue());
+        });
+    }
 
     @FXML
     private void handleLoadSimulation(ActionEvent event) {

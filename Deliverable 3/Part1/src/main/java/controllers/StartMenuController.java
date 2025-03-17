@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -13,7 +15,24 @@ import java.io.IOException;
 public class StartMenuController {
 
     @FXML
+    private AnchorPane rootPane;
+
+    @FXML
+    private BorderPane mainPane;
+
+    @FXML
     private StackPane settingsOverlay;
+
+    @FXML
+    public void initialize() {
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefWidth(newVal.doubleValue());
+        });
+
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefHeight(newVal.doubleValue());
+        });
+    }
 
     public void handleNewSimulation(ActionEvent event) {
         switchRoot("/fxml/new_simulation.fxml", event);
