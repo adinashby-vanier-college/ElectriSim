@@ -285,3 +285,16 @@ VBox {
     -fx-font-size: 12px;
 }
 
+/* ---------------- CENTERING LAYOUT ---------------- */
+.load-vbox {
+    -fx-alignment: center; /* Centers all children (HBox elements) */
+    -fx-spacing: 15px; /* Space between the elements */
+}
+
+.load-hbox,
+.load-button-hbox {
+    -fx-alignment: center; /* Center HBox contents */
+    -fx-pref-width: 100%; /* Ensure they take full width */
+    -fx-spacing: 10px; /* Space between child elements */
+}
+

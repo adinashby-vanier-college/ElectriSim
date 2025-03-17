@@ -76,9 +76,9 @@
             </HBox>
          </top>
          <center>
-            <SplitPane dividerPositions="0.14311783107403545" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.2056830031282586" prefHeight="160.0" prefWidth="200.0" styleClass="simulation-background" BorderPane.alignment="CENTER">
                <items>
-                  <SplitPane dividerPositions="0.8704238921001927" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
+                  <SplitPane dividerPositions="0.8704238921001927" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background" stylesheets="@../css/simulation.css">
                      <items>
                         <VBox prefHeight="940.0" prefWidth="256.0">
                            <children>
@@ -88,7 +88,6 @@
                                        <graphic>
                                           <HBox prefHeight="31.0" prefWidth="154.0">
                                              <children>
-                                                <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" />
                                                 <TextField prefHeight="38.0" prefWidth="161.0" promptText="Search" />
                                              </children>
                                           </HBox>
@@ -96,13 +95,13 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <Accordion prefHeight="945.0" prefWidth="259.0">
+                              <Accordion prefHeight="945.0" prefWidth="259.0" stylesheets="@../css/simulation.css">
                                 <panes>
                                   <TitledPane animated="false" text="Diagram Tools">
                                     <content>
                                           <ScrollPane prefHeight="773.0" prefWidth="325.0">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="274.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
                                                          <graphic>
@@ -454,7 +453,7 @@
                                        <content>
                                           <ScrollPane prefHeight="773.0" prefWidth="325.0">
                                              <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0">
+                                                <VBox prefHeight="728.0" prefWidth="251.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0">
                                                          <graphic>

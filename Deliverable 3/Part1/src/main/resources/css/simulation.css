@@ -1,0 +1,67 @@
+/* ---------------- TILTED PANE---------------- */
+.titled-pane > .title {
+    -fx-background-color: #111111;
+    -fx-font-family: "Helvetica Neue";
+    -fx-font-size: 15px;
+    -fx-padding: 5px 10px;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: #FFFFFF;
+}
+
+/* ---------------- BUTTON STYLING ---------------- */
+.accordion .button {
+    -fx-background-color: #515151;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.accordion .button:hover {
+    -fx-background-color: #6A6A6A;
+}
+
+.accordion .vbox > .button {
+    -fx-margin: 2px 5px 2px 5px;
+}
+
+/* ---------------- IMAGE INSIDE BUTTON ---------------- */
+.accordion .button .image-view {
+    -fx-padding: 3px;
+}
+
+/* ---------------- LABEL INSIDE BUTTON ---------------- */
+.accordion .button .label {
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
+/* ---------------- HBOX BUTTON STYLING ---------------- */
+.hbox-button {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+}
+
+.hbox-button > .button {
+    -fx-background-color: #111111;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 3px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* ---------------- TEXT FIELD STYLING ---------------- */
+.hbox-button > .button > .hbox > .text-field {
+    -fx-background-color: #111111;
+    -fx-text-fill: white;
+    -fx-padding: 3px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-pref-width: 100%;
+}
