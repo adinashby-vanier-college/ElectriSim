@@ -598,7 +598,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button" onAction="#handleAddBattery">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>

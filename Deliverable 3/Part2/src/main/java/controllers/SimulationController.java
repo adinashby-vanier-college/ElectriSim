@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -253,4 +254,23 @@ public class SimulationController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleAddBattery(ActionEvent event) {
+        if (builder != null) {
+            GraphicsContext gc = builder.getGraphicsContext2D();
+
+            Image batteryImage = new Image(getClass().getResource("/images/circuit_diagrams/Battery Cell.GIF").toExternalForm());
+
+            double x = builder.getWidth() / 2 - 25;
+            double y = builder.getHeight() / 2 - 25;
+
+            gc.drawImage(batteryImage, x, y, 50, 50);
+
+            System.out.println("Battery added to the builder.");
+        } else {
+            System.out.println("Canvas is null. Check FXML binding.");
+        }
+    }
+
 }
