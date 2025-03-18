@@ -1335,7 +1335,7 @@
                                 <items>
                                     <ScrollPane prefHeight="200.0" prefWidth="200.0">
                                        <content>
-                                          <Canvas fx:id="builder" height="1000.0" width="1500.0" />
+                                          <Canvas fx:id="builder" height="1000.0" width="3000.0" />
                                        </content>
                                     </ScrollPane>
                                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="392.0" prefWidth="380.0" vbarPolicy="NEVER">

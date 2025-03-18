@@ -79,16 +79,64 @@ public class SimulationController {
         addZoomFunctionality();
     }
 
+    private double zoomScale = 1.0; // Default zoom scale
+    private final double minZoom = 0.5;
+    private final double maxZoom = 3.0;
+    private final double gridSize = 15; // Base grid size
+
     private void addZoomFunctionality() {
         builder.setOnScroll(event -> {
             if (event.isControlDown()) { // Check if CTRL is held
-                double zoomFactor = event.getDeltaY() > 0 ? 1.1 : 0.9; // Zoom in or out
-                builder.setScaleX(builder.getScaleX() * zoomFactor);
-                builder.setScaleY(builder.getScaleY() * zoomFactor);
+                double delta = event.getDeltaY();
+                double zoomFactor = delta > 0 ? 1.1 : 0.9; // Zoom in or out
+
+                // Calculate new zoom scale within limits
+                double newScale = zoomScale * zoomFactor;
+                if (newScale < minZoom || newScale > maxZoom) {
+                    return; // Prevent excessive zooming
+                }
+                zoomScale = newScale;
+
+                // Resize the canvas
+                builder.setWidth(3000 * zoomScale);
+                builder.setHeight(1500 * zoomScale);
+
+                // Redraw the grid
+                drawGrid();
+
                 event.consume();
             }
         });
     }
+
+    private void drawGrid() {
+        GraphicsContext gc = builder.getGraphicsContext2D();
+        double width = builder.getWidth();
+        double height = builder.getHeight();
+        double scaledGridSize = gridSize * zoomScale; // Adjust grid size based on zoom
+
+        // Extra margin to ensure full coverage
+        double extraMargin = scaledGridSize;
+
+        // Clear previous grid
+        gc.setFill(javafx.scene.paint.Color.DARKGRAY);
+        gc.fillRect(0, 0, width, height);
+
+        // Set grid line color
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.setLineWidth(1);
+
+        // Draw vertical lines (extend beyond width)
+        for (double x = 0; x <= width + extraMargin; x += scaledGridSize) {
+            gc.strokeLine(x, 0, x, height);
+        }
+
+        // Draw horizontal lines (extend beyond height)
+        for (double y = 0; y <= height + extraMargin; y += scaledGridSize) {
+            gc.strokeLine(0, y, width, y);
+        }
+    }
+
 
     @FXML
     private void handleSave(ActionEvent event) {
