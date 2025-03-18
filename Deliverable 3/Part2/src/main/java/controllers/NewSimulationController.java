@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -23,8 +25,25 @@ public class NewSimulationController {
     @FXML
     private StackPane settingsOverlay;
 
+    @FXML
+    private AnchorPane rootPane;
+
+    @FXML
+    private BorderPane mainPane;
+
     public void handleExit(ActionEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    public void initialize() {
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefWidth(newVal.doubleValue());
+        });
+
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            mainPane.setPrefHeight(newVal.doubleValue());
+        });
     }
 
     @FXML

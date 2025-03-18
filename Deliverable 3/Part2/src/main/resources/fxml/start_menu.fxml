@@ -16,10 +16,9 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.ImageView?>
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StartMenuController">
-   <children>
-      <BorderPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/styles.css">
-      
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StartMenuController">
+    <children>
+        <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
           <top>
               <HBox styleClass="menu-bar">
                   <Label styleClass="menu-logo" text="ElectriSim" />
