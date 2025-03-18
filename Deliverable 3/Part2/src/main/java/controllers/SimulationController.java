@@ -48,6 +48,10 @@ public class SimulationController {
             mainPane.setPrefHeight(newVal.doubleValue());
         });
 
+        createBuilder();
+    }
+
+    private void createBuilder(){
         if (builder != null) {
             GraphicsContext gc = builder.getGraphicsContext2D();
             double width = builder.getWidth();
