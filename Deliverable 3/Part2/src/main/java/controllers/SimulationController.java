@@ -6,10 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -32,6 +36,9 @@ public class SimulationController {
     private BorderPane mainPane;
 
     @FXML
+    private Canvas builder;
+
+    @FXML
     public void initialize() {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             mainPane.setPrefWidth(newVal.doubleValue());
@@ -39,6 +46,47 @@ public class SimulationController {
 
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             mainPane.setPrefHeight(newVal.doubleValue());
+        });
+
+        if (builder != null) {
+            GraphicsContext gc = builder.getGraphicsContext2D();
+            double width = builder.getWidth();
+            double height = builder.getHeight();
+            double gridSize = 20; // Adjust grid size as needed
+
+            // Set background to dark gray
+            gc.setFill(javafx.scene.paint.Color.DARKGRAY);
+            gc.fillRect(0, 0, width, height);
+
+            // Set line color to black
+            gc.setStroke(javafx.scene.paint.Color.BLACK);
+            gc.setLineWidth(1);
+
+            // Draw vertical lines
+            for (double x = 0; x <= width; x += gridSize) {
+                gc.strokeLine(x, 0, x, height);
+            }
+
+            // Draw horizontal lines
+            for (double y = 0; y <= height; y += gridSize) {
+                gc.strokeLine(0, y, width, y);
+            }
+        } else {
+            System.out.println("Canvas is null. Check FXML binding.");
+        }
+
+        //zoom in/out functionality
+        addZoomFunctionality();
+    }
+
+    private void addZoomFunctionality() {
+        builder.setOnScroll(event -> {
+            if (event.isControlDown()) { // Check if CTRL is held
+                double zoomFactor = event.getDeltaY() > 0 ? 1.1 : 0.9; // Zoom in or out
+                builder.setScaleX(builder.getScaleX() * zoomFactor);
+                builder.setScaleY(builder.getScaleY() * zoomFactor);
+                event.consume();
+            }
         });
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -1328,10 +1329,22 @@
                   </SplitPane>
                   <SplitPane dividerPositions="0.7051971326164874" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="simulation-background">
                      <items>
-                        <SplitPane dividerPositions="0.8367655966081163" prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
+                        <SplitPane prefHeight="251.0" prefWidth="598.0" styleClass="simulation-background">
                            <items>
-                              <Accordion prefHeight="75.0" prefWidth="375.0" />
-                              <Pane prefHeight="792.0" prefWidth="1268.0" styleClass="simulation-background" />
+                              <SplitPane dividerPositions="0.8123052959501558" prefHeight="160.0" prefWidth="200.0">
+                                <items>
+                                    <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                       <content>
+                                          <Canvas fx:id="builder" height="1000.0" width="1500.0" />
+                                       </content>
+                                    </ScrollPane>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="392.0" prefWidth="380.0" vbarPolicy="NEVER">
+                                       <content>
+                                          <Pane prefHeight="392.0" prefWidth="131.0" style="-fx-background-image: url('/resources/images/grid_background.jpg'); -fx-background-repeat: repeat;" styleClass="simulation-background" />
+                                       </content>
+                                    </ScrollPane>
+                                </items>
+                              </SplitPane>
                            </items>
                         </SplitPane>
                         <SplitPane dividerPositions="0.8137492428831011" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
