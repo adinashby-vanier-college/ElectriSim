@@ -19,7 +19,7 @@
 
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoadSimulationController">
    <children>
-      <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <HBox prefHeight="26.0" prefWidth="382.0" styleClass="menu-bar" stylesheets="@../css/styles.css" BorderPane.alignment="CENTER">
                <children>
@@ -44,7 +44,7 @@
          <center>
             <VBox prefHeight="827.0" prefWidth="1920.0" styleClass="load-vbox" BorderPane.alignment="CENTER">
                <children>
-                  <Label styleClass="center-logo" text="Select Load File" />
+                  <Label alignment="CENTER" prefHeight="79.0" prefWidth="742.0" styleClass="center-logo" text="Select Load File" />
                   <HBox styleClass="load-hbox">
                      <children>
                         <ScrollPane prefHeight="438.0" prefWidth="751.0" styleClass="load-pane">

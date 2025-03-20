@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
-   <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+   <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <HBox styleClass="menu-bar">
             <children>
@@ -43,7 +43,7 @@
       <center>
          <VBox alignment="CENTER" prefHeight="585.0" prefWidth="882.0" spacing="10">
             <children>
-               <Label prefHeight="79.0" prefWidth="457.0" styleClass="center-logo" text="New Simulation" />
+               <Label alignment="CENTER" prefHeight="79.0" prefWidth="414.0" styleClass="center-logo" text="New Simulation" />
                <Button onAction="#handleNewSimulation" styleClass="menu-button">
                   <graphic>
                      <HBox alignment="CENTER_LEFT" spacing="10" styleClass="name-button">
