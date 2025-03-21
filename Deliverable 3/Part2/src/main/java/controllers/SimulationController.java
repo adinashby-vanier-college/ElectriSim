@@ -18,8 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 import java.io.IOException;
 
@@ -53,15 +53,14 @@ public class SimulationController {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefWidth(newVal.doubleValue()));
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefHeight(newVal.doubleValue()));
 
-        // Wrap canvasContainer in a Group to allow proper zooming
         Group zoomGroup = new Group();
         zoomGroup.getChildren().add(canvasContainer);
+        scrollPane.setContent(zoomGroup);
 
-        scrollPane.setContent(zoomGroup); // Set the ScrollPane content to this Group
-
-        // Initialize the builder and center the scroll bars
         createBuilder();
         centerScrollBars();
+
+        setupDragging(); // Enable dragging for all components
     }
 
     private void createBuilder() {
@@ -286,44 +285,44 @@ public class SimulationController {
             double height = 110;
 
             ImageComponent battery = new ImageComponent(batteryImage, x, y, width, height);
-            setDraggable(battery);
-
-            components.add(battery);
+            components.add(battery); // Add to list
             redrawCanvas();
+
             System.out.println("Battery added to the builder.");
         } else {
             System.out.println("Canvas is null. Check FXML binding.");
         }
     }
 
-    private void setDraggable(ImageComponent component) {
+    private void setupDragging() {
         final double[] offsetX = {0};
         final double[] offsetY = {0};
-        final boolean[] dragging = {false};
+        final ImageComponent[] selectedComponent = {null};
 
         builder.setOnMousePressed(e -> {
-            if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
-                    e.getY() >= component.y && e.getY() <= component.y + component.height) {
+            for (ImageComponent component : components) {
+                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
 
-                dragging[0] = true;
-                offsetX[0] = e.getX() - component.x;
-                offsetY[0] = e.getY() - (component.y + component.height / 2); // Centered y-reference
-            } else {
-                dragging[0] = false;
+                    selectedComponent[0] = component;
+                    offsetX[0] = e.getX() - component.x;
+                    offsetY[0] = e.getY() - component.y;
+                    break;
+                }
             }
         });
 
         builder.setOnMouseDragged(e -> {
-            if (dragging[0]) {
+            if (selectedComponent[0] != null) {
                 double newX = e.getX() - offsetX[0];
-                double newY = e.getY() - offsetY[0] - component.height / 2; // Keep y reference at the center
+                double newY = e.getY() - offsetY[0];
 
-                // Keep within canvas bounds
-                if (newX >= 0 && newX + component.width <= builder.getWidth()) {
-                    component.x = newX;
+                // Ensure movement stays within bounds
+                if (newX >= 0 && newX + selectedComponent[0].width <= builder.getWidth()) {
+                    selectedComponent[0].x = newX;
                 }
-                if (newY >= 0 && newY + component.height <= builder.getHeight()) {
-                    component.y = newY;
+                if (newY >= 0 && newY + selectedComponent[0].height <= builder.getHeight()) {
+                    selectedComponent[0].y = newY;
                 }
 
                 redrawCanvas();
@@ -331,14 +330,80 @@ public class SimulationController {
         });
 
         builder.setOnMouseReleased(e -> {
-            if (dragging[0]) {
-                // Snap the component's center to the nearest grid intersection
-                component.x = Math.round(component.x / gridSize) * gridSize - 4;
-                component.y = Math.round((component.y + component.height / 2) / gridSize) * gridSize - component.height / 2 + 2;
+            if (selectedComponent[0] != null) {
+                // Snap to the closest grid intersection
+                selectedComponent[0].x = Math.round(selectedComponent[0].x / gridSize) * gridSize;
+                selectedComponent[0].y = Math.round(selectedComponent[0].y / gridSize) * gridSize;
 
-                dragging[0] = false;
+                selectedComponent[0] = null; // Reset selection
                 redrawCanvas();
             }
         });
+    }
+}
+
+class CircuitVerifier {
+    private Map<String, List<String>> graph = new HashMap<>(); // Circuit connections
+    private Map<String, Double> voltages = new HashMap<>(); // Voltage values of batteries
+    private Map<String, Double> resistances = new HashMap<>(); // Resistance values
+    private Map<String, Double> currents = new HashMap<>(); // Current values
+
+    // Add a component
+    public void addComponent(String id, double resistance) {
+        graph.putIfAbsent(id, new ArrayList<>());
+        resistances.put(id, resistance);
+    }
+
+    // Add a battery with voltage
+    public void addBattery(String id, double voltage) {
+        graph.putIfAbsent(id, new ArrayList<>());
+        voltages.put(id, voltage);
+    }
+
+    // Connect two components
+    public void connect(String a, String b) {
+        graph.computeIfAbsent(a, k -> new ArrayList<>()).add(b);
+        graph.computeIfAbsent(b, k -> new ArrayList<>()).add(a);
+    }
+
+    // Check if the circuit is closed
+    public boolean isCircuitClosed() {
+        if (voltages.isEmpty()) return false; // No power source
+
+        String start = voltages.keySet().iterator().next(); // Pick any battery
+        Set<String> visited = new HashSet<>();
+        return dfs(start, visited, null);
+    }
+
+    private boolean dfs(String node, Set<String> visited, String parent) {
+        if (visited.contains(node)) return true;
+        visited.add(node);
+
+        for (String neighbor : graph.getOrDefault(node, new ArrayList<>())) {
+            if (!neighbor.equals(parent) && dfs(neighbor, visited, node)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Compute current directions using Kirchhoff’s Laws
+    public void calculateCurrents() {
+        if (!isCircuitClosed()) {
+            System.out.println("Open circuit! No current flows.");
+            return;
+        }
+
+        for (String node : voltages.keySet()) {
+            double voltage = voltages.get(node);
+            for (String neighbor : graph.get(node)) {
+                if (resistances.containsKey(neighbor)) {
+                    double resistance = resistances.get(neighbor);
+                    double current = voltage / resistance;
+                    currents.put(neighbor, current);
+                    System.out.println("Current through " + neighbor + " = " + current + "A");
+                }
+            }
+        }
     }
 }
