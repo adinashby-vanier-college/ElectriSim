@@ -118,7 +118,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -132,7 +132,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -146,7 +146,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -160,7 +160,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -174,7 +174,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -188,7 +188,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -202,7 +202,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -216,7 +216,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -230,7 +230,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -244,7 +244,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -270,7 +270,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -284,7 +284,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -298,7 +298,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -324,7 +324,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -338,7 +338,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -352,7 +352,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -366,7 +366,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -380,7 +380,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -394,7 +394,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -408,7 +408,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -422,7 +422,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -448,7 +448,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="251.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -462,7 +462,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -476,7 +476,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -502,7 +502,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -516,7 +516,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -530,7 +530,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -556,7 +556,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -570,7 +570,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -584,7 +584,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -598,7 +598,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button" onAction="#handleAddBattery">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -612,7 +612,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -626,7 +626,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -640,7 +640,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -666,7 +666,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -680,7 +680,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -694,7 +694,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -708,7 +708,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -734,7 +734,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -748,7 +748,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -762,7 +762,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -776,7 +776,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -790,7 +790,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -804,7 +804,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -818,7 +818,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -844,7 +844,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -858,7 +858,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -872,7 +872,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -886,7 +886,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -900,7 +900,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -914,7 +914,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -928,7 +928,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -954,7 +954,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -968,7 +968,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -982,7 +982,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -996,7 +996,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1010,7 +1010,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1024,7 +1024,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1038,7 +1038,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1052,7 +1052,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1066,7 +1066,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1080,7 +1080,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1106,7 +1106,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1120,7 +1120,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1146,7 +1146,7 @@
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1160,7 +1160,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1174,7 +1174,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1188,7 +1188,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1202,7 +1202,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1216,7 +1216,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1230,7 +1230,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1244,7 +1244,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1258,7 +1258,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1272,7 +1272,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1286,7 +1286,7 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
@@ -1335,7 +1335,7 @@
                                 <items>
                                    <ScrollPane fx:id="scrollPane">
                                       <Pane fx:id="canvasContainer">
-                                         <Canvas fx:id="builder" width="3000" height="1500" />
+                                         <Canvas fx:id="builder" height="1500" width="3000" />
                                       </Pane>
                                    </ScrollPane>
                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="392.0" prefWidth="380.0" vbarPolicy="NEVER">

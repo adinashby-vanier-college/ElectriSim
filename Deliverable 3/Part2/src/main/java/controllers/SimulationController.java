@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,44 +10,39 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.*;
 
-import java.io.IOException;
-
 public class SimulationController {
-    @FXML
-    private StackPane settingsOverlay;
+    @FXML private StackPane settingsOverlay;
+    @FXML private HBox searchHbox;
+    @FXML private TextField searchBar;
+    @FXML private AnchorPane rootPane;
+    @FXML private BorderPane mainPane;
+    @FXML private Canvas builder;
+    @FXML private ScrollPane scrollPane;
+    @FXML private Pane canvasContainer;
 
-    @FXML
-    private HBox searchHbox;
+    private List<ImageComponent> components = new ArrayList<>();
+    private final double gridSize = 20;
+    private double zoomScale = 1.0;
+    private final double minZoom = 0.5;
+    private final double maxZoom = 3.0;
 
-    @FXML
-    private TextField searchBar;
-
-    @FXML
-    private AnchorPane rootPane;
-
-    @FXML
-    private BorderPane mainPane;
-
-    @FXML
-    private Canvas builder;
-
-    @FXML
-    private ScrollPane scrollPane;
-
-    @FXML
-    private Pane canvasContainer; // New container for Canvas
+    private ImageView floatingComponentImage;
+    private Image currentlySelectedImage;
+    private double selectedImageWidth = 80;
+    private double selectedImageHeight = 80;
+    private ImageComponent draggedExistingComponent = null;
+    private double currentRotation = 0;
 
     @FXML
     public void initialize() {
@@ -59,50 +55,130 @@ public class SimulationController {
 
         createBuilder();
         centerScrollBars();
+        setupDragging();
+        setupFloatingImage();
+        setupCanvasClickPlacement();
+    }
 
-        setupDragging(); // Enable dragging for all components
+    private void setupFloatingImage() {
+        floatingComponentImage = new ImageView();
+        floatingComponentImage.setMouseTransparent(true);
+        floatingComponentImage.setVisible(false);
+        rootPane.getChildren().add(floatingComponentImage);
+
+        rootPane.addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
+            if (floatingComponentImage.isVisible()) {
+                floatingComponentImage.setLayoutX(e.getSceneX() - selectedImageWidth / 2);
+                floatingComponentImage.setLayoutY(e.getSceneY() - selectedImageHeight / 2);
+            }
+        });
+
+        Platform.runLater(() -> {
+            rootPane.getScene().setOnKeyPressed(e -> {
+                if (!floatingComponentImage.isVisible()) return;
+
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    floatingComponentImage.setVisible(false);
+                    currentlySelectedImage = null;
+                } else if (e.getCode() == KeyCode.E) {
+                    floatingComponentImage.setVisible(false);
+                    currentlySelectedImage = null;
+                } else if (e.getCode() == KeyCode.R) {
+                    currentRotation = (currentRotation + 90) % 360;
+                    floatingComponentImage.setRotate(currentRotation);
+                }
+            });
+        });
+    }
+
+    private void setupCanvasClickPlacement() {
+        builder.setOnMouseClicked(e -> {
+            if (floatingComponentImage.isVisible() && currentlySelectedImage != null) {
+                double snappedX = Math.round((e.getX() - selectedImageWidth / 2) / gridSize) * gridSize;
+                double snappedY = Math.round((e.getY() - selectedImageHeight / 2) / gridSize) * gridSize;
+
+                for (ImageComponent existing : components) {
+                    if (snappedX < existing.x + existing.width && snappedX + selectedImageWidth > existing.x &&
+                            snappedY < existing.y + existing.height && snappedY + selectedImageHeight > existing.y) {
+                        return;
+                    }
+                }
+
+                ImageComponent newComponent = new ImageComponent(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                newComponent.rotation = currentRotation;
+                components.add(newComponent);
+                redrawCanvas();
+
+                floatingComponentImage.setVisible(false);
+                currentlySelectedImage = null;
+                floatingComponentImage.setRotate(0);
+                currentRotation = 0;
+                return;
+            }
+
+            for (Iterator<ImageComponent> iterator = components.iterator(); iterator.hasNext(); ) {
+                ImageComponent component = iterator.next();
+                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
+                    currentlySelectedImage = component.image;
+                    floatingComponentImage.setImage(currentlySelectedImage);
+                    floatingComponentImage.setFitWidth(component.width);
+                    floatingComponentImage.setFitHeight(component.height);
+                    floatingComponentImage.setRotate(component.rotation);
+                    currentRotation = component.rotation;
+                    selectedImageWidth = component.width;
+                    selectedImageHeight = component.height;
+                    floatingComponentImage.setVisible(true);
+                    iterator.remove();
+                    redrawCanvas();
+                    return;
+                }
+            }
+        });
+    }
+    @FXML
+    private void handleComponentButtonClick(ActionEvent event) {
+        if (floatingComponentImage.isVisible()) return;
+
+        Button sourceButton = (Button) event.getSource();
+        ImageView imageView = (ImageView) ((HBox) sourceButton.getGraphic()).getChildren().get(0);
+        Image image = imageView.getImage();
+
+        if (image != null) {
+            currentlySelectedImage = image;
+            floatingComponentImage.setImage(image);
+            floatingComponentImage.setFitWidth(selectedImageWidth);
+            floatingComponentImage.setFitHeight(selectedImageHeight);
+            floatingComponentImage.setRotate(0);
+            floatingComponentImage.setVisible(true);
+            currentRotation = 0;
+        }
     }
 
     private void createBuilder() {
         if (builder != null) {
             drawGrid();
-        } else {
-            System.out.println("Canvas is null. Check FXML binding.");
         }
-
-        // Zoom in/out functionality
         addZoomFunctionality();
     }
 
     private void centerScrollBars() {
-        // Set the scroll bars to the middle (center) of their range
-        scrollPane.setHvalue(0.5); // Center horizontally
-        scrollPane.setVvalue(0.5); // Center vertically
+        scrollPane.setHvalue(0.5);
+        scrollPane.setVvalue(0.5);
     }
-
-    private double zoomScale = 1.0; // Default zoom scale
-    private final double minZoom = 0.5;
-    private final double maxZoom = 3.0;
-    private final double gridSize = 20; // Base grid size
 
     private void addZoomFunctionality() {
         builder.setOnScroll(event -> {
-            if (event.isControlDown()) { // Check if CTRL is held
+            if (event.isControlDown()) {
                 double delta = event.getDeltaY();
-                double zoomFactor = delta > 0 ? 1.1 : 0.9; // Zoom in or out
-
-                // Calculate new zoom scale within limits
+                double zoomFactor = delta > 0 ? 1.1 : 0.9;
                 double newScale = zoomScale * zoomFactor;
-                if (newScale < minZoom || newScale > maxZoom) {
-                    return; // Prevent excessive zooming
-                }
+
+                if (newScale < minZoom || newScale > maxZoom) return;
                 zoomScale = newScale;
 
-                // Apply scaling transformation to the container
                 canvasContainer.setScaleX(zoomScale);
                 canvasContainer.setScaleY(zoomScale);
-
-                // Redraw the grid and components
                 redrawCanvas();
 
                 event.consume();
@@ -115,142 +191,70 @@ public class SimulationController {
         double width = builder.getWidth();
         double height = builder.getHeight();
 
-        // Clear previous grid
         gc.setFill(javafx.scene.paint.Color.DARKGRAY);
         gc.fillRect(0, 0, width, height);
 
-        // Set grid line color
         gc.setStroke(javafx.scene.paint.Color.BLACK);
         gc.setLineWidth(1);
 
-        // Draw vertical lines
-        for (double x = 0; x <= width; x += gridSize) {
-            gc.strokeLine(x, 0, x, height);
-        }
-
-        // Draw horizontal lines
-        for (double y = 0; y <= height; y += gridSize) {
-            gc.strokeLine(0, y, width, y);
-        }
+        for (double x = 0; x <= width; x += gridSize) gc.strokeLine(x, 0, x, height);
+        for (double y = 0; y <= height; y += gridSize) gc.strokeLine(0, y, width, y);
     }
 
-    @FXML
-    private void handleSave(ActionEvent event) {
-        // Save code
-    }
-
-    @FXML
-    private void handleSaveAndExit(ActionEvent event) {
-        // Save code
-        System.exit(0);
-    }
-
-    @FXML
-    private void handleExportJSON(ActionEvent event) {
-        // Export code
-    }
-
-    @FXML
-    private void handleExportCSV(ActionEvent event) {
-        // Export code
-    }
-
-    @FXML
-    private void handleExportText(ActionEvent event) {
-        // Export code
-    }
-
-    @FXML
-    private void handleExportImage(ActionEvent event) {
-        // Export code
-    }
-
-    @FXML
-    private void handleExit(ActionEvent event) {
-        System.exit(0);
-    }
-
-    @FXML
-    private void handleUndo(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleRedo(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleCopy(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handlePaste(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleDelete(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleSelectAll(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleColor(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleName(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleMaximizeGraph(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    private void handleMinimizeGraph(ActionEvent event) {
-        // Code
-    }
-
-    @FXML
-    public void handleOpenSettings(ActionEvent event) {
-        settingsOverlay.setVisible(true);
-    }
-
-    @FXML
-    public void handleCloseSettings(ActionEvent event) {
-        settingsOverlay.setVisible(false);
-    }
-
-    private void switchScene(String fxmlFile, ActionEvent event) {
-        try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            Parent root = loader.load();
-            scene.setRoot(root);
-
-            stage.setFullScreen(true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void redrawCanvas() {
+        GraphicsContext gc = builder.getGraphicsContext2D();
+        gc.clearRect(0, 0, builder.getWidth(), builder.getHeight());
+        drawGrid();
+        for (ImageComponent component : components) {
+            gc.save();
+            gc.translate(component.x + component.width / 2, component.y + component.height / 2);
+            gc.rotate(component.rotation);
+            gc.drawImage(component.image, -component.width / 2, -component.height / 2, component.width, component.height);
+            gc.restore();
         }
     }
 
-    private List<ImageComponent> components = new ArrayList<>();
+    private void setupDragging() {
+        final double[] offsetX = {0};
+        final double[] offsetY = {0};
+
+        builder.setOnMousePressed(e -> {
+            for (ImageComponent component : components) {
+                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
+                    draggedExistingComponent = component;
+                    offsetX[0] = e.getX() - component.x;
+                    offsetY[0] = e.getY() - component.y;
+                    break;
+                }
+            }
+        });
+
+        builder.setOnMouseDragged(e -> {
+            if (draggedExistingComponent != null) {
+                double newX = e.getX() - offsetX[0];
+                double newY = e.getY() - offsetY[0];
+
+                draggedExistingComponent.x = newX;
+                draggedExistingComponent.y = newY;
+                redrawCanvas();
+            }
+        });
+
+        builder.setOnMouseReleased(e -> {
+            if (draggedExistingComponent != null) {
+                draggedExistingComponent.x = Math.round(draggedExistingComponent.x / gridSize) * gridSize;
+                draggedExistingComponent.y = Math.round(draggedExistingComponent.y / gridSize) * gridSize;
+                draggedExistingComponent = null;
+                redrawCanvas();
+            }
+        });
+    }
 
     private static class ImageComponent {
         Image image;
         double x, y, width, height;
+        double rotation = 0;
 
         ImageComponent(Image image, double x, double y, double width, double height) {
             this.image = image;
@@ -261,116 +265,64 @@ public class SimulationController {
         }
     }
 
-    private void redrawCanvas() {
-        GraphicsContext gc = builder.getGraphicsContext2D();
-        gc.clearRect(0, 0, builder.getWidth(), builder.getHeight());
+    @FXML private void handleSave(ActionEvent event) {}
+    @FXML private void handleSaveAndExit(ActionEvent event) { System.exit(0); }
+    @FXML private void handleExportJSON(ActionEvent event) {}
+    @FXML private void handleExportCSV(ActionEvent event) {}
+    @FXML private void handleExportText(ActionEvent event) {}
+    @FXML private void handleExportImage(ActionEvent event) {}
+    @FXML private void handleExit(ActionEvent event) { System.exit(0); }
+    @FXML private void handleUndo(ActionEvent event) {}
+    @FXML private void handleRedo(ActionEvent event) {}
+    @FXML private void handleCopy(ActionEvent event) {}
+    @FXML private void handlePaste(ActionEvent event) {}
+    @FXML private void handleDelete(ActionEvent event) {}
+    @FXML private void handleSelectAll(ActionEvent event) {}
+    @FXML private void handleColor(ActionEvent event) {}
+    @FXML private void handleName(ActionEvent event) {}
+    @FXML private void handleMaximizeGraph(ActionEvent event) {}
+    @FXML private void handleMinimizeGraph(ActionEvent event) {}
+    @FXML public void handleOpenSettings(ActionEvent event) { settingsOverlay.setVisible(true); }
+    @FXML public void handleCloseSettings(ActionEvent event) { settingsOverlay.setVisible(false); }
 
-        // Redraw grid
-        drawGrid();
-
-        // Redraw all components
-        for (ImageComponent component : components) {
-            gc.drawImage(component.image, component.x, component.y, component.width, component.height);
+    private void switchScene(String fxmlFile, ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            scene.setRoot(root);
+            stage.setFullScreen(true);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleAddBattery(ActionEvent event) {
-        if (builder != null) {
-            Image batteryImage = new Image(getClass().getResource("/images/circuit_diagrams/Battery Cell.GIF").toExternalForm());
-
-            double x = builder.getWidth() / 2 - 25;
-            double y = builder.getHeight() / 2 - 25;
-            double width = 110;
-            double height = 110;
-
-            ImageComponent battery = new ImageComponent(batteryImage, x, y, width, height);
-            components.add(battery); // Add to list
-            redrawCanvas();
-
-            System.out.println("Battery added to the builder.");
-        } else {
-            System.out.println("Canvas is null. Check FXML binding.");
-        }
-    }
-
-    private void setupDragging() {
-        final double[] offsetX = {0};
-        final double[] offsetY = {0};
-        final ImageComponent[] selectedComponent = {null};
-
-        builder.setOnMousePressed(e -> {
-            for (ImageComponent component : components) {
-                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
-                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
-
-                    selectedComponent[0] = component;
-                    offsetX[0] = e.getX() - component.x;
-                    offsetY[0] = e.getY() - component.y;
-                    break;
-                }
-            }
-        });
-
-        builder.setOnMouseDragged(e -> {
-            if (selectedComponent[0] != null) {
-                double newX = e.getX() - offsetX[0];
-                double newY = e.getY() - offsetY[0];
-
-                // Ensure movement stays within bounds
-                if (newX >= 0 && newX + selectedComponent[0].width <= builder.getWidth()) {
-                    selectedComponent[0].x = newX;
-                }
-                if (newY >= 0 && newY + selectedComponent[0].height <= builder.getHeight()) {
-                    selectedComponent[0].y = newY;
-                }
-
-                redrawCanvas();
-            }
-        });
-
-        builder.setOnMouseReleased(e -> {
-            if (selectedComponent[0] != null) {
-                // Snap to the closest grid intersection
-                selectedComponent[0].x = Math.round(selectedComponent[0].x / gridSize) * gridSize;
-                selectedComponent[0].y = Math.round(selectedComponent[0].y / gridSize) * gridSize;
-
-                selectedComponent[0] = null; // Reset selection
-                redrawCanvas();
-            }
-        });
     }
 }
 
 class CircuitVerifier {
-    private Map<String, List<String>> graph = new HashMap<>(); // Circuit connections
-    private Map<String, Double> voltages = new HashMap<>(); // Voltage values of batteries
-    private Map<String, Double> resistances = new HashMap<>(); // Resistance values
-    private Map<String, Double> currents = new HashMap<>(); // Current values
+    private Map<String, List<String>> graph = new HashMap<>();
+    private Map<String, Double> voltages = new HashMap<>();
+    private Map<String, Double> resistances = new HashMap<>();
+    private Map<String, Double> currents = new HashMap<>();
 
-    // Add a component
     public void addComponent(String id, double resistance) {
         graph.putIfAbsent(id, new ArrayList<>());
         resistances.put(id, resistance);
     }
 
-    // Add a battery with voltage
     public void addBattery(String id, double voltage) {
         graph.putIfAbsent(id, new ArrayList<>());
         voltages.put(id, voltage);
     }
 
-    // Connect two components
     public void connect(String a, String b) {
         graph.computeIfAbsent(a, k -> new ArrayList<>()).add(b);
         graph.computeIfAbsent(b, k -> new ArrayList<>()).add(a);
     }
 
-    // Check if the circuit is closed
     public boolean isCircuitClosed() {
-        if (voltages.isEmpty()) return false; // No power source
-
-        String start = voltages.keySet().iterator().next(); // Pick any battery
+        if (voltages.isEmpty()) return false;
+        String start = voltages.keySet().iterator().next();
         Set<String> visited = new HashSet<>();
         return dfs(start, visited, null);
     }
@@ -378,7 +330,6 @@ class CircuitVerifier {
     private boolean dfs(String node, Set<String> visited, String parent) {
         if (visited.contains(node)) return true;
         visited.add(node);
-
         for (String neighbor : graph.getOrDefault(node, new ArrayList<>())) {
             if (!neighbor.equals(parent) && dfs(neighbor, visited, node)) {
                 return true;
@@ -387,7 +338,6 @@ class CircuitVerifier {
         return false;
     }
 
-    // Compute current directions using Kirchhoff’s Laws
     public void calculateCurrents() {
         if (!isCircuitClosed()) {
             System.out.println("Open circuit! No current flows.");
