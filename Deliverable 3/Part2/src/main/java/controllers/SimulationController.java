@@ -237,6 +237,13 @@ public class SimulationController {
 
                 draggedExistingComponent.x = newX;
                 draggedExistingComponent.y = newY;
+
+                // Update start and end points
+                draggedExistingComponent.startX = newX;
+                draggedExistingComponent.startY = newY + draggedExistingComponent.height / 2;
+                draggedExistingComponent.endX = newX + draggedExistingComponent.width;
+                draggedExistingComponent.endY = newY + draggedExistingComponent.height / 2;
+
                 redrawCanvas();
             }
         });
@@ -245,6 +252,13 @@ public class SimulationController {
             if (draggedExistingComponent != null) {
                 draggedExistingComponent.x = Math.round(draggedExistingComponent.x / gridSize) * gridSize;
                 draggedExistingComponent.y = Math.round(draggedExistingComponent.y / gridSize) * gridSize;
+
+                // Update the start and end points after snapping to grid
+                draggedExistingComponent.startX = draggedExistingComponent.x;
+                draggedExistingComponent.startY = draggedExistingComponent.y + draggedExistingComponent.height / 2;
+                draggedExistingComponent.endX = draggedExistingComponent.x + draggedExistingComponent.width;
+                draggedExistingComponent.endY = draggedExistingComponent.y + draggedExistingComponent.height / 2;
+
                 draggedExistingComponent = null;
                 redrawCanvas();
             }
@@ -255,6 +269,7 @@ public class SimulationController {
         Image image;
         double x, y, width, height;
         double rotation = 0;
+        double startX, startY, endX, endY;
 
         ImageComponent(Image image, double x, double y, double width, double height) {
             this.image = image;
@@ -262,6 +277,10 @@ public class SimulationController {
             this.y = y;
             this.width = width;
             this.height = height;
+            this.startX = x;
+            this.startY = y + height / 2;
+            this.endX = x + width;
+            this.endY = y + height / 2;
         }
     }
 
