@@ -50,6 +50,7 @@ public class SimulationController {
     private boolean isDrawingWire = false;
     private double wireStartX, wireStartY;
     private Circle wireStartCircle;
+    private Wire selectedWire = null; // Track the selected wire
 
     @FXML
     public void initialize() {
@@ -101,6 +102,7 @@ public class SimulationController {
 
     private void setupCanvasClickPlacement() {
         builder.setOnMouseClicked(e -> {
+            // Check if a component is being placed
             if (floatingComponentImage.isVisible() && currentlySelectedImage != null) {
                 double snappedX = Math.round((e.getX() - selectedImageWidth / 2) / gridSize) * gridSize;
                 double snappedY = Math.round((e.getY() - selectedImageHeight / 2) / gridSize) * gridSize;
@@ -127,28 +129,27 @@ public class SimulationController {
                 return;
             }
 
-            for (Iterator<Drawable> iterator = drawables.iterator(); iterator.hasNext(); ) {
-                Drawable drawable = iterator.next();
-                if (drawable instanceof ImageComponent) {
-                    ImageComponent component = (ImageComponent) drawable;
-                    if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
-                            e.getY() >= component.y && e.getY() <= component.y + component.height) {
-                        currentlySelectedImage = component.image;
-                        floatingComponentImage.setImage(currentlySelectedImage);
-                        floatingComponentImage.setFitWidth(component.width);
-                        floatingComponentImage.setFitHeight(component.height);
-                        floatingComponentImage.setRotate(component.rotation);
-                        currentRotation = component.rotation;
-                        selectedImageWidth = component.width;
-                        selectedImageHeight = component.height;
-                        floatingComponentImage.setVisible(true);
-                        iterator.remove();
-                        redrawCanvas();
-                        return;
+            // Check if a wire is clicked
+            selectedWire = null; // Reset selected wire
+            for (Drawable drawable : drawables) {
+                if (drawable instanceof Wire) {
+                    Wire wire = (Wire) drawable;
+                    if (isPointNearLine(e.getX(), e.getY(), wire.startX, wire.startY, wire.endX, wire.endY)) {
+                        selectedWire = wire; // Select the wire
+                        break;
                     }
                 }
             }
+
+            // Redraw the canvas to highlight the selected wire
+            redrawCanvas();
         });
+    }
+
+    private boolean isPointNearLine(double px, double py, double x1, double y1, double x2, double y2) {
+        double lineLength = Math.hypot(x2 - x1, y2 - y1);
+        double distance = Math.abs((x2 - x1) * (y1 - py) - (x1 - px) * (y2 - y1)) / lineLength;
+        return distance < 5; // Tolerance for wire selection
     }
 
     private double wireEndX, wireEndY; // Add these variables to store the current mouse coordinates
@@ -271,7 +272,16 @@ public class SimulationController {
 
         // Draw all drawable objects
         for (Drawable drawable : drawables) {
-            drawable.draw(gc);
+            if (drawable == selectedWire) {
+                // Highlight the selected wire
+                gc.setStroke(Color.RED);
+                gc.setLineWidth(6); // Thicker line for selected wire
+                ((Wire) drawable).draw(gc);
+                gc.setStroke(Color.BLACK); // Reset stroke color
+                gc.setLineWidth(4); // Reset line width
+            } else {
+                drawable.draw(gc);
+            }
         }
 
         // Draw the temporary red wire if drawing
@@ -537,7 +547,14 @@ public class SimulationController {
     @FXML private void handleRedo(ActionEvent event) {}
     @FXML private void handleCopy(ActionEvent event) {}
     @FXML private void handlePaste(ActionEvent event) {}
-    @FXML private void handleDelete(ActionEvent event) {}
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        if (selectedWire != null) {
+            drawables.remove(selectedWire); // Remove the selected wire
+            selectedWire = null; // Clear the selection
+            redrawCanvas(); // Redraw the canvas
+        }
+    }
     @FXML private void handleSelectAll(ActionEvent event) {}
     @FXML private void handleColor(ActionEvent event) {}
     @FXML private void handleName(ActionEvent event) {}
