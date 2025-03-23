@@ -130,6 +130,29 @@ public class SimulationController {
                 return;
             }
 
+            // Check if an existing component is clicked to be moved
+            for (Iterator<Drawable> iterator = drawables.iterator(); iterator.hasNext(); ) {
+                Drawable drawable = iterator.next();
+                if (drawable instanceof ImageComponent) {
+                    ImageComponent component = (ImageComponent) drawable;
+                    if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                            e.getY() >= component.y && e.getY() <= component.y + component.height) {
+                        currentlySelectedImage = component.image;
+                        floatingComponentImage.setImage(currentlySelectedImage);
+                        floatingComponentImage.setFitWidth(component.width);
+                        floatingComponentImage.setFitHeight(component.height);
+                        floatingComponentImage.setRotate(component.rotation);
+                        currentRotation = component.rotation;
+                        selectedImageWidth = component.width;
+                        selectedImageHeight = component.height;
+                        floatingComponentImage.setVisible(true);
+                        iterator.remove();
+                        redrawCanvas();
+                        return;
+                    }
+                }
+            }
+
             // Check if a wire is clicked
             selectedWire = null; // Reset selected wire
             for (Drawable drawable : drawables) {
@@ -580,65 +603,6 @@ public class SimulationController {
             stage.setFullScreen(true);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-}
-
-class CircuitVerifier {
-    private Map<String, List<String>> graph = new HashMap<>();
-    private Map<String, Double> voltages = new HashMap<>();
-    private Map<String, Double> resistances = new HashMap<>();
-    private Map<String, Double> currents = new HashMap<>();
-
-    public void addComponent(String id, double resistance) {
-        graph.putIfAbsent(id, new ArrayList<>());
-        resistances.put(id, resistance);
-    }
-
-    public void addBattery(String id, double voltage) {
-        graph.putIfAbsent(id, new ArrayList<>());
-        voltages.put(id, voltage);
-    }
-
-    public void connect(String a, String b) {
-        graph.computeIfAbsent(a, k -> new ArrayList<>()).add(b);
-        graph.computeIfAbsent(b, k -> new ArrayList<>()).add(a);
-    }
-
-    public boolean isCircuitClosed() {
-        if (voltages.isEmpty()) return false;
-        String start = voltages.keySet().iterator().next();
-        Set<String> visited = new HashSet<>();
-        return dfs(start, visited, null);
-    }
-
-    private boolean dfs(String node, Set<String> visited, String parent) {
-        if (visited.contains(node)) return true;
-        visited.add(node);
-        for (String neighbor : graph.getOrDefault(node, new ArrayList<>())) {
-            if (!neighbor.equals(parent) && dfs(neighbor, visited, node)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void calculateCurrents() {
-        if (!isCircuitClosed()) {
-            System.out.println("Open circuit! No current flows.");
-            return;
-        }
-
-        for (String node : voltages.keySet()) {
-            double voltage = voltages.get(node);
-            for (String neighbor : graph.get(node)) {
-                if (resistances.containsKey(neighbor)) {
-                    double resistance = resistances.get(neighbor);
-                    double current = voltage / resistance;
-                    currents.put(neighbor, current);
-                    System.out.println("Current through " + neighbor + " = " + current + "A");
-                }
-            }
         }
     }
 }
