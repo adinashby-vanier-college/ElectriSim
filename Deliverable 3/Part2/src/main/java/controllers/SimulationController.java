@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -270,15 +271,22 @@ public class SimulationController {
         gc.clearRect(0, 0, builder.getWidth(), builder.getHeight());
         drawGrid();
 
+        // Create a light blue shadow effect
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.LIGHTBLUE);
+        shadow.setRadius(10);
+        shadow.setSpread(0.6);
+
         // Draw all drawable objects
         for (Drawable drawable : drawables) {
             if (drawable == selectedWire) {
-                // Highlight the selected wire
-                gc.setStroke(Color.RED);
-                gc.setLineWidth(6); // Thicker line for selected wire
+                // Apply the shadow effect to the selected wire
+                gc.save();
+                gc.setEffect(shadow);
+                gc.setStroke(Color.BLACK);
+                gc.setLineWidth(4); // Set wire thickness to 4 pixels
                 ((Wire) drawable).draw(gc);
-                gc.setStroke(Color.BLACK); // Reset stroke color
-                gc.setLineWidth(4); // Reset line width
+                gc.restore();
             } else {
                 drawable.draw(gc);
             }
@@ -547,8 +555,7 @@ public class SimulationController {
     @FXML private void handleRedo(ActionEvent event) {}
     @FXML private void handleCopy(ActionEvent event) {}
     @FXML private void handlePaste(ActionEvent event) {}
-    @FXML
-    private void handleDelete(ActionEvent event) {
+    @FXML private void handleDelete(ActionEvent event) {
         if (selectedWire != null) {
             drawables.remove(selectedWire); // Remove the selected wire
             selectedWire = null; // Clear the selection
