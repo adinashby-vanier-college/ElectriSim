@@ -16,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class SimulationController {
     @FXML private ScrollPane scrollPane;
     @FXML private Pane canvasContainer;
 
-    private List<ImageComponent> components = new ArrayList<>();
+    private List<Drawable> drawables = new ArrayList<>(); // Store all drawable objects (components and wires)
     private final double gridSize = 20;
     private double zoomScale = 1.0;
     private final double minZoom = 0.5;
@@ -43,6 +45,11 @@ public class SimulationController {
     private double selectedImageHeight = 80;
     private ImageComponent draggedExistingComponent = null;
     private double currentRotation = 0;
+
+    // Wire creation variables
+    private boolean isDrawingWire = false;
+    private double wireStartX, wireStartY;
+    private Circle wireStartCircle;
 
     @FXML
     public void initialize() {
@@ -58,6 +65,7 @@ public class SimulationController {
         setupDragging();
         setupFloatingImage();
         setupCanvasClickPlacement();
+        setupWireDrawing();
     }
 
     private void setupFloatingImage() {
@@ -97,16 +105,19 @@ public class SimulationController {
                 double snappedX = Math.round((e.getX() - selectedImageWidth / 2) / gridSize) * gridSize;
                 double snappedY = Math.round((e.getY() - selectedImageHeight / 2) / gridSize) * gridSize;
 
-                for (ImageComponent existing : components) {
-                    if (snappedX < existing.x + existing.width && snappedX + selectedImageWidth > existing.x &&
-                            snappedY < existing.y + existing.height && snappedY + selectedImageHeight > existing.y) {
-                        return;
+                for (Drawable drawable : drawables) {
+                    if (drawable instanceof ImageComponent) {
+                        ImageComponent component = (ImageComponent) drawable;
+                        if (snappedX < component.x + component.width && snappedX + selectedImageWidth > component.x &&
+                                snappedY < component.y + component.height && snappedY + selectedImageHeight > component.y) {
+                            return;
+                        }
                     }
                 }
 
                 ImageComponent newComponent = new ImageComponent(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
                 newComponent.rotation = currentRotation;
-                components.add(newComponent);
+                drawables.add(newComponent);
                 redrawCanvas();
 
                 floatingComponentImage.setVisible(false);
@@ -116,26 +127,78 @@ public class SimulationController {
                 return;
             }
 
-            for (Iterator<ImageComponent> iterator = components.iterator(); iterator.hasNext(); ) {
-                ImageComponent component = iterator.next();
-                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
-                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
-                    currentlySelectedImage = component.image;
-                    floatingComponentImage.setImage(currentlySelectedImage);
-                    floatingComponentImage.setFitWidth(component.width);
-                    floatingComponentImage.setFitHeight(component.height);
-                    floatingComponentImage.setRotate(component.rotation);
-                    currentRotation = component.rotation;
-                    selectedImageWidth = component.width;
-                    selectedImageHeight = component.height;
-                    floatingComponentImage.setVisible(true);
-                    iterator.remove();
-                    redrawCanvas();
-                    return;
+            for (Iterator<Drawable> iterator = drawables.iterator(); iterator.hasNext(); ) {
+                Drawable drawable = iterator.next();
+                if (drawable instanceof ImageComponent) {
+                    ImageComponent component = (ImageComponent) drawable;
+                    if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                            e.getY() >= component.y && e.getY() <= component.y + component.height) {
+                        currentlySelectedImage = component.image;
+                        floatingComponentImage.setImage(currentlySelectedImage);
+                        floatingComponentImage.setFitWidth(component.width);
+                        floatingComponentImage.setFitHeight(component.height);
+                        floatingComponentImage.setRotate(component.rotation);
+                        currentRotation = component.rotation;
+                        selectedImageWidth = component.width;
+                        selectedImageHeight = component.height;
+                        floatingComponentImage.setVisible(true);
+                        iterator.remove();
+                        redrawCanvas();
+                        return;
+                    }
                 }
             }
         });
     }
+
+    private double wireEndX, wireEndY; // Add these variables to store the current mouse coordinates
+
+    private void setupWireDrawing() {
+        builder.setOnMousePressed(e -> {
+            for (Drawable drawable : drawables) {
+                if (drawable instanceof ImageComponent) {
+                    ImageComponent component = (ImageComponent) drawable;
+                    if (component.startCircle.contains(e.getX(), e.getY())) {
+                        isDrawingWire = true;
+                        wireStartX = component.startX;
+                        wireStartY = component.startY;
+                        wireStartCircle = component.startCircle;
+                        break;
+                    } else if (component.endCircle.contains(e.getX(), e.getY())) {
+                        isDrawingWire = true;
+                        wireStartX = component.endX;
+                        wireStartY = component.endY;
+                        wireStartCircle = component.endCircle;
+                        break;
+                    }
+                }
+            }
+        });
+
+        builder.setOnMouseDragged(e -> {
+            if (isDrawingWire) {
+                // Store the current mouse coordinates
+                wireEndX = e.getX();
+                wireEndY = e.getY();
+                redrawCanvas();
+            }
+        });
+
+        builder.setOnMouseReleased(e -> {
+            if (isDrawingWire) {
+                double snappedX = Math.round(e.getX() / gridSize) * gridSize;
+                double snappedY = Math.round(e.getY() / gridSize) * gridSize;
+
+                // Add the wire to the list of drawables
+                Wire newWire = new Wire(wireStartX, wireStartY, snappedX, snappedY);
+                drawables.add(newWire);
+                isDrawingWire = false;
+                wireStartCircle = null;
+                redrawCanvas();
+            }
+        });
+    }
+
     @FXML
     private void handleComponentButtonClick(ActionEvent event) {
         if (floatingComponentImage.isVisible()) return;
@@ -191,10 +254,10 @@ public class SimulationController {
         double width = builder.getWidth();
         double height = builder.getHeight();
 
-        gc.setFill(javafx.scene.paint.Color.DARKGRAY);
+        gc.setFill(Color.DARKGRAY);
         gc.fillRect(0, 0, width, height);
 
-        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
 
         for (double x = 0; x <= width; x += gridSize) gc.strokeLine(x, 0, x, height);
@@ -205,12 +268,17 @@ public class SimulationController {
         GraphicsContext gc = builder.getGraphicsContext2D();
         gc.clearRect(0, 0, builder.getWidth(), builder.getHeight());
         drawGrid();
-        for (ImageComponent component : components) {
-            gc.save();
-            gc.translate(component.x + component.width / 2, component.y + component.height / 2);
-            gc.rotate(component.rotation);
-            gc.drawImage(component.image, -component.width / 2, -component.height / 2, component.width, component.height);
-            gc.restore();
+
+        // Draw all drawable objects
+        for (Drawable drawable : drawables) {
+            drawable.draw(gc);
+        }
+
+        // Draw the temporary red wire if drawing
+        if (isDrawingWire) {
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(4); // Set temporary wire thickness to 4 pixels
+            gc.strokeLine(wireStartX, wireStartY, wireEndX, wireEndY);
         }
     }
 
@@ -219,13 +287,16 @@ public class SimulationController {
         final double[] offsetY = {0};
 
         builder.setOnMousePressed(e -> {
-            for (ImageComponent component : components) {
-                if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
-                        e.getY() >= component.y && e.getY() <= component.y + component.height) {
-                    draggedExistingComponent = component;
-                    offsetX[0] = e.getX() - component.x;
-                    offsetY[0] = e.getY() - component.y;
-                    break;
+            for (Drawable drawable : drawables) {
+                if (drawable instanceof ImageComponent) {
+                    ImageComponent component = (ImageComponent) drawable;
+                    if (e.getX() >= component.x && e.getX() <= component.x + component.width &&
+                            e.getY() >= component.y && e.getY() <= component.y + component.height) {
+                        draggedExistingComponent = component;
+                        offsetX[0] = e.getX() - component.x;
+                        offsetY[0] = e.getY() - component.y;
+                        break;
+                    }
                 }
             }
         });
@@ -244,6 +315,9 @@ public class SimulationController {
                 draggedExistingComponent.endX = newX + draggedExistingComponent.width;
                 draggedExistingComponent.endY = newY + draggedExistingComponent.height / 2;
 
+                // Update wires connected to this component
+                updateWiresForComponent(draggedExistingComponent);
+
                 redrawCanvas();
             }
         });
@@ -259,17 +333,42 @@ public class SimulationController {
                 draggedExistingComponent.endX = draggedExistingComponent.x + draggedExistingComponent.width;
                 draggedExistingComponent.endY = draggedExistingComponent.y + draggedExistingComponent.height / 2;
 
+                // Update wires connected to this component
+                updateWiresForComponent(draggedExistingComponent);
+
                 draggedExistingComponent = null;
                 redrawCanvas();
             }
         });
     }
 
-    private static class ImageComponent {
+    private void updateWiresForComponent(ImageComponent component) {
+        for (Drawable drawable : drawables) {
+            if (drawable instanceof Wire) {
+                Wire wire = (Wire) drawable;
+                if (wire.startX == component.startX && wire.startY == component.startY) {
+                    wire.startX = component.startX;
+                    wire.startY = component.startY;
+                }
+                if (wire.endX == component.endX && wire.endY == component.endY) {
+                    wire.endX = component.endX;
+                    wire.endY = component.endY;
+                }
+            }
+        }
+    }
+
+    // Base interface for all drawable objects
+    private interface Drawable {
+        void draw(GraphicsContext gc);
+    }
+
+    private static class ImageComponent implements Drawable {
         Image image;
         double x, y, width, height;
         double rotation = 0;
         double startX, startY, endX, endY;
+        Circle startCircle, endCircle;
 
         ImageComponent(Image image, double x, double y, double width, double height) {
             this.image = image;
@@ -281,7 +380,150 @@ public class SimulationController {
             this.startY = y + height / 2;
             this.endX = x + width;
             this.endY = y + height / 2;
+
+            // Create circles at start and end points
+            this.startCircle = new Circle(startX, startY, 8, Color.BLACK); // Change circle color to black
+            this.endCircle = new Circle(endX, endY, 8, Color.BLACK); // Change circle color to black
         }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            gc.save();
+            gc.translate(x + width / 2, y + height / 2);
+            gc.rotate(rotation);
+            gc.drawImage(image, -width / 2, -height / 2, width, height);
+            gc.restore();
+
+            // Draw start and end circles
+            gc.setFill(Color.BLACK); // Change circle color to black
+            gc.fillOval(startX - 8, startY - 8, 16, 16); // Increase circle size to 16x16 pixels
+            gc.fillOval(endX - 8, endY - 8, 16, 16); // Increase circle size to 16x16 pixels
+        }
+    }
+
+    private static class Wire implements Drawable {
+        double startX, startY, endX, endY;
+
+        Wire(double startX, double startY, double endX, double endY) {
+            this.startX = startX;
+            this.startY = startY;
+            this.endX = endX;
+            this.endY = endY;
+        }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(4); // Set wire thickness to 4 pixels
+            gc.strokeLine(startX, startY, endX, endY);
+        }
+    }
+
+    private boolean isPowerSupply(ImageComponent component) {
+        String SearchedComponent = component.image.getUrl();
+        if (SearchedComponent.contains("Voltage%20Source.GIF")||SearchedComponent.contains("Current%20Source.GIF")||SearchedComponent.contains("Generator.GIF")
+        ||SearchedComponent.contains("Battery%20Cell.GIF")||SearchedComponent.contains("Battery.GIF")||SearchedComponent.contains("Controlled%20Voltage%20Source.GIF")||SearchedComponent.contains("Controlled%20Current%20Source.GIF")) {
+            return true;}
+        else return false;
+    }
+
+    private void verifyCircuit() {
+        // Find a power supply component
+        ImageComponent powerSupply = null;
+        for (Drawable drawable : drawables) {
+            if (drawable instanceof ImageComponent) {
+                ImageComponent component = (ImageComponent) drawable;
+                if (isPowerSupply(component)) {
+                    powerSupply = component;
+                    break;
+                }
+            }
+        }
+
+        if (powerSupply == null) {
+            System.out.println("Circuit open: No power supply found.");
+            return;
+        }
+
+        // Start traversal from one end of the power supply
+        double startX = powerSupply.startX;
+        double startY = powerSupply.startY;
+
+        // Use a set to keep track of visited wires and components
+        Set<Drawable> visited = new HashSet<>();
+
+        // Perform traversal
+        if (traverseCircuit(startX, startY, startX, startY, visited)) {
+            System.out.println("Circuit closed.");
+        } else {
+            System.out.println("Circuit open.");
+        }
+    }
+
+    private boolean traverseCircuit(double startX, double startY, double initialX, double initialY, Set<Drawable> visited) {
+        // Check if we have returned to the starting point
+        if (startX == initialX && startY == initialY && !visited.isEmpty()) {
+            return true; // Circuit is closed
+        }
+
+        // Look for connected wires or components
+        for (Drawable drawable : drawables) {
+            if (visited.contains(drawable)) {
+                continue; // Skip already visited elements
+            }
+
+            if (drawable instanceof Wire) {
+                Wire wire = (Wire) drawable;
+                if ((wire.startX == startX && wire.startY == startY) || (wire.endX == startX && wire.endY == startY)) {
+                    visited.add(wire); // Mark wire as visited
+                    double nextX = (wire.startX == startX && wire.startY == startY) ? wire.endX : wire.startX;
+                    double nextY = (wire.startY == startY && wire.startX == startX) ? wire.endY : wire.startY;
+                    if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
+                        return true; // Continue traversal
+                    }
+                }
+            } else if (drawable instanceof ImageComponent) {
+                ImageComponent component = (ImageComponent) drawable;
+                if ((component.startX == startX && component.startY == startY) || (component.endX == startX && component.endY == startY)) {
+                    visited.add(component); // Mark component as visited
+                    double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
+                    double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;
+                    if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
+                        return true; // Continue traversal
+                    }
+                }
+            }
+        }
+
+        return false; // No closed circuit found
+    }
+
+    @FXML
+    private void handleVerifyCircuit(ActionEvent event) {
+        verifyCircuit();
+    }
+
+    @FXML
+    private void handleReset(ActionEvent event) {
+        resetBuilder();
+    }
+
+    private void resetBuilder() {
+        // Clear all components and wires
+        drawables.clear();
+
+        // Reset the floating component image
+        floatingComponentImage.setVisible(false);
+        currentlySelectedImage = null;
+        floatingComponentImage.setRotate(0);
+        currentRotation = 0;
+
+        // Reset the wire drawing state
+        isDrawingWire = false;
+        wireStartCircle = null;
+
+        // Redraw the canvas to reflect the reset state
+        redrawCanvas();
     }
 
     @FXML private void handleSave(ActionEvent event) {}

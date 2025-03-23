@@ -1317,8 +1317,8 @@
                                     <Label prefHeight="0.0" prefWidth="270.0" styleClass="simulation-label" text="Simulation Controls" />
                                     <HBox prefHeight="202.0" prefWidth="487.0" styleClass="simulation-button-hbox">
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Simuate" />
-                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Reset" />
+                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Simuate" onAction="#handleVerifyCircuit"/>
+                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Reset" onAction="#handleReset"/>
                                        </children>
                                     </HBox>
                                  </children>
