@@ -62,7 +62,6 @@ public class SimulationController {
     // Initialization
     @FXML
     public void initialize() {
-        System.out.println("parametersPane is null: " + (parametersPane == null)); // Debug log
         // Adjust main pane size when root pane resizes
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefWidth(newVal.doubleValue()));
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefHeight(newVal.doubleValue()));
@@ -99,11 +98,20 @@ public class SimulationController {
         // Handle key presses for component placement
         Platform.runLater(() -> {
             rootPane.getScene().setOnKeyPressed(e -> {
-                if (!floatingComponentImage.isVisible()) return;
-
                 if (e.getCode() == KeyCode.ESCAPE || e.getCode() == KeyCode.E) {
-                    floatingComponentImage.setVisible(false);
-                    currentlySelectedImage = null;
+                    if (draggedExistingComponent != null) {
+                        // Remove the component from the drawables list
+                        drawables.remove(draggedExistingComponent);
+                        // Remove the component's parameter controls from the parametersPane
+                        parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
+                        // Reset the dragged component
+                        draggedExistingComponent = null;
+                        // Redraw the canvas
+                        redrawCanvas();
+                    } else if (floatingComponentImage.isVisible()) {
+                        floatingComponentImage.setVisible(false);
+                        currentlySelectedImage = null;
+                    }
                 } else if (e.getCode() == KeyCode.R) {
                     currentRotation = (currentRotation + 90) % 360;
                     floatingComponentImage.setRotate(currentRotation);
@@ -148,6 +156,11 @@ public class SimulationController {
         drawables.add(newComponent);
         redrawCanvas();
 
+        // Remove any existing parameter controls for this component
+        if (newComponent.parameterControls != null) {
+            parametersPane.getChildren().remove(newComponent.parameterControls);
+        }
+
         // Generate parameter controls for the new component
         generateParameterControls(newComponent);
 
@@ -160,8 +173,6 @@ public class SimulationController {
 
     // Helper method to determine the component type based on the image URL
     private String determineComponentType(String imageUrl) {
-        System.out.println("Image URL: " + imageUrl); // Debug log
-
         if (imageUrl.contains("SPST%20Toggle%20Switch")) {
             return "SPSTToggleSwitch";
         } else if (imageUrl.contains("SPDT%20Toggle%20Switch")) {
@@ -331,7 +342,14 @@ public class SimulationController {
                     selectedImageWidth = component.width;
                     selectedImageHeight = component.height;
                     floatingComponentImage.setVisible(true);
+
+                    // Remove the component from the drawables list
                     iterator.remove();
+                    // Remove the component's parameter controls from the parametersPane
+                    if (component.parameterControls != null) {
+                        parametersPane.getChildren().remove(component.parameterControls);
+                    }
+
                     redrawCanvas();
                     return;
                 }
@@ -526,6 +544,7 @@ public class SimulationController {
         double startX, startY, endX, endY;
         Circle startCircle, endCircle;
         String componentType; // Add this field
+        VBox parameterControls; // Add this field to store the parameter controls container
 
         ImageComponent(Image image, double x, double y, double width, double height, String componentType) {
             this.image = image;
@@ -761,6 +780,9 @@ public class SimulationController {
         componentBox.setPadding(new Insets(10));
         componentBox.setUserData(component); // Set the component as user data
 
+        // Store the VBox in the component
+        component.parameterControls = componentBox;
+
         // Add a label for the component type
         Label componentLabel = new Label("Component: " + component.componentType);
         componentLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
@@ -771,7 +793,7 @@ public class SimulationController {
         removeButton.setOnAction(event -> {
             // Remove the component from the drawables list
             drawables.remove(component);
-            // Remove the component's parameters from the parametersPane
+            // Remove the component's container from the parametersPane
             parametersPane.getChildren().remove(componentBox);
             // Redraw the canvas to reflect the removal
             redrawCanvas();
@@ -791,131 +813,131 @@ public class SimulationController {
                 addToggleSwitchControls(component, componentBox);
                 break;
             case "PushbuttonSwitchNO":
-                addPushbuttonSwitchControls(component);
+                addPushbuttonSwitchControls(component, componentBox);
                 break;
             case "PushbuttonSwitchNC":
-                addPushbuttonSwitchControls(component);
+                addPushbuttonSwitchControls(component, componentBox);
                 break;
             case "DIPSwitch":
-                addDIPSwitchControls(component);
+                addDIPSwitchControls(component, componentBox);
                 break;
             case "SPSTRelay":
-                addRelayControls(component);
+                addRelayControls(component, componentBox);
                 break;
             case "SPDTRelay":
-                addRelayControls(component);
+                addRelayControls(component, componentBox);
                 break;
             case "Jumper":
-                addJumperControls(component);
+                addJumperControls(component, componentBox);
                 break;
             case "SolderBridge":
-                addSolderBridgeControls(component);
+                addSolderBridgeControls(component, componentBox);
                 break;
             case "EarthGround":
             case "ChassisGround":
             case "DigitalGround":
-                addGroundControls(component);
+                addGroundControls(component, componentBox);
                 break;
             case "ResistorIEEE":
             case "ResistorIEC":
-                addResistorControls(component);
+                addResistorControls(component, componentBox);
                 break;
             case "PotentiometerIEEE":
             case "PotentiometerIEC":
-                addPotentiometerControls(component);
+                addPotentiometerControls(component, componentBox);
                 break;
             case "RheostatIEEE":
             case "RheostatIEC":
-                addRheostatControls(component);
+                addRheostatControls(component, componentBox);
                 break;
             case "Thermistor":
-                addThermistorControls(component);
+                addThermistorControls(component, componentBox);
                 break;
             case "Photoresistor":
-                addPhotoresistorControls(component);
+                addPhotoresistorControls(component, componentBox);
                 break;
             case "Capacitor":
-                addCapacitorControls(component);
+                addCapacitorControls(component, componentBox);
                 break;
             case "PolarizedCapacitor":
-                addPolarizedCapacitorControls(component);
+                addPolarizedCapacitorControls(component, componentBox);
                 break;
             case "VariableCapacitor":
-                addVariableCapacitorControls(component);
+                addVariableCapacitorControls(component, componentBox);
                 break;
             case "Inductor":
-                addInductorControls(component);
+                addInductorControls(component, componentBox);
                 break;
             case "IronCoreInductor":
-                addIronCoreInductorControls(component);
+                addIronCoreInductorControls(component, componentBox);
                 break;
             case "VariableInductor":
-                addVariableInductorControls(component);
+                addVariableInductorControls(component, componentBox);
                 break;
             case "VoltageSource":
-                addVoltageSourceControls(component);
+                addVoltageSourceControls(component, componentBox);
                 break;
             case "CurrentSource":
-                addCurrentSourceControls(component);
+                addCurrentSourceControls(component, componentBox);
                 break;
             case "Generator":
-                addGeneratorControls(component);
+                addGeneratorControls(component, componentBox);
                 break;
             case "BatteryCell":
             case "Battery":
-                addBatteryControls(component);
+                addBatteryControls(component, componentBox);
                 break;
             case "ControlledVoltageSource":
-                addControlledVoltageSourceControls(component);
+                addControlledVoltageSourceControls(component, componentBox);
                 break;
             case "ControlledCurrentSource":
-                addControlledCurrentSourceControls(component);
+                addControlledCurrentSourceControls(component, componentBox);
                 break;
             case "Voltmeter":
-                addVoltmeterControls(component);
+                addVoltmeterControls(component, componentBox);
                 break;
             case "Ammeter":
-                addAmmeterControls(component);
+                addAmmeterControls(component, componentBox);
                 break;
             case "Ohmmeter":
-                addOhmmeterControls(component);
+                addOhmmeterControls(component, componentBox);
                 break;
             case "Wattmeter":
-                addWattmeterControls(component);
+                addWattmeterControls(component, componentBox);
                 break;
             case "Diode":
-                addDiodeControls(component);
+                addDiodeControls(component, componentBox);
                 break;
             case "ZenerDiode":
-                addZenerDiodeControls(component);
+                addZenerDiodeControls(component, componentBox);
                 break;
             case "SchottkyDiode":
-                addSchottkyDiodeControls(component);
+                addSchottkyDiodeControls(component, componentBox);
                 break;
             case "Varactor":
-                addVaractorControls(component);
+                addVaractorControls(component, componentBox);
                 break;
             case "TunnelDiode":
-                addTunnelDiodeControls(component);
+                addTunnelDiodeControls(component, componentBox);
                 break;
             case "LightEmittingDiode":
-                addLightEmittingDiodeControls(component);
+                addLightEmittingDiodeControls(component, componentBox);
                 break;
             case "Photodiode":
-                addPhotodiodeControls(component);
+                addPhotodiodeControls(component, componentBox);
                 break;
             case "NPNBipolarTransistor":
             case "PNPBipolarTransistor":
             case "DarlingtonTransistor":
-                addBipolarTransistorControls(component);
+                addBipolarTransistorControls(component, componentBox);
                 break;
             case "JFETNTransistor":
             case "JFETPTransistor":
-                addJFETTransistorControls(component);
+                addJFETTransistorControls(component, componentBox);
                 break;
             case "NMOSTransistor":
             case "PMOSTransistor":
-                addMOSTransistorControls(component);
+                addMOSTransistorControls(component, componentBox);
                 break;
             case "NOTGate":
             case "ANDGate":
@@ -923,54 +945,54 @@ public class SimulationController {
             case "ORGate":
             case "NORGate":
             case "XORGate":
-                addLogicGateControls(component);
+                addLogicGateControls(component, componentBox);
                 break;
             case "DFlipFlop":
-                addDFlipFlopControls(component);
+                addDFlipFlopControls(component, componentBox);
                 break;
             case "Multiplexer2to1":
             case "Multiplexer4to1":
-                addMultiplexerControls(component);
+                addMultiplexerControls(component, componentBox);
                 break;
             case "Demultiplexer1to4":
-                addDemultiplexerControls(component);
+                addDemultiplexerControls(component, componentBox);
                 break;
             case "Antenna":
             case "DipoleAntenna":
-                addAntennaControls(component);
+                addAntennaControls(component, componentBox);
                 break;
             case "Motor":
-                addMotorControls(component);
+                addMotorControls(component, componentBox);
                 break;
             case "Transformer":
-                addTransformerControls(component);
+                addTransformerControls(component, componentBox);
                 break;
             case "Fuse":
-                addFuseControls(component);
+                addFuseControls(component, componentBox);
                 break;
             case "Optocoupler":
-                addOptocouplerControls(component);
+                addOptocouplerControls(component, componentBox);
                 break;
             case "Loudspeaker":
-                addLoudspeakerControls(component);
+                addLoudspeakerControls(component, componentBox);
                 break;
             case "Microphone":
-                addMicrophoneControls(component);
+                addMicrophoneControls(component, componentBox);
                 break;
             case "OperationalAmplifier":
-                addOperationalAmplifierControls(component);
+                addOperationalAmplifierControls(component, componentBox);
                 break;
             case "SchmittTrigger":
-                addSchmittTriggerControls(component);
+                addSchmittTriggerControls(component, componentBox);
                 break;
             case "AnalogToDigitalConverter":
-                addAnalogToDigitalConverterControls(component);
+                addAnalogToDigitalConverterControls(component, componentBox);
                 break;
             case "DigitalToAnalogConverter":
-                addDigitalToAnalogConverterControls(component);
+                addDigitalToAnalogConverterControls(component, componentBox);
                 break;
             case "CrystalOscillator":
-                addCrystalOscillatorControls(component);
+                addCrystalOscillatorControls(component, componentBox);
                 break;
             default:
                 System.out.println("Unknown component type: " + component.componentType);
@@ -984,25 +1006,42 @@ public class SimulationController {
         parametersPane.requestLayout();
     }
 
+    //components related methods
     private void addToggleSwitchControls(ImageComponent component, VBox container) {
         // Example: Add controls for a toggle switch
         Label stateLabel = new Label("State:");
         ComboBox<String> stateComboBox = new ComboBox<>();
         stateComboBox.getItems().addAll("Open", "Closed");
-        stateComboBox.setValue("Open"); // Default value
+        stateComboBox.setValue("Open"); // Default value set to "Open"
+
+        // Add a listener to update the circuit state when the switch state changes
+        stateComboBox.setOnAction(e -> {
+            String selectedState = stateComboBox.getValue();
+            if ("Closed".equals(selectedState)) {
+                System.out.println("Circuit closed");
+            } else {
+                System.out.println("Circuit open");
+            }
+        });
+
         container.getChildren().addAll(stateLabel, stateComboBox);
     }
 
-    private void addPushbuttonSwitchControls(ImageComponent component) {
+    private void addPushbuttonSwitchControls(ImageComponent component, VBox container) {
         Label label = new Label("Pushbutton Switch Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         CheckBox isPressedCheckBox = new CheckBox("Is Pressed");
-        isPressedCheckBox.setSelected(false);
+        isPressedCheckBox.setSelected(false); // Default state is not pressed (open)
         isPressedCheckBox.setOnAction(e -> {
-            // Update component state
+            boolean isPressed = isPressedCheckBox.isSelected();
+            if (isPressed) {
+                System.out.println("Circuit closed");
+            } else {
+                System.out.println("Circuit open");
+            }
         });
-        parametersPane.getChildren().add(isPressedCheckBox);
+        container.getChildren().add(isPressedCheckBox);
 
         TextField maxVoltageField = new TextField();
         maxVoltageField.setPromptText("Max Voltage");
@@ -1015,7 +1054,7 @@ public class SimulationController {
                 maxVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxVoltageField);
+        container.getChildren().add(maxVoltageField);
 
         TextField maxCurrentField = new TextField();
         maxCurrentField.setPromptText("Max Current");
@@ -1028,20 +1067,26 @@ public class SimulationController {
                 maxCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxCurrentField);
+        container.getChildren().add(maxCurrentField);
     }
 
-    private void addDIPSwitchControls(ImageComponent component) {
+    private void addDIPSwitchControls(ImageComponent component, VBox container) {
         Label label = new Label("DIP Switch Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         for (int i = 0; i < 8; i++) { // Assuming 8 switches in the DIP
-            CheckBox switchCheckBox = new CheckBox("Switch " + (i + 1));
-            switchCheckBox.setSelected(false);
+            final int switchIndex = i; // Capture the current value of i
+            CheckBox switchCheckBox = new CheckBox("Switch " + (switchIndex + 1));
+            switchCheckBox.setSelected(false); // Default state is open
             switchCheckBox.setOnAction(e -> {
-                // Update component state
+                boolean isClosed = switchCheckBox.isSelected();
+                if (isClosed) {
+                    System.out.println("Switch " + (switchIndex + 1) + " closed");
+                } else {
+                    System.out.println("Switch " + (switchIndex + 1) + " open");
+                }
             });
-            parametersPane.getChildren().add(switchCheckBox);
+            container.getChildren().add(switchCheckBox);
         }
 
         TextField maxVoltageField = new TextField();
@@ -1055,7 +1100,7 @@ public class SimulationController {
                 maxVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxVoltageField);
+        container.getChildren().add(maxVoltageField);
 
         TextField maxCurrentField = new TextField();
         maxCurrentField.setPromptText("Max Current");
@@ -1068,19 +1113,19 @@ public class SimulationController {
                 maxCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxCurrentField);
+        container.getChildren().add(maxCurrentField);
     }
 
-    private void addRelayControls(ImageComponent component) {
+    private void addRelayControls(ImageComponent component, VBox container) {
         Label label = new Label("Relay Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         CheckBox isEnergizedCheckBox = new CheckBox("Is Energized");
         isEnergizedCheckBox.setSelected(false);
         isEnergizedCheckBox.setOnAction(e -> {
             // Update component state
         });
-        parametersPane.getChildren().add(isEnergizedCheckBox);
+        container.getChildren().add(isEnergizedCheckBox);
 
         TextField coilVoltageField = new TextField();
         coilVoltageField.setPromptText("Coil Voltage");
@@ -1093,7 +1138,7 @@ public class SimulationController {
                 coilVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(coilVoltageField);
+        container.getChildren().add(coilVoltageField);
 
         TextField maxVoltageField = new TextField();
         maxVoltageField.setPromptText("Max Voltage");
@@ -1106,7 +1151,7 @@ public class SimulationController {
                 maxVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxVoltageField);
+        container.getChildren().add(maxVoltageField);
 
         TextField maxCurrentField = new TextField();
         maxCurrentField.setPromptText("Max Current");
@@ -1119,12 +1164,12 @@ public class SimulationController {
                 maxCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxCurrentField);
+        container.getChildren().add(maxCurrentField);
     }
 
-    private void addJumperControls(ImageComponent component) {
+    private void addJumperControls(ImageComponent component, VBox container) {
         Label label = new Label("Jumper Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1137,12 +1182,12 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
     }
 
-    private void addSolderBridgeControls(ImageComponent component) {
+    private void addSolderBridgeControls(ImageComponent component, VBox container) {
         Label label = new Label("Solder Bridge Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1155,12 +1200,12 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
     }
 
-    private void addGroundControls(ImageComponent component) {
+    private void addGroundControls(ImageComponent component, VBox container) {
         Label label = new Label("Ground Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1173,12 +1218,12 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
     }
 
-    private void addResistorControls(ImageComponent component) {
+    private void addResistorControls(ImageComponent component, VBox container) {
         Label label = new Label("Resistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1191,7 +1236,7 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
 
         TextField powerRatingField = new TextField();
         powerRatingField.setPromptText("Power Rating (Watts)");
@@ -1204,12 +1249,12 @@ public class SimulationController {
                 powerRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(powerRatingField);
+        container.getChildren().add(powerRatingField);
     }
 
-    private void addPotentiometerControls(ImageComponent component) {
+    private void addPotentiometerControls(ImageComponent component, VBox container) {
         Label label = new Label("Potentiometer Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1222,7 +1267,7 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
 
         TextField powerRatingField = new TextField();
         powerRatingField.setPromptText("Power Rating (Watts)");
@@ -1235,7 +1280,7 @@ public class SimulationController {
                 powerRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(powerRatingField);
+        container.getChildren().add(powerRatingField);
 
         Slider wiperSlider = new Slider(0, 1, 0.5);
         wiperSlider.setShowTickLabels(true);
@@ -1247,17 +1292,17 @@ public class SimulationController {
             double wiperPosition = wiperSlider.getValue();
             // Update component wiperPosition
         });
-        parametersPane.getChildren().add(new Label("Wiper Position"));
-        parametersPane.getChildren().add(wiperSlider);
+        container.getChildren().add(new Label("Wiper Position"));
+        container.getChildren().add(wiperSlider);
     }
 
-    private void addRheostatControls(ImageComponent component) {
-        addPotentiometerControls(component); // Same as potentiometer
+    private void addRheostatControls(ImageComponent component, VBox container) {
+        addPotentiometerControls(component, container); // Same as potentiometer
     }
 
-    private void addThermistorControls(ImageComponent component) {
+    private void addThermistorControls(ImageComponent component, VBox container) {
         Label label = new Label("Thermistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1270,7 +1315,7 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
 
         TextField temperatureCoefficientField = new TextField();
         temperatureCoefficientField.setPromptText("Temperature Coefficient");
@@ -1283,12 +1328,12 @@ public class SimulationController {
                 temperatureCoefficientField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(temperatureCoefficientField);
+        container.getChildren().add(temperatureCoefficientField);
     }
 
-    private void addPhotoresistorControls(ImageComponent component) {
+    private void addPhotoresistorControls(ImageComponent component, VBox container) {
         Label label = new Label("Photoresistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resistanceField = new TextField();
         resistanceField.setPromptText("Resistance (Ohms)");
@@ -1301,7 +1346,7 @@ public class SimulationController {
                 resistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resistanceField);
+        container.getChildren().add(resistanceField);
 
         TextField lightIntensityField = new TextField();
         lightIntensityField.setPromptText("Light Intensity");
@@ -1314,12 +1359,12 @@ public class SimulationController {
                 lightIntensityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(lightIntensityField);
+        container.getChildren().add(lightIntensityField);
     }
 
-    private void addCapacitorControls(ImageComponent component) {
+    private void addCapacitorControls(ImageComponent component, VBox container) {
         Label label = new Label("Capacitor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField capacitanceField = new TextField();
         capacitanceField.setPromptText("Capacitance (Farads)");
@@ -1332,7 +1377,7 @@ public class SimulationController {
                 capacitanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(capacitanceField);
+        container.getChildren().add(capacitanceField);
 
         TextField voltageRatingField = new TextField();
         voltageRatingField.setPromptText("Voltage Rating (Volts)");
@@ -1345,22 +1390,22 @@ public class SimulationController {
                 voltageRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageRatingField);
+        container.getChildren().add(voltageRatingField);
     }
 
-    private void addPolarizedCapacitorControls(ImageComponent component) {
-        addCapacitorControls(component); // Same as capacitor
+    private void addPolarizedCapacitorControls(ImageComponent component, VBox container) {
+        addCapacitorControls(component, container); // Same as capacitor
 
         CheckBox polarityCheckBox = new CheckBox("Polarity Respected");
         polarityCheckBox.setSelected(false);
         polarityCheckBox.setOnAction(e -> {
             // Update component polarity
         });
-        parametersPane.getChildren().add(polarityCheckBox);
+        container.getChildren().add(polarityCheckBox);
     }
 
-    private void addVariableCapacitorControls(ImageComponent component) {
-        addCapacitorControls(component); // Same as capacitor
+    private void addVariableCapacitorControls(ImageComponent component, VBox container) {
+        addCapacitorControls(component, container); // Same as capacitor
 
         Slider rotationSlider = new Slider(0, 360, 180);
         rotationSlider.setShowTickLabels(true);
@@ -1372,13 +1417,13 @@ public class SimulationController {
             double rotationAngle = rotationSlider.getValue();
             // Update component rotationAngle
         });
-        parametersPane.getChildren().add(new Label("Rotation Angle"));
-        parametersPane.getChildren().add(rotationSlider);
+        container.getChildren().add(new Label("Rotation Angle"));
+        container.getChildren().add(rotationSlider);
     }
 
-    private void addInductorControls(ImageComponent component) {
+    private void addInductorControls(ImageComponent component, VBox container) {
         Label label = new Label("Inductor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField inductanceField = new TextField();
         inductanceField.setPromptText("Inductance (Henries)");
@@ -1391,7 +1436,7 @@ public class SimulationController {
                 inductanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(inductanceField);
+        container.getChildren().add(inductanceField);
 
         TextField currentRatingField = new TextField();
         currentRatingField.setPromptText("Current Rating (Amps)");
@@ -1404,11 +1449,11 @@ public class SimulationController {
                 currentRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentRatingField);
+        container.getChildren().add(currentRatingField);
     }
 
-    private void addIronCoreInductorControls(ImageComponent component) {
-        addInductorControls(component); // Same as inductor
+    private void addIronCoreInductorControls(ImageComponent component, VBox container) {
+        addInductorControls(component, container); // Same as inductor
 
         TextField corePermeabilityField = new TextField();
         corePermeabilityField.setPromptText("Core Permeability");
@@ -1421,11 +1466,11 @@ public class SimulationController {
                 corePermeabilityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(corePermeabilityField);
+        container.getChildren().add(corePermeabilityField);
     }
 
-    private void addVariableInductorControls(ImageComponent component) {
-        addInductorControls(component); // Same as inductor
+    private void addVariableInductorControls(ImageComponent component, VBox container) {
+        addInductorControls(component, container); // Same as inductor
 
         Slider rotationSlider = new Slider(0, 360, 180);
         rotationSlider.setShowTickLabels(true);
@@ -1437,13 +1482,13 @@ public class SimulationController {
             double rotationAngle = rotationSlider.getValue();
             // Update component rotationAngle
         });
-        parametersPane.getChildren().add(new Label("Rotation Angle"));
-        parametersPane.getChildren().add(rotationSlider);
+        container.getChildren().add(new Label("Rotation Angle"));
+        container.getChildren().add(rotationSlider);
     }
 
-    private void addVoltageSourceControls(ImageComponent component) {
+    private void addVoltageSourceControls(ImageComponent component, VBox container) {
         Label label = new Label("Voltage Source Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageField = new TextField();
         voltageField.setPromptText("Voltage (Volts)");
@@ -1456,7 +1501,7 @@ public class SimulationController {
                 voltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageField);
+        container.getChildren().add(voltageField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1469,12 +1514,12 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
     }
 
-    private void addCurrentSourceControls(ImageComponent component) {
+    private void addCurrentSourceControls(ImageComponent component, VBox container) {
         Label label = new Label("Current Source Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField currentField = new TextField();
         currentField.setPromptText("Current (Amps)");
@@ -1487,7 +1532,7 @@ public class SimulationController {
                 currentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentField);
+        container.getChildren().add(currentField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1500,12 +1545,12 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
     }
 
-    private void addGeneratorControls(ImageComponent component) {
+    private void addGeneratorControls(ImageComponent component, VBox container) {
         Label label = new Label("Generator Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageField = new TextField();
         voltageField.setPromptText("Voltage (Volts)");
@@ -1518,7 +1563,7 @@ public class SimulationController {
                 voltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageField);
+        container.getChildren().add(voltageField);
 
         TextField frequencyField = new TextField();
         frequencyField.setPromptText("Frequency (Hz)");
@@ -1531,7 +1576,7 @@ public class SimulationController {
                 frequencyField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(frequencyField);
+        container.getChildren().add(frequencyField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1544,12 +1589,12 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
     }
 
-    private void addBatteryControls(ImageComponent component) {
+    private void addBatteryControls(ImageComponent component, VBox container) {
         Label label = new Label("Battery Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageField = new TextField();
         voltageField.setPromptText("Voltage (Volts)");
@@ -1562,7 +1607,7 @@ public class SimulationController {
                 voltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageField);
+        container.getChildren().add(voltageField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1575,7 +1620,7 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
 
         TextField capacityField = new TextField();
         capacityField.setPromptText("Capacity (Ah)");
@@ -1588,12 +1633,12 @@ public class SimulationController {
                 capacityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(capacityField);
+        container.getChildren().add(capacityField);
     }
 
-    private void addControlledVoltageSourceControls(ImageComponent component) {
+    private void addControlledVoltageSourceControls(ImageComponent component, VBox container) {
         Label label = new Label("Controlled Voltage Source Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageField = new TextField();
         voltageField.setPromptText("Voltage (Volts)");
@@ -1606,7 +1651,7 @@ public class SimulationController {
                 voltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageField);
+        container.getChildren().add(voltageField);
 
         TextField controlSignalField = new TextField();
         controlSignalField.setPromptText("Control Signal");
@@ -1619,12 +1664,12 @@ public class SimulationController {
                 controlSignalField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(controlSignalField);
+        container.getChildren().add(controlSignalField);
     }
 
-    private void addControlledCurrentSourceControls(ImageComponent component) {
+    private void addControlledCurrentSourceControls(ImageComponent component, VBox container) {
         Label label = new Label("Controlled Current Source Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField currentField = new TextField();
         currentField.setPromptText("Current (Amps)");
@@ -1637,7 +1682,7 @@ public class SimulationController {
                 currentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentField);
+        container.getChildren().add(currentField);
 
         TextField controlSignalField = new TextField();
         controlSignalField.setPromptText("Control Signal");
@@ -1650,12 +1695,12 @@ public class SimulationController {
                 controlSignalField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(controlSignalField);
+        container.getChildren().add(controlSignalField);
     }
 
-    private void addVoltmeterControls(ImageComponent component) {
+    private void addVoltmeterControls(ImageComponent component, VBox container) {
         Label label = new Label("Voltmeter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField rangeField = new TextField();
         rangeField.setPromptText("Range (Volts)");
@@ -1668,7 +1713,7 @@ public class SimulationController {
                 rangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(rangeField);
+        container.getChildren().add(rangeField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1681,12 +1726,12 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
     }
 
-    private void addAmmeterControls(ImageComponent component) {
+    private void addAmmeterControls(ImageComponent component, VBox container) {
         Label label = new Label("Ammeter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField rangeField = new TextField();
         rangeField.setPromptText("Range (Amps)");
@@ -1699,7 +1744,7 @@ public class SimulationController {
                 rangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(rangeField);
+        container.getChildren().add(rangeField);
 
         TextField internalResistanceField = new TextField();
         internalResistanceField.setPromptText("Internal Resistance (Ohms)");
@@ -1712,12 +1757,12 @@ public class SimulationController {
                 internalResistanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(internalResistanceField);
+        container.getChildren().add(internalResistanceField);
     }
 
-    private void addOhmmeterControls(ImageComponent component) {
+    private void addOhmmeterControls(ImageComponent component, VBox container) {
         Label label = new Label("Ohmmeter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField rangeField = new TextField();
         rangeField.setPromptText("Range (Ohms)");
@@ -1730,12 +1775,12 @@ public class SimulationController {
                 rangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(rangeField);
+        container.getChildren().add(rangeField);
     }
 
-    private void addWattmeterControls(ImageComponent component) {
+    private void addWattmeterControls(ImageComponent component, VBox container) {
         Label label = new Label("Wattmeter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageRangeField = new TextField();
         voltageRangeField.setPromptText("Voltage Range (Volts)");
@@ -1748,7 +1793,7 @@ public class SimulationController {
                 voltageRangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageRangeField);
+        container.getChildren().add(voltageRangeField);
 
         TextField currentRangeField = new TextField();
         currentRangeField.setPromptText("Current Range (Amps)");
@@ -1761,12 +1806,12 @@ public class SimulationController {
                 currentRangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentRangeField);
+        container.getChildren().add(currentRangeField);
     }
 
-    private void addDiodeControls(ImageComponent component) {
+    private void addDiodeControls(ImageComponent component, VBox container) {
         Label label = new Label("Diode Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField forwardVoltageField = new TextField();
         forwardVoltageField.setPromptText("Forward Voltage (Volts)");
@@ -1779,7 +1824,7 @@ public class SimulationController {
                 forwardVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(forwardVoltageField);
+        container.getChildren().add(forwardVoltageField);
 
         TextField reverseBreakdownVoltageField = new TextField();
         reverseBreakdownVoltageField.setPromptText("Reverse Breakdown Voltage (Volts)");
@@ -1792,11 +1837,11 @@ public class SimulationController {
                 reverseBreakdownVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(reverseBreakdownVoltageField);
+        container.getChildren().add(reverseBreakdownVoltageField);
     }
 
-    private void addZenerDiodeControls(ImageComponent component) {
-        addDiodeControls(component); // Same as diode
+    private void addZenerDiodeControls(ImageComponent component, VBox container) {
+        addDiodeControls(component, container); // Same as diode
 
         TextField zenerVoltageField = new TextField();
         zenerVoltageField.setPromptText("Zener Voltage (Volts)");
@@ -1809,16 +1854,16 @@ public class SimulationController {
                 zenerVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(zenerVoltageField);
+        container.getChildren().add(zenerVoltageField);
     }
 
-    private void addSchottkyDiodeControls(ImageComponent component) {
-        addDiodeControls(component); // Same as diode
+    private void addSchottkyDiodeControls(ImageComponent component, VBox container) {
+        addDiodeControls(component, container); // Same as diode
     }
 
-    private void addVaractorControls(ImageComponent component) {
+    private void addVaractorControls(ImageComponent component, VBox container) {
         Label label = new Label("Varactor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField capacitanceField = new TextField();
         capacitanceField.setPromptText("Capacitance (Farads)");
@@ -1831,7 +1876,7 @@ public class SimulationController {
                 capacitanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(capacitanceField);
+        container.getChildren().add(capacitanceField);
 
         TextField reverseVoltageField = new TextField();
         reverseVoltageField.setPromptText("Reverse Voltage (Volts)");
@@ -1844,12 +1889,12 @@ public class SimulationController {
                 reverseVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(reverseVoltageField);
+        container.getChildren().add(reverseVoltageField);
     }
 
-    private void addTunnelDiodeControls(ImageComponent component) {
+    private void addTunnelDiodeControls(ImageComponent component, VBox container) {
         Label label = new Label("Tunnel Diode Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField peakVoltageField = new TextField();
         peakVoltageField.setPromptText("Peak Voltage (Volts)");
@@ -1862,7 +1907,7 @@ public class SimulationController {
                 peakVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(peakVoltageField);
+        container.getChildren().add(peakVoltageField);
 
         TextField valleyVoltageField = new TextField();
         valleyVoltageField.setPromptText("Valley Voltage (Volts)");
@@ -1875,12 +1920,12 @@ public class SimulationController {
                 valleyVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(valleyVoltageField);
+        container.getChildren().add(valleyVoltageField);
     }
 
-    private void addLightEmittingDiodeControls(ImageComponent component) {
+    private void addLightEmittingDiodeControls(ImageComponent component, VBox container) {
         Label label = new Label("Light Emitting Diode Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField forwardVoltageField = new TextField();
         forwardVoltageField.setPromptText("Forward Voltage (Volts)");
@@ -1893,7 +1938,7 @@ public class SimulationController {
                 forwardVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(forwardVoltageField);
+        container.getChildren().add(forwardVoltageField);
 
         TextField wavelengthField = new TextField();
         wavelengthField.setPromptText("Wavelength (nm)");
@@ -1906,12 +1951,12 @@ public class SimulationController {
                 wavelengthField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(wavelengthField);
+        container.getChildren().add(wavelengthField);
     }
 
-    private void addPhotodiodeControls(ImageComponent component) {
+    private void addPhotodiodeControls(ImageComponent component, VBox container) {
         Label label = new Label("Photodiode Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField darkCurrentField = new TextField();
         darkCurrentField.setPromptText("Dark Current (Amps)");
@@ -1924,7 +1969,7 @@ public class SimulationController {
                 darkCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(darkCurrentField);
+        container.getChildren().add(darkCurrentField);
 
         TextField lightCurrentField = new TextField();
         lightCurrentField.setPromptText("Light Current (Amps)");
@@ -1937,12 +1982,12 @@ public class SimulationController {
                 lightCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(lightCurrentField);
+        container.getChildren().add(lightCurrentField);
     }
 
-    private void addBipolarTransistorControls(ImageComponent component) {
+    private void addBipolarTransistorControls(ImageComponent component, VBox container) {
         Label label = new Label("Bipolar Transistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField currentGainField = new TextField();
         currentGainField.setPromptText("Current Gain (Beta)");
@@ -1955,7 +2000,7 @@ public class SimulationController {
                 currentGainField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentGainField);
+        container.getChildren().add(currentGainField);
 
         TextField maxCollectorCurrentField = new TextField();
         maxCollectorCurrentField.setPromptText("Max Collector Current (Amps)");
@@ -1968,7 +2013,7 @@ public class SimulationController {
                 maxCollectorCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxCollectorCurrentField);
+        container.getChildren().add(maxCollectorCurrentField);
 
         TextField maxCollectorEmitterVoltageField = new TextField();
         maxCollectorEmitterVoltageField.setPromptText("Max Collector-Emitter Voltage (Volts)");
@@ -1981,12 +2026,12 @@ public class SimulationController {
                 maxCollectorEmitterVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxCollectorEmitterVoltageField);
+        container.getChildren().add(maxCollectorEmitterVoltageField);
     }
 
-    private void addJFETTransistorControls(ImageComponent component) {
+    private void addJFETTransistorControls(ImageComponent component, VBox container) {
         Label label = new Label("JFET Transistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField pinchOffVoltageField = new TextField();
         pinchOffVoltageField.setPromptText("Pinch-Off Voltage (Volts)");
@@ -1999,7 +2044,7 @@ public class SimulationController {
                 pinchOffVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(pinchOffVoltageField);
+        container.getChildren().add(pinchOffVoltageField);
 
         TextField maxDrainSourceVoltageField = new TextField();
         maxDrainSourceVoltageField.setPromptText("Max Drain-Source Voltage (Volts)");
@@ -2012,12 +2057,12 @@ public class SimulationController {
                 maxDrainSourceVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxDrainSourceVoltageField);
+        container.getChildren().add(maxDrainSourceVoltageField);
     }
 
-    private void addMOSTransistorControls(ImageComponent component) {
+    private void addMOSTransistorControls(ImageComponent component, VBox container) {
         Label label = new Label("MOS Transistor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField thresholdVoltageField = new TextField();
         thresholdVoltageField.setPromptText("Threshold Voltage (Volts)");
@@ -2030,7 +2075,7 @@ public class SimulationController {
                 thresholdVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(thresholdVoltageField);
+        container.getChildren().add(thresholdVoltageField);
 
         TextField maxDrainSourceVoltageField = new TextField();
         maxDrainSourceVoltageField.setPromptText("Max Drain-Source Voltage (Volts)");
@@ -2043,12 +2088,12 @@ public class SimulationController {
                 maxDrainSourceVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(maxDrainSourceVoltageField);
+        container.getChildren().add(maxDrainSourceVoltageField);
     }
 
-    private void addLogicGateControls(ImageComponent component) {
+    private void addLogicGateControls(ImageComponent component, VBox container) {
         Label label = new Label("Logic Gate Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField propagationDelayField = new TextField();
         propagationDelayField.setPromptText("Propagation Delay (ns)");
@@ -2061,12 +2106,12 @@ public class SimulationController {
                 propagationDelayField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(propagationDelayField);
+        container.getChildren().add(propagationDelayField);
     }
 
-    private void addDFlipFlopControls(ImageComponent component) {
+    private void addDFlipFlopControls(ImageComponent component, VBox container) {
         Label label = new Label("D Flip-Flop Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField setupTimeField = new TextField();
         setupTimeField.setPromptText("Setup Time (ns)");
@@ -2079,7 +2124,7 @@ public class SimulationController {
                 setupTimeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(setupTimeField);
+        container.getChildren().add(setupTimeField);
 
         TextField holdTimeField = new TextField();
         holdTimeField.setPromptText("Hold Time (ns)");
@@ -2092,12 +2137,12 @@ public class SimulationController {
                 holdTimeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(holdTimeField);
+        container.getChildren().add(holdTimeField);
     }
 
-    private void addMultiplexerControls(ImageComponent component) {
+    private void addMultiplexerControls(ImageComponent component, VBox container) {
         Label label = new Label("Multiplexer Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField propagationDelayField = new TextField();
         propagationDelayField.setPromptText("Propagation Delay (ns)");
@@ -2110,12 +2155,12 @@ public class SimulationController {
                 propagationDelayField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(propagationDelayField);
+        container.getChildren().add(propagationDelayField);
     }
 
-    private void addDemultiplexerControls(ImageComponent component) {
+    private void addDemultiplexerControls(ImageComponent component, VBox container) {
         Label label = new Label("Demultiplexer Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField propagationDelayField = new TextField();
         propagationDelayField.setPromptText("Propagation Delay (ns)");
@@ -2128,12 +2173,12 @@ public class SimulationController {
                 propagationDelayField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(propagationDelayField);
+        container.getChildren().add(propagationDelayField);
     }
 
-    private void addAntennaControls(ImageComponent component) {
+    private void addAntennaControls(ImageComponent component, VBox container) {
         Label label = new Label("Antenna Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField frequencyRangeField = new TextField();
         frequencyRangeField.setPromptText("Frequency Range (Hz)");
@@ -2146,7 +2191,7 @@ public class SimulationController {
                 frequencyRangeField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(frequencyRangeField);
+        container.getChildren().add(frequencyRangeField);
 
         TextField gainField = new TextField();
         gainField.setPromptText("Gain (dBi)");
@@ -2159,12 +2204,12 @@ public class SimulationController {
                 gainField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(gainField);
+        container.getChildren().add(gainField);
     }
 
-    private void addMotorControls(ImageComponent component) {
+    private void addMotorControls(ImageComponent component, VBox container) {
         Label label = new Label("Motor Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField voltageRatingField = new TextField();
         voltageRatingField.setPromptText("Voltage Rating (Volts)");
@@ -2177,7 +2222,7 @@ public class SimulationController {
                 voltageRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(voltageRatingField);
+        container.getChildren().add(voltageRatingField);
 
         TextField speedField = new TextField();
         speedField.setPromptText("Speed (RPM)");
@@ -2190,7 +2235,7 @@ public class SimulationController {
                 speedField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(speedField);
+        container.getChildren().add(speedField);
 
         TextField torqueField = new TextField();
         torqueField.setPromptText("Torque (Nm)");
@@ -2203,12 +2248,12 @@ public class SimulationController {
                 torqueField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(torqueField);
+        container.getChildren().add(torqueField);
     }
 
-    private void addTransformerControls(ImageComponent component) {
+    private void addTransformerControls(ImageComponent component, VBox container) {
         Label label = new Label("Transformer Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField primaryVoltageField = new TextField();
         primaryVoltageField.setPromptText("Primary Voltage (Volts)");
@@ -2221,7 +2266,7 @@ public class SimulationController {
                 primaryVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(primaryVoltageField);
+        container.getChildren().add(primaryVoltageField);
 
         TextField secondaryVoltageField = new TextField();
         secondaryVoltageField.setPromptText("Secondary Voltage (Volts)");
@@ -2234,7 +2279,7 @@ public class SimulationController {
                 secondaryVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(secondaryVoltageField);
+        container.getChildren().add(secondaryVoltageField);
 
         TextField powerRatingField = new TextField();
         powerRatingField.setPromptText("Power Rating (Watts)");
@@ -2247,12 +2292,12 @@ public class SimulationController {
                 powerRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(powerRatingField);
+        container.getChildren().add(powerRatingField);
     }
 
-    private void addFuseControls(ImageComponent component) {
+    private void addFuseControls(ImageComponent component, VBox container) {
         Label label = new Label("Fuse Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField currentRatingField = new TextField();
         currentRatingField.setPromptText("Current Rating (Amps)");
@@ -2265,7 +2310,7 @@ public class SimulationController {
                 currentRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(currentRatingField);
+        container.getChildren().add(currentRatingField);
 
         TextField breakingCapacityField = new TextField();
         breakingCapacityField.setPromptText("Breaking Capacity (Amps)");
@@ -2278,12 +2323,12 @@ public class SimulationController {
                 breakingCapacityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(breakingCapacityField);
+        container.getChildren().add(breakingCapacityField);
     }
 
-    private void addOptocouplerControls(ImageComponent component) {
+    private void addOptocouplerControls(ImageComponent component, VBox container) {
         Label label = new Label("Optocoupler Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField forwardCurrentField = new TextField();
         forwardCurrentField.setPromptText("Forward Current (mA)");
@@ -2296,7 +2341,7 @@ public class SimulationController {
                 forwardCurrentField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(forwardCurrentField);
+        container.getChildren().add(forwardCurrentField);
 
         TextField isolationVoltageField = new TextField();
         isolationVoltageField.setPromptText("Isolation Voltage (Volts)");
@@ -2309,12 +2354,12 @@ public class SimulationController {
                 isolationVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(isolationVoltageField);
+        container.getChildren().add(isolationVoltageField);
     }
 
-    private void addLoudspeakerControls(ImageComponent component) {
+    private void addLoudspeakerControls(ImageComponent component, VBox container) {
         Label label = new Label("Loudspeaker Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField impedanceField = new TextField();
         impedanceField.setPromptText("Impedance (Ohms)");
@@ -2327,7 +2372,7 @@ public class SimulationController {
                 impedanceField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(impedanceField);
+        container.getChildren().add(impedanceField);
 
         TextField powerRatingField = new TextField();
         powerRatingField.setPromptText("Power Rating (Watts)");
@@ -2340,12 +2385,12 @@ public class SimulationController {
                 powerRatingField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(powerRatingField);
+        container.getChildren().add(powerRatingField);
     }
 
-    private void addMicrophoneControls(ImageComponent component) {
+    private void addMicrophoneControls(ImageComponent component, VBox container) {
         Label label = new Label("Microphone Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField sensitivityField = new TextField();
         sensitivityField.setPromptText("Sensitivity (dB)");
@@ -2358,7 +2403,7 @@ public class SimulationController {
                 sensitivityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(sensitivityField);
+        container.getChildren().add(sensitivityField);
 
         TextField frequencyResponseField = new TextField();
         frequencyResponseField.setPromptText("Frequency Response (Hz)");
@@ -2371,12 +2416,12 @@ public class SimulationController {
                 frequencyResponseField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(frequencyResponseField);
+        container.getChildren().add(frequencyResponseField);
     }
 
-    private void addOperationalAmplifierControls(ImageComponent component) {
+    private void addOperationalAmplifierControls(ImageComponent component, VBox container) {
         Label label = new Label("Operational Amplifier Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField gainBandwidthProductField = new TextField();
         gainBandwidthProductField.setPromptText("Gain Bandwidth Product (Hz)");
@@ -2389,7 +2434,7 @@ public class SimulationController {
                 gainBandwidthProductField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(gainBandwidthProductField);
+        container.getChildren().add(gainBandwidthProductField);
 
         TextField slewRateField = new TextField();
         slewRateField.setPromptText("Slew Rate (V/µs)");
@@ -2402,12 +2447,12 @@ public class SimulationController {
                 slewRateField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(slewRateField);
+        container.getChildren().add(slewRateField);
     }
 
-    private void addSchmittTriggerControls(ImageComponent component) {
+    private void addSchmittTriggerControls(ImageComponent component, VBox container) {
         Label label = new Label("Schmitt Trigger Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField upperThresholdField = new TextField();
         upperThresholdField.setPromptText("Upper Threshold (Volts)");
@@ -2420,7 +2465,7 @@ public class SimulationController {
                 upperThresholdField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(upperThresholdField);
+        container.getChildren().add(upperThresholdField);
 
         TextField lowerThresholdField = new TextField();
         lowerThresholdField.setPromptText("Lower Threshold (Volts)");
@@ -2433,12 +2478,12 @@ public class SimulationController {
                 lowerThresholdField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(lowerThresholdField);
+        container.getChildren().add(lowerThresholdField);
     }
 
-    private void addAnalogToDigitalConverterControls(ImageComponent component) {
+    private void addAnalogToDigitalConverterControls(ImageComponent component, VBox container) {
         Label label = new Label("Analog-to-Digital Converter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resolutionField = new TextField();
         resolutionField.setPromptText("Resolution (bits)");
@@ -2451,7 +2496,7 @@ public class SimulationController {
                 resolutionField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resolutionField);
+        container.getChildren().add(resolutionField);
 
         TextField samplingRateField = new TextField();
         samplingRateField.setPromptText("Sampling Rate (Hz)");
@@ -2464,12 +2509,12 @@ public class SimulationController {
                 samplingRateField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(samplingRateField);
+        container.getChildren().add(samplingRateField);
     }
 
-    private void addDigitalToAnalogConverterControls(ImageComponent component) {
+    private void addDigitalToAnalogConverterControls(ImageComponent component, VBox container) {
         Label label = new Label("Digital-to-Analog Converter Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField resolutionField = new TextField();
         resolutionField.setPromptText("Resolution (bits)");
@@ -2482,7 +2527,7 @@ public class SimulationController {
                 resolutionField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(resolutionField);
+        container.getChildren().add(resolutionField);
 
         TextField outputVoltageField = new TextField();
         outputVoltageField.setPromptText("Output Voltage (Volts)");
@@ -2495,12 +2540,12 @@ public class SimulationController {
                 outputVoltageField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(outputVoltageField);
+        container.getChildren().add(outputVoltageField);
     }
 
-    private void addCrystalOscillatorControls(ImageComponent component) {
+    private void addCrystalOscillatorControls(ImageComponent component, VBox container) {
         Label label = new Label("Crystal Oscillator Parameters");
-        parametersPane.getChildren().add(label);
+        container.getChildren().add(label);
 
         TextField frequencyField = new TextField();
         frequencyField.setPromptText("Frequency (Hz)");
@@ -2513,7 +2558,7 @@ public class SimulationController {
                 frequencyField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(frequencyField);
+        container.getChildren().add(frequencyField);
 
         TextField stabilityField = new TextField();
         stabilityField.setPromptText("Stability (ppm)");
@@ -2526,35 +2571,7 @@ public class SimulationController {
                 stabilityField.setText("Invalid input");
             }
         });
-        parametersPane.getChildren().add(stabilityField);
-    }
-
-    private void generateDropdownAndParameterControls(ImageComponent component) {
-        System.out.println("Generating dropdown and controls for component: " + component.componentType); // Debug log
-        parametersPane.getChildren().clear(); // Clear existing controls
-
-        // Create a dropdown list (ComboBox) for components
-        ComboBox<String> componentDropdown = new ComboBox<>();
-        componentDropdown.setPromptText("Select Component");
-
-        // Add the name of the component to the dropdown
-        componentDropdown.getItems().add(component.image.getUrl());
-
-        // Add an event handler to the dropdown
-        componentDropdown.setOnAction(e -> {
-            String selectedComponent = componentDropdown.getSelectionModel().getSelectedItem();
-            if (selectedComponent != null) {
-                // Generate parameter controls for the selected component
-                generateParameterControls(component);
-            }
-        });
-
-        // Add the dropdown to the parametersPane
-        parametersPane.getChildren().add(componentDropdown);
-        System.out.println("Added dropdown to parametersPane"); // Debug log
-
-        // Generate parameter controls for the newly added component
-        generateParameterControls(component);
+        container.getChildren().add(stabilityField);
     }
 
     @FXML private void handleSave(ActionEvent event) {}
