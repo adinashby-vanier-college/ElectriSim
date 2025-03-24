@@ -24,6 +24,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.geometry.Insets?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SimulationController">
    <children>
       <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -1339,10 +1340,15 @@
                                       </Pane>
                                    </ScrollPane>
                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="392.0" prefWidth="380.0" vbarPolicy="NEVER">
-                                       <content>
-                                          <Pane prefHeight="392.0" prefWidth="131.0" style="-fx-background-image: url('/resources/images/grid_background.jpg'); -fx-background-repeat: repeat;" styleClass="simulation-background" />
-                                       </content>
-                                    </ScrollPane>
+                                      <content>
+                                         <VBox fx:id="parametersPane" spacing="10" style="-fx-background-color: #666666;">
+                                            <padding>
+                                               <Insets top="10" right="10" bottom="10" left="10"/>
+                                            </padding>
+                                            <!-- Parameter controls will be dynamically added here -->
+                                         </VBox>
+                                      </content>
+                                   </ScrollPane>
                                 </items>
                               </SplitPane>
                            </items>
