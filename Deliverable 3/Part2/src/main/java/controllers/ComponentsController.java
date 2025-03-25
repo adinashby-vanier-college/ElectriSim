@@ -11,6 +11,218 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 /**
+ * Base class for all electrical components containing all possible variables
+ * used by any component in the system.
+ */
+class ComponentBase {
+    // Common electrical properties
+    public double voltage;
+    public double current;
+    public double resistance;
+    public double powerRating;
+    public double maxVoltage;
+    public double maxCurrent;
+    public double internalResistance;
+    public double frequency;
+
+    // Switch/Relay specific
+    public boolean isClosed;
+    public boolean isPressed;
+    public boolean isEnergized;
+    public boolean[] switchStates;
+    public double coilVoltage;
+
+    // Potentiometer/Rheostat specific
+    public double wiperPosition;
+
+    // Capacitor specific
+    public double capacitance;
+    public double voltageRating;
+    public boolean isPolarityRespected;
+
+    // Inductor specific
+    public double inductance;
+    public double corePermeability;
+
+    // Variable component specific
+    public double rotationAngle;
+
+    // Diode specific
+    public double forwardVoltage;
+    public double reverseBreakdownVoltage;
+    public double zenerVoltage;
+    public double peakVoltage;
+    public double valleyVoltage;
+    public double darkCurrent;
+    public double lightCurrent;
+
+    // LED specific
+    public double wavelength;
+
+    // Transistor specific
+    public double currentGain;
+    public double maxCollectorCurrent;
+    public double maxCollectorEmitterVoltage;
+    public double pinchOffVoltage;
+    public double maxDrainSourceVoltage;
+    public double thresholdVoltage;
+
+    // Power source specific
+    public double controlSignal;
+    public double capacity;
+
+    // Meter specific
+    public double range;
+
+    // Logic gate specific
+    public double propagationDelay;
+    public double setupTime;
+    public double holdTime;
+
+    // Antenna specific
+    public double frequencyRange;
+    public double gain;
+
+    // Motor specific
+    public double ratedVoltage;
+    public double ratedCurrent;
+    public double speed;
+    public double torque;
+
+    // Transformer specific
+    public double primaryVoltage;
+    public double secondaryVoltage;
+    public double turnsRatio;
+
+    // Fuse specific
+    public double ratedCurrentFuse;
+    public double breakingCapacity;
+
+    // Optocoupler specific
+    public double currentTransferRatio;
+    public double forwardCurrent;
+    public double isolationVoltage;
+
+    // Audio specific
+    public double impedance;
+    public double sensitivity;
+    public double frequencyResponse;
+
+    // Op-amp specific
+    public double gainBandwidthProduct;
+    public double slewRate;
+
+    // Schmitt trigger specific
+    public double upperThreshold;
+    public double lowerThreshold;
+
+    // Converter specific
+    public int resolution;
+    public double samplingRate;
+    public double outputVoltageRange;
+
+    // Crystal oscillator specific
+    public double stability;
+
+    // Thermistor/Photoresistor specific
+    public double temperatureCoefficient;
+    public double lightIntensity;
+
+    // Varactor specific
+    public double reverseVoltage;
+
+    // Visual properties (from ImageComponent)
+    public Image image;
+    public double x, y;
+    public double width, height;
+    public double rotation;
+    public double startX, startY, endX, endY;
+    public Circle startCircle, endCircle;
+    public String componentType;
+    public VBox parameterControls;
+
+    // Wire specific
+    public boolean selected;
+
+    // Default constructor
+    public ComponentBase() {
+        // Initialize all numeric values to 0
+        voltage = 0;
+        current = 0;
+        resistance = 0;
+        powerRating = 0;
+        maxVoltage = 0;
+        maxCurrent = 0;
+        internalResistance = 0;
+        frequency = 0;
+        coilVoltage = 0;
+        wiperPosition = 0;
+        capacitance = 0;
+        voltageRating = 0;
+        inductance = 0;
+        corePermeability = 0;
+        rotationAngle = 0;
+        forwardVoltage = 0;
+        reverseBreakdownVoltage = 0;
+        zenerVoltage = 0;
+        peakVoltage = 0;
+        valleyVoltage = 0;
+        darkCurrent = 0;
+        lightCurrent = 0;
+        wavelength = 0;
+        currentGain = 0;
+        maxCollectorCurrent = 0;
+        maxCollectorEmitterVoltage = 0;
+        pinchOffVoltage = 0;
+        maxDrainSourceVoltage = 0;
+        thresholdVoltage = 0;
+        controlSignal = 0;
+        capacity = 0;
+        range = 0;
+        propagationDelay = 0;
+        setupTime = 0;
+        holdTime = 0;
+        frequencyRange = 0;
+        gain = 0;
+        ratedVoltage = 0;
+        ratedCurrent = 0;
+        speed = 0;
+        torque = 0;
+        primaryVoltage = 0;
+        secondaryVoltage = 0;
+        turnsRatio = 0;
+        ratedCurrentFuse = 0;
+        breakingCapacity = 0;
+        currentTransferRatio = 0;
+        forwardCurrent = 0;
+        isolationVoltage = 0;
+        impedance = 0;
+        sensitivity = 0;
+        frequencyResponse = 0;
+        gainBandwidthProduct = 0;
+        slewRate = 0;
+        upperThreshold = 0;
+        lowerThreshold = 0;
+        samplingRate = 0;
+        outputVoltageRange = 0;
+        stability = 0;
+        temperatureCoefficient = 0;
+        lightIntensity = 0;
+        reverseVoltage = 0;
+
+        // Initialize boolean values
+        isClosed = false;
+        isPressed = false;
+        isEnergized = false;
+        isPolarityRespected = false;
+        selected = false;
+
+        // Initialize resolution to 0
+        resolution = 0;
+    }
+}
+
+/**
  * This class contains nested classes for each electrical component in the FXML file.
  * Each component is represented as a separate class with relevant electrical properties.
  */
@@ -21,15 +233,7 @@ public class ComponentsController {
     }
 
     // Base class for all image components
-    public static class ImageComponent implements Drawable {
-        public Image image;
-        public double x, y, width, height;
-        public double rotation = 0;
-        public double startX, startY, endX, endY;
-        public Circle startCircle, endCircle;
-        public String componentType;
-        public VBox parameterControls;
-
+    public static class ImageComponent extends ComponentBase implements Drawable {
         public ImageComponent(Image image, double x, double y, double width, double height, String componentType) {
             this.image = image;
             this.x = x;
@@ -119,7 +323,7 @@ public class ComponentsController {
     // Component data classes with their control generation methods
 
     // Switch and Relay Components
-    public static class SPSTToggleSwitch {
+    public static class SPSTToggleSwitch  extends ComponentBase{
         public boolean isClosed;
         public double maxVoltage;
         public double maxCurrent;
@@ -145,7 +349,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SPDTToggleSwitch {
+    public static class SPDTToggleSwitch extends ComponentBase{
         public boolean isClosed;
         public double maxVoltage;
         public double maxCurrent;
@@ -171,7 +375,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PushbuttonSwitchNO {
+    public static class PushbuttonSwitchNO extends ComponentBase{
         public boolean isPressed;
         public double maxVoltage;
         public double maxCurrent;
@@ -195,7 +399,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PushbuttonSwitchNC {
+    public static class PushbuttonSwitchNC extends ComponentBase{
         public boolean isPressed; // State of the pushbutton (pressed/released)
         public double maxVoltage;
         public double maxCurrent;
@@ -219,7 +423,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DIPSwitch {
+    public static class DIPSwitch extends ComponentBase{
         public boolean[] switchStates; // Array of states for each switch in the DIP
         public double maxVoltage;
         public double maxCurrent;
@@ -271,7 +475,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SPSTRelay {
+    public static class SPSTRelay extends ComponentBase{
         public boolean isEnergized; // State of the relay coil (energized/de-energized)
         public double coilVoltage; // Voltage required to energize the coil
         public double maxVoltage;
@@ -324,7 +528,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SPDTRelay {
+    public static class SPDTRelay extends ComponentBase{
         public boolean isEnergized; // State of the relay coil (energized/de-energized)
         public double coilVoltage; // Voltage required to energize the coil
         public double maxVoltage;
@@ -377,7 +581,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Jumper {
+    public static class Jumper extends ComponentBase{
         public double resistance; // Resistance of the jumper (typically very low)
 
         public static void addControls(VBox container) {
@@ -399,7 +603,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SolderBridge {
+    public static class SolderBridge extends ComponentBase{
         public double resistance; // Resistance of the solder bridge (typically very low)
 
         public static void addControls(VBox container) {
@@ -422,7 +626,7 @@ public class ComponentsController {
     }
 
     // Ground Components
-    public static class EarthGround {
+    public static class EarthGround extends ComponentBase{
         public double resistance; // Resistance to earth (typically very low)
 
         public static void addControls(VBox container) {
@@ -444,7 +648,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ChassisGround {
+    public static class ChassisGround extends ComponentBase{
         public double resistance; // Resistance to chassis (typically very low)
 
         public static void addControls(VBox container) {
@@ -466,7 +670,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DigitalGround {
+    public static class DigitalGround extends ComponentBase{
         public double resistance; // Resistance to digital ground (typically very low)
 
         public static void addControls(VBox container) {
@@ -489,7 +693,7 @@ public class ComponentsController {
     }
 
     // Resistor Components
-    public static class ResistorIEEE {
+    public static class ResistorIEEE extends ComponentBase{
         public double resistance; // Resistance value in ohms
         public double powerRating; // Maximum power the resistor can handle
 
@@ -525,7 +729,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ResistorIEC {
+    public static class ResistorIEC extends ComponentBase{
         public double resistance;
         public double powerRating;
 
@@ -561,7 +765,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PotentiometerIEEE {
+    public static class PotentiometerIEEE extends ComponentBase{
         public double resistance;
         public double powerRating;
         public double wiperPosition; // Position of the wiper (0 to 1)
@@ -611,7 +815,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PotentiometerIEC {
+    public static class PotentiometerIEC extends ComponentBase{
         public double resistance;
         public double powerRating;
         public double wiperPosition;
@@ -661,7 +865,7 @@ public class ComponentsController {
         }
     }
 
-    public static class RheostatIEEE {
+    public static class RheostatIEEE extends ComponentBase{
         public double resistance;
         public double powerRating;
         public double wiperPosition;
@@ -711,7 +915,7 @@ public class ComponentsController {
         }
     }
 
-    public static class RheostatIEC {
+    public static class RheostatIEC extends ComponentBase{
         public double resistance;
         public double powerRating;
         public double wiperPosition;
@@ -761,7 +965,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Thermistor {
+    public static class Thermistor extends ComponentBase{
         public double resistance; // Resistance at a given temperature
         public double temperatureCoefficient; // Temperature coefficient of resistance
 
@@ -797,7 +1001,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Photoresistor {
+    public static class Photoresistor extends ComponentBase {
         public double resistance; // Resistance under current light conditions
         public double lightIntensity; // Light intensity affecting resistance
 
@@ -834,7 +1038,7 @@ public class ComponentsController {
     }
 
     // Capacitor Components
-    public static class Capacitor {
+    public static class Capacitor extends ComponentBase{
         public double capacitance; // Capacitance in farads
         public double voltageRating; // Maximum voltage the capacitor can handle
 
@@ -870,7 +1074,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PolarizedCapacitor {
+    public static class PolarizedCapacitor extends ComponentBase{
         public double capacitance;
         public double voltageRating;
         public boolean isPolarityRespected; // Whether polarity is respected
@@ -887,7 +1091,7 @@ public class ComponentsController {
         }
     }
 
-    public static class VariableCapacitor {
+    public static class VariableCapacitor extends ComponentBase{
         public double capacitance;
         public double voltageRating;
         public double rotationAngle; // Angle of rotation (0 to 360 degrees)
@@ -911,7 +1115,7 @@ public class ComponentsController {
     }
 
     // Inductor and Coil Components
-    public static class Inductor {
+    public static class Inductor extends ComponentBase {
         public double inductance; // Inductance in henries
         public double currentRating; // Maximum current the inductor can handle
 
@@ -947,7 +1151,7 @@ public class ComponentsController {
         }
     }
 
-    public static class IronCoreInductor {
+    public static class IronCoreInductor extends ComponentBase{
         public double inductance;
         public double currentRating;
         public double corePermeability; // Permeability of the iron core
@@ -970,7 +1174,7 @@ public class ComponentsController {
         }
     }
 
-    public static class VariableInductor {
+    public static class VariableInductor extends ComponentBase{
         public double inductance;
         public double currentRating;
         public double rotationAngle; // Angle of rotation (0 to 360 degrees)
@@ -994,7 +1198,7 @@ public class ComponentsController {
     }
 
     // Power Supply Components
-    public static class VoltageSource {
+    public static class VoltageSource extends ComponentBase {
         public double voltage; // Output voltage
         public double internalResistance; // Internal resistance of the source
 
@@ -1030,7 +1234,7 @@ public class ComponentsController {
         }
     }
 
-    public static class CurrentSource {
+    public static class CurrentSource extends ComponentBase {
         public double current; // Output current
         public double internalResistance;
         public static void addControls(VBox container) {
@@ -1066,7 +1270,7 @@ public class ComponentsController {
 
     }
 
-    public static class Generator {
+    public static class Generator extends ComponentBase {
         public double voltage;
         public double frequency; // Frequency of the generated AC signal
         public double internalResistance;
@@ -1116,7 +1320,7 @@ public class ComponentsController {
         }
     }
 
-    public static class BatteryCell {
+    public static class BatteryCell extends ComponentBase{
         public double voltage; // Nominal voltage of the cell
         public double internalResistance;
         public double capacity; // Capacity in ampere-hours (Ah)
@@ -1166,7 +1370,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Battery {
+    public static class Battery extends ComponentBase{
         public double voltage; // Total voltage of the battery
         public double internalResistance;
         public double capacity;
@@ -1216,7 +1420,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ControlledVoltageSource {
+    public static class ControlledVoltageSource extends ComponentBase{
         public double voltage;
         public double controlSignal; // Signal controlling the output voltage
 
@@ -1252,7 +1456,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ControlledCurrentSource {
+    public static class ControlledCurrentSource extends ComponentBase{
         public double current;
         public double controlSignal; // Signal controlling the output current
 
@@ -1289,7 +1493,7 @@ public class ComponentsController {
     }
 
     // Meter Components
-    public static class Voltmeter {
+    public static class Voltmeter extends ComponentBase {
         public double range; // Maximum voltage the voltmeter can measure
         public double internalResistance;
 
@@ -1325,7 +1529,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Ammeter {
+    public static class Ammeter extends ComponentBase{
         public double range; // Maximum current the ammeter can measure
         public double internalResistance;
 
@@ -1361,7 +1565,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Ohmmeter {
+    public static class Ohmmeter extends ComponentBase{
         public double range; // Maximum resistance the ohmmeter can measure
 
         public static void addControls(VBox container) {
@@ -1383,7 +1587,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Wattmeter {
+    public static class Wattmeter extends ComponentBase{
         public double voltageRange;
         public double currentRange;
 
@@ -1420,7 +1624,7 @@ public class ComponentsController {
     }
 
     // Diode and LED Components
-    public static class Diode {
+    public static class Diode extends ComponentBase{
         public double forwardVoltage; // Forward voltage drop
         public double reverseBreakdownVoltage; // Reverse breakdown voltage
 
@@ -1456,7 +1660,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ZenerDiode {
+    public static class ZenerDiode extends ComponentBase{
         public double zenerVoltage; // Zener breakdown voltage
         public double forwardVoltage;
 
@@ -1478,7 +1682,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SchottkyDiode {
+    public static class SchottkyDiode extends ComponentBase{
         public double forwardVoltage;
         public double reverseBreakdownVoltage;
 
@@ -1487,7 +1691,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Varactor {
+    public static class Varactor extends ComponentBase{
         public double capacitance; // Capacitance at a given reverse voltage
         public double reverseVoltage; // Applied reverse voltage
 
@@ -1523,7 +1727,7 @@ public class ComponentsController {
         }
     }
 
-    public static class TunnelDiode {
+    public static class TunnelDiode extends ComponentBase{
         public double peakVoltage; // Peak voltage in the I-V curve
         public double valleyVoltage; // Valley voltage in the I-V curve
 
@@ -1559,7 +1763,7 @@ public class ComponentsController {
         }
     }
 
-    public static class LightEmittingDiode {
+    public static class LightEmittingDiode extends ComponentBase{
         public double forwardVoltage;
         public double wavelength; // Wavelength of emitted light
 
@@ -1595,7 +1799,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Photodiode {
+    public static class Photodiode extends ComponentBase{
         public double darkCurrent; // Current in the absence of light
         public double lightCurrent; // Current under illumination
 
@@ -1632,7 +1836,7 @@ public class ComponentsController {
     }
 
     // Transistor Components
-    public static class NPNBipolarTransistor {
+    public static class NPNBipolarTransistor extends ComponentBase{
         public double currentGain; // Current gain (beta)
         public double maxCollectorCurrent;
         public double maxCollectorEmitterVoltage;
@@ -1682,7 +1886,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PNPBipolarTransistor {
+    public static class PNPBipolarTransistor extends ComponentBase{
         public double currentGain;
         public double maxCollectorCurrent;
         public double maxCollectorEmitterVoltage;
@@ -1732,7 +1936,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DarlingtonTransistor {
+    public static class DarlingtonTransistor extends ComponentBase{
         public double currentGain;
         public double maxCollectorCurrent;
         public double maxCollectorEmitterVoltage;
@@ -1782,7 +1986,7 @@ public class ComponentsController {
         }
     }
 
-    public static class JFETNTransistor {
+    public static class JFETNTransistor extends ComponentBase{
         public double pinchOffVoltage; // Pinch-off voltage
         public double maxDrainSourceVoltage;
 
@@ -1818,7 +2022,7 @@ public class ComponentsController {
         }
     }
 
-    public static class JFETPTransistor {
+    public static class JFETPTransistor extends ComponentBase{
         public double pinchOffVoltage;
         public double maxDrainSourceVoltage;
 
@@ -1854,7 +2058,7 @@ public class ComponentsController {
         }
     }
 
-    public static class NMOSTransistor {
+    public static class NMOSTransistor extends ComponentBase{
         public double thresholdVoltage; // Threshold voltage
         public double maxDrainSourceVoltage;
 
@@ -1890,7 +2094,7 @@ public class ComponentsController {
         }
     }
 
-    public static class PMOSTransistor {
+    public static class PMOSTransistor extends ComponentBase{
         public double thresholdVoltage;
         public double maxDrainSourceVoltage;
 
@@ -1927,7 +2131,7 @@ public class ComponentsController {
     }
 
     // Logic Gate Components
-    public static class NOTGate {
+    public static class NOTGate extends ComponentBase{
         public double propagationDelay; // Propagation delay in nanoseconds
 
         public static void addControls(VBox container) {
@@ -1949,7 +2153,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ANDGate {
+    public static class ANDGate extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -1971,7 +2175,7 @@ public class ComponentsController {
         }
     }
 
-    public static class NANDGate {
+    public static class NANDGate extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -1993,7 +2197,7 @@ public class ComponentsController {
         }
     }
 
-    public static class ORGate {
+    public static class ORGate extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2015,7 +2219,7 @@ public class ComponentsController {
         }
     }
 
-    public static class NORGate {
+    public static class NORGate extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2037,7 +2241,7 @@ public class ComponentsController {
         }
     }
 
-    public static class XORGate {
+    public static class XORGate extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2059,7 +2263,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DFlipFlop {
+    public static class DFlipFlop extends ComponentBase{
         public double setupTime; // Setup time in nanoseconds
         public double holdTime; // Hold time in nanoseconds
 
@@ -2095,7 +2299,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Multiplexer2to1 {
+    public static class Multiplexer2to1 extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2117,7 +2321,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Multiplexer4to1 {
+    public static class Multiplexer4to1 extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2139,7 +2343,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Demultiplexer1to4 {
+    public static class Demultiplexer1to4 extends ComponentBase{
         public double propagationDelay;
 
         public static void addControls(VBox container) {
@@ -2162,7 +2366,7 @@ public class ComponentsController {
     }
 
     // Antenna Components
-    public static class Antenna {
+    public static class Antenna extends ComponentBase{
         public double frequencyRange; // Frequency range the antenna operates in
         public double gain; // Gain in dBi
 
@@ -2198,7 +2402,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DipoleAntenna {
+    public static class DipoleAntenna extends ComponentBase{
         public double frequencyRange;
         public double gain;
 
@@ -2235,7 +2439,7 @@ public class ComponentsController {
     }
 
     // Miscellaneous Components
-    public static class Motor {
+    public static class Motor extends ComponentBase{
         public double ratedVoltage; // Rated operating voltage
         public double ratedCurrent; // Rated operating current
 
@@ -2284,7 +2488,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Transformer {
+    public static class Transformer extends ComponentBase{
         public double primaryVoltage; // Primary winding voltage
         public double secondaryVoltage; // Secondary winding voltage
         public double turnsRatio; // Turns ratio (N1/N2)
@@ -2334,7 +2538,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Fuse {
+    public static class Fuse extends ComponentBase{
         public double ratedCurrent; // Current at which the fuse blows
         public double breakingCapacity; // Maximum current the fuse can interrupt
 
@@ -2370,7 +2574,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Optocoupler {
+    public static class Optocoupler extends ComponentBase{
         public double currentTransferRatio; // Ratio of output current to input current
 
         public static void addControls(VBox container) {
@@ -2405,7 +2609,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Loudspeaker {
+    public static class Loudspeaker extends ComponentBase{
         public double impedance; // Impedance in ohms
         public double powerRating; // Maximum power the speaker can handle
 
@@ -2441,7 +2645,7 @@ public class ComponentsController {
         }
     }
 
-    public static class Microphone {
+    public static class Microphone extends ComponentBase{
         public double sensitivity; // Sensitivity in dB
         public double frequencyResponse; // Frequency response range
 
@@ -2477,7 +2681,7 @@ public class ComponentsController {
         }
     }
 
-    public static class OperationalAmplifier {
+    public static class OperationalAmplifier extends ComponentBase{
         public double gainBandwidthProduct; // Gain-bandwidth product in Hz
         public double slewRate; // Slew rate in V/µs
 
@@ -2513,7 +2717,7 @@ public class ComponentsController {
         }
     }
 
-    public static class SchmittTrigger {
+    public static class SchmittTrigger extends ComponentBase{
         public double upperThreshold; // Upper threshold voltage
         public double lowerThreshold; // Lower threshold voltage
 
@@ -2549,7 +2753,7 @@ public class ComponentsController {
         }
     }
 
-    public static class AnalogToDigitalConverter {
+    public static class AnalogToDigitalConverter extends ComponentBase{
         public int resolution; // Resolution in bits
         public double samplingRate; // Sampling rate in samples per second
 
@@ -2585,7 +2789,7 @@ public class ComponentsController {
         }
     }
 
-    public static class DigitalToAnalogConverter {
+    public static class DigitalToAnalogConverter extends ComponentBase{
         public int resolution;
         public double outputVoltageRange; // Output voltage range
 
@@ -2621,7 +2825,7 @@ public class ComponentsController {
         }
     }
 
-    public static class CrystalOscillator {
+    public static class CrystalOscillator extends ComponentBase{
         public double frequency; // Oscillation frequency in Hz
         public double stability; // Frequency stability in ppm
 
