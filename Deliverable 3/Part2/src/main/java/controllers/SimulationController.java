@@ -326,6 +326,12 @@ public class SimulationController {
     }
 
     private void selectOrCreateComponent(double x, double y) {
+        // First, deselect any previously selected wire
+        if (selectedWire != null) {
+            selectedWire.setSelected(false);
+        }
+        selectedWire = null;
+
         // Check if an existing component is clicked
         for (Iterator<Drawable> iterator = drawables.iterator(); iterator.hasNext(); ) {
             Drawable drawable = iterator.next();
@@ -357,23 +363,19 @@ public class SimulationController {
         }
 
         // Check if a wire is clicked
-        selectedWire = null;
         for (Drawable drawable : drawables) {
             if (drawable instanceof Wire) {
                 Wire wire = (Wire) drawable;
-                if (isPointNearLine(x, y, wire.startX, wire.startY, wire.endX, wire.endY)) {
+                if (isPointNearLine(x, y, wire.startX, wire.startY, wire.endX, wire.endY) ||
+                        Math.hypot(x - wire.endX, y - wire.endY) <= 6) {
+                    wire.setSelected(true);
                     selectedWire = wire;
                     break;
                 }
             }
         }
 
-        // If no component or wire is clicked, create a standalone circle
-        double snappedX = Math.round(x / gridSize) * gridSize;
-        double snappedY = Math.round(y / gridSize) * gridSize;
-        StandaloneCircle newCircle = new StandaloneCircle(snappedX, snappedY);
-        drawables.add(newCircle);
-        redrawCanvas();
+        redrawCanvas(); // Add this to ensure the selection is visually updated
     }
 
     private boolean isPointNearLine(double px, double py, double x1, double y1, double x2, double y2) {
@@ -397,10 +399,11 @@ public class SimulationController {
                         startWireDrawing(component.endX, component.endY, component.endCircle);
                         break;
                     }
-                } else if (drawable instanceof StandaloneCircle) {
-                    StandaloneCircle circle = (StandaloneCircle) drawable;
-                    if (circle.circle.contains(e.getX(), e.getY())) {
-                        startWireDrawing(circle.x, circle.y, circle.circle);
+                } else if (drawable instanceof Wire) {
+                    Wire wire = (Wire) drawable;
+                    // Check if clicking near the wire's end circle
+                    if (Math.hypot(e.getX() - wire.endX, e.getY() - wire.endY) <= 6) {
+                        startWireDrawing(wire.endX, wire.endY, wire.endCircle);
                         break;
                     }
                 }
@@ -523,10 +526,14 @@ public class SimulationController {
                 if (wire.startX == component.startX && wire.startY == component.startY) {
                     wire.startX = component.startX;
                     wire.startY = component.startY;
+                    wire.endCircle.setCenterX(wire.endX);
+                    wire.endCircle.setCenterY(wire.endY);
                 }
                 if (wire.endX == component.endX && wire.endY == component.endY) {
                     wire.endX = component.endX;
                     wire.endY = component.endY;
+                    wire.endCircle.setCenterX(wire.endX);
+                    wire.endCircle.setCenterY(wire.endY);
                 }
             }
         }
@@ -596,36 +603,42 @@ public class SimulationController {
 
     private static class Wire implements Drawable {
         double startX, startY, endX, endY;
+        Circle endCircle;
+        private boolean selected = false;
 
         Wire(double startX, double startY, double endX, double endY) {
             this.startX = startX;
             this.startY = startY;
             this.endX = endX;
             this.endY = endY;
+            this.endCircle = new Circle(endX, endY, 6, Color.BLACK);
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
+        public boolean isSelected() {
+            return selected;
         }
 
         @Override
         public void draw(GraphicsContext gc) {
+            // Draw shadow effect if selected
+            if (selected) {
+                gc.setStroke(Color.LIGHTBLUE);
+                gc.setLineWidth(8); // Wider line for the shadow
+                gc.strokeLine(startX, startY, endX, endY);
+            }
+
+            // Draw the actual wire
             gc.setStroke(Color.BLACK);
             gc.setLineWidth(4);
             gc.strokeLine(startX, startY, endX, endY);
-        }
-    }
 
-    private static class StandaloneCircle implements Drawable {
-        double x, y;
-        Circle circle;
-
-        StandaloneCircle(double x, double y) {
-            this.x = x;
-            this.y = y;
-            this.circle = new Circle(x, y, 6, Color.BLACK);
-        }
-
-        @Override
-        public void draw(GraphicsContext gc) {
+            // Draw the end circle
             gc.setFill(Color.BLACK);
-            gc.fillOval(x - 6, y - 6, 12, 12);
+            gc.fillOval(endX - 6, endY - 6, 12, 12);
         }
     }
 
