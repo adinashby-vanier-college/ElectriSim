@@ -1,5 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -10,217 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-/**
- * Base class for all electrical components containing all possible variables
- * used by any component in the system.
- */
-class ComponentBase {
-    // Common electrical properties
-    public double voltage;
-    public double current;
-    public double resistance;
-    public double powerRating;
-    public double maxVoltage;
-    public double maxCurrent;
-    public double internalResistance;
-    public double frequency;
-
-    // Switch/Relay specific
-    public boolean isClosed;
-    public boolean isPressed;
-    public boolean isEnergized;
-    public boolean[] switchStates;
-    public double coilVoltage;
-
-    // Potentiometer/Rheostat specific
-    public double wiperPosition;
-
-    // Capacitor specific
-    public double capacitance;
-    public double voltageRating;
-    public boolean isPolarityRespected;
-
-    // Inductor specific
-    public double inductance;
-    public double corePermeability;
-
-    // Variable component specific
-    public double rotationAngle;
-
-    // Diode specific
-    public double forwardVoltage;
-    public double reverseBreakdownVoltage;
-    public double zenerVoltage;
-    public double peakVoltage;
-    public double valleyVoltage;
-    public double darkCurrent;
-    public double lightCurrent;
-
-    // LED specific
-    public double wavelength;
-
-    // Transistor specific
-    public double currentGain;
-    public double maxCollectorCurrent;
-    public double maxCollectorEmitterVoltage;
-    public double pinchOffVoltage;
-    public double maxDrainSourceVoltage;
-    public double thresholdVoltage;
-
-    // Power source specific
-    public double controlSignal;
-    public double capacity;
-
-    // Meter specific
-    public double range;
-
-    // Logic gate specific
-    public double propagationDelay;
-    public double setupTime;
-    public double holdTime;
-
-    // Antenna specific
-    public double frequencyRange;
-    public double gain;
-
-    // Motor specific
-    public double ratedVoltage;
-    public double ratedCurrent;
-    public double speed;
-    public double torque;
-
-    // Transformer specific
-    public double primaryVoltage;
-    public double secondaryVoltage;
-    public double turnsRatio;
-
-    // Fuse specific
-    public double ratedCurrentFuse;
-    public double breakingCapacity;
-
-    // Optocoupler specific
-    public double currentTransferRatio;
-    public double forwardCurrent;
-    public double isolationVoltage;
-
-    // Audio specific
-    public double impedance;
-    public double sensitivity;
-    public double frequencyResponse;
-
-    // Op-amp specific
-    public double gainBandwidthProduct;
-    public double slewRate;
-
-    // Schmitt trigger specific
-    public double upperThreshold;
-    public double lowerThreshold;
-
-    // Converter specific
-    public int resolution;
-    public double samplingRate;
-    public double outputVoltageRange;
-
-    // Crystal oscillator specific
-    public double stability;
-
-    // Thermistor/Photoresistor specific
-    public double temperatureCoefficient;
-    public double lightIntensity;
-
-    // Varactor specific
-    public double reverseVoltage;
-
-    // Visual properties (from ImageComponent)
-    public Image image;
-    public double x, y;
-    public double width, height;
-    public double rotation;
-    public double startX, startY, endX, endY;
-    public Circle startCircle, endCircle;
-    public String componentType;
-    public VBox parameterControls;
-
-    // Wire specific
-    public boolean selected;
-
-    // Default constructor
-    public ComponentBase() {
-        // Initialize all numeric values to 0
-        voltage = 0;
-        current = 0;
-        resistance = 0;
-        powerRating = 0;
-        maxVoltage = 0;
-        maxCurrent = 0;
-        internalResistance = 0;
-        frequency = 0;
-        coilVoltage = 0;
-        wiperPosition = 0;
-        capacitance = 0;
-        voltageRating = 0;
-        inductance = 0;
-        corePermeability = 0;
-        rotationAngle = 0;
-        forwardVoltage = 0;
-        reverseBreakdownVoltage = 0;
-        zenerVoltage = 0;
-        peakVoltage = 0;
-        valleyVoltage = 0;
-        darkCurrent = 0;
-        lightCurrent = 0;
-        wavelength = 0;
-        currentGain = 0;
-        maxCollectorCurrent = 0;
-        maxCollectorEmitterVoltage = 0;
-        pinchOffVoltage = 0;
-        maxDrainSourceVoltage = 0;
-        thresholdVoltage = 0;
-        controlSignal = 0;
-        capacity = 0;
-        range = 0;
-        propagationDelay = 0;
-        setupTime = 0;
-        holdTime = 0;
-        frequencyRange = 0;
-        gain = 0;
-        ratedVoltage = 0;
-        ratedCurrent = 0;
-        speed = 0;
-        torque = 0;
-        primaryVoltage = 0;
-        secondaryVoltage = 0;
-        turnsRatio = 0;
-        ratedCurrentFuse = 0;
-        breakingCapacity = 0;
-        currentTransferRatio = 0;
-        forwardCurrent = 0;
-        isolationVoltage = 0;
-        impedance = 0;
-        sensitivity = 0;
-        frequencyResponse = 0;
-        gainBandwidthProduct = 0;
-        slewRate = 0;
-        upperThreshold = 0;
-        lowerThreshold = 0;
-        samplingRate = 0;
-        outputVoltageRange = 0;
-        stability = 0;
-        temperatureCoefficient = 0;
-        lightIntensity = 0;
-        reverseVoltage = 0;
-
-        // Initialize boolean values
-        isClosed = false;
-        isPressed = false;
-        isEnergized = false;
-        isPolarityRespected = false;
-        selected = false;
-
-        // Initialize resolution to 0
-        resolution = 0;
-    }
-}
+import java.util.Arrays;
 
 /**
  * This class contains nested classes for each electrical component in the FXML file.
@@ -228,14 +21,37 @@ class ComponentBase {
  */
 public class ComponentsController {
     // Interface for drawable objects
+
     public interface Drawable {
         void draw(GraphicsContext gc);
     }
 
+    // Distinguishing Types in Json
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "type"
+    )
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = ImageComponent.class, name = "component"),
+            @JsonSubTypes.Type(value = Wire.class, name = "wire")
+    })
+
     // Base class for all image components
     public static class ImageComponent extends ComponentBase implements Drawable {
+        public ImageComponent () {
+            this.image = null;
+            this.imageURL = "";
+            this.x = 0;
+            this.y = 0;
+            this.width = 0;
+            this.height = 0;
+            this.componentType = "";
+            updateEndPoints();
+        }
         public ImageComponent(Image image, double x, double y, double width, double height, String componentType) {
             this.image = image;
+            this.imageURL = image.getUrl();
             this.x = x;
             this.y = y;
             this.width = width;
@@ -270,29 +86,47 @@ public class ComponentsController {
 
         @Override
         public void draw(GraphicsContext gc) {
+            updateEndPoints();
             gc.save();
             gc.translate(x + width / 2, y + height / 2);
             gc.rotate(rotation);
             gc.drawImage(image, -width / 2, -height / 2, width, height);
             gc.restore();
-
             gc.setFill(Color.BLACK);
             gc.fillOval(startX - 6, startY - 6, 12, 12);
             gc.fillOval(endX - 6, endY - 6, 12, 12);
         }
     }
 
+    // Distinguishing Types in Json
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "type"
+    )
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = ComponentBase.class, name = "component"),
+            @JsonSubTypes.Type(value = Wire.class, name = "wire")
+    })
     public static class Wire implements Drawable {
+        public String componentType = "Wire";
         public double startX, startY, endX, endY;
+        @JsonIgnore
         public Circle endCircle;
+        @JsonIgnore
         private boolean selected = false;
 
+        public Wire() {
+            this.startX = 0;
+            this.startY = 0;
+            this.endX = 0;
+            this.endY = 0;
+        }
         public Wire(double startX, double startY, double endX, double endY) {
             this.startX = startX;
             this.startY = startY;
             this.endX = endX;
             this.endY = endY;
-            this.endCircle = new Circle(endX, endY, 6, Color.BLACK);
         }
 
         public void setSelected(boolean selected) {
@@ -305,18 +139,31 @@ public class ComponentsController {
 
         @Override
         public void draw(GraphicsContext gc) {
+            endCircle = new Circle(endX, endY, 6, Color.BLACK);
             if (selected) {
                 gc.setStroke(Color.LIGHTBLUE);
                 gc.setLineWidth(8);
                 gc.strokeLine(startX, startY, endX, endY);
             }
-
             gc.setStroke(Color.BLACK);
             gc.setLineWidth(4);
             gc.strokeLine(startX, startY, endX, endY);
 
             gc.setFill(Color.BLACK);
             gc.fillOval(endX - 6, endY - 6, 12, 12);
+        }
+
+        @Override
+        public String toString() {
+            return "Wire{" +
+                    "componentType='" + componentType + '\'' +
+                    ", startX=" + startX +
+                    ", startY=" + startY +
+                    ", endX=" + endX +
+                    ", endY=" + endY +
+                    ", endCircle=" + endCircle +
+                    ", selected=" + selected +
+                    '}';
         }
     }
 

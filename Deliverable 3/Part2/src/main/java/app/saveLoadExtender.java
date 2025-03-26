@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,17 +13,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
+import controllers.ComponentBase;
+import controllers.ComponentsController.ImageComponent;
+import controllers.ComponentsController.Drawable;
 import com.opencsv.CSVWriter;
 
 import java.util.ArrayList;
-import components.testComponent;
+import java.util.List;
 
+import components.testComponent;
+import javafx.scene.image.Image;
 
 
 public class saveLoadExtender {
-    testComponent tc = new testComponent("componentName",10,10,20,20);
-    testComponent t2 = new testComponent("componentName",20,20,20,20);
-    ArrayList<testComponent> input = new ArrayList<>();
+    /*
     public void csvWriter(String filename, ArrayList<String[]> allComponents) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
 
@@ -46,25 +50,33 @@ public class saveLoadExtender {
         }
         return reading;
     }
+     */
 
-    public void jsonWriter(String fileName) {
-        input.add(tc);
-        input.add(t2);
+    public void jsonWriter(String fileName, List<Drawable> input) {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE
+        );
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         try {
-                objectMapper.writeValue(new File(fileName),input);
+            objectMapper.writeValue(new File(fileName),input);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public ArrayList<testComponent> jsonReader(String fileName) {
-        ArrayList<testComponent> reading = new ArrayList<>();
+    public ArrayList<Drawable> jsonReader(String fileName) {
+        ArrayList<Drawable> reading;
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE
+        );
 
         try {
-           reading = objectMapper.readValue(new File(fileName), new TypeReference<ArrayList<testComponent>>() {});
-
+           reading = objectMapper.readValue(new File(fileName), new TypeReference<>() {
+           });
         } catch (StreamReadException e) {
             throw new RuntimeException(e);
         } catch (DatabindException e) {

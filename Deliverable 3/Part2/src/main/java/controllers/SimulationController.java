@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-
+import app.saveLoadExtender;
 import java.io.IOException;
 import java.util.*;
 
@@ -56,8 +57,12 @@ public class SimulationController {
     // Wire Drawing
     private boolean isDrawingWire = false; // Whether a wire is being drawn
     private double wireStartX, wireStartY; // Start coordinates of the wire
+    @JsonIgnore
     private Circle wireStartCircle; // Start circle for wire drawing
     private ComponentsController.Wire selectedWire = null; // Currently selected wire
+
+    // Importing Load/Save
+    private saveLoadExtender sl = new saveLoadExtender();
 
     // Initialization
     @FXML
@@ -578,6 +583,7 @@ public class SimulationController {
         currentRotation = 0;
         isDrawingWire = false;
         wireStartCircle = null;
+        parametersPane.getChildren().clear();
         redrawCanvas();
     }
 
@@ -687,8 +693,32 @@ public class SimulationController {
 
     @FXML private void handleSave(ActionEvent event) {}
     @FXML private void handleSaveAndExit(ActionEvent event) { System.exit(0); }
-    @FXML private void handleExportJSON(ActionEvent event) {}
-    @FXML private void handleExportCSV(ActionEvent event) {}
+    @FXML private void handleExportJSON(ActionEvent event) {
+        String filename = "src/main/resources/json/save1.json";
+        sl.jsonWriter(filename, drawables);
+    }
+    @FXML private void handleExportCSV(ActionEvent event) {
+        GraphicsContext gc = builder.getGraphicsContext2D();
+        String filename = "src/main/resources/json/save1.json";
+        resetBuilder();
+        for (ComponentsController.Drawable draw: sl.jsonReader(filename)) {
+            if (draw instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent image = (ComponentsController.ImageComponent) draw;
+                ComponentsController.generateParameterControls(image , parametersPane);
+                String imagePath = image.getImageURL();
+                System.out.println(imagePath);
+                image.setImage(new Image(imagePath));
+                drawables.add(image);
+                image.draw(gc);
+            }
+            else {
+                drawables.add(draw);
+                draw.draw(gc);
+            }
+
+        }
+        System.out.println(drawables.toString());
+    }
     @FXML private void handleExportText(ActionEvent event) {}
     @FXML private void handleExportImage(ActionEvent event) {}
     @FXML private void handleExit(ActionEvent event) { System.exit(0); }
