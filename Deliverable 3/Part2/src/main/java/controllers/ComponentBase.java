@@ -21,8 +21,6 @@ public class ComponentBase {
     public double current;
     public double resistance;
     public double powerRating;
-    public double maxVoltage;
-    public double maxCurrent;
     public double internalResistance;
     public double frequency;
 
@@ -180,22 +178,6 @@ public class ComponentBase {
 
     public void setPowerRating(double powerRating) {
         this.powerRating = powerRating;
-    }
-
-    public double getMaxVoltage() {
-        return maxVoltage;
-    }
-
-    public void setMaxVoltage(double maxVoltage) {
-        this.maxVoltage = maxVoltage;
-    }
-
-    public double getMaxCurrent() {
-        return maxCurrent;
-    }
-
-    public void setMaxCurrent(double maxCurrent) {
-        this.maxCurrent = maxCurrent;
     }
 
     public double getInternalResistance() {
@@ -832,8 +814,6 @@ public class ComponentBase {
                 ", current=" + current +
                 ", resistance=" + resistance +
                 ", powerRating=" + powerRating +
-                ", maxVoltage=" + maxVoltage +
-                ", maxCurrent=" + maxCurrent +
                 ", internalResistance=" + internalResistance +
                 ", frequency=" + frequency +
                 ", isClosed=" + isClosed +
@@ -922,8 +902,6 @@ public class ComponentBase {
         current = 0;
         resistance = 0;
         powerRating = 0;
-        maxVoltage = 0;
-        maxCurrent = 0;
         internalResistance = 0;
         frequency = 0;
         coilVoltage = 0;

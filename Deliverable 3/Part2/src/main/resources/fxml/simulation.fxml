@@ -91,7 +91,7 @@
                               </HBox>
                               <Accordion prefHeight="945.0" prefWidth="259.0" stylesheets="@../css/simulation.css">
                                 <panes>
-                                  <TitledPane animated="false" text="Diagram Tools">
+                                  <TitledPane animated="false" text="Simulation Tools">
                                     <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
@@ -102,7 +102,27 @@
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Label" />
+                                                               </children>
+                                                            </HBox>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                         <graphic>
+                                                            <HBox prefHeight="43.0" prefWidth="380.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Color" />
+                                                               </children>
+                                                            </HBox>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
+                                                         <graphic>
+                                                            <HBox prefHeight="43.0" prefWidth="380.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Timer" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
@@ -113,8 +133,8 @@
                                           </ScrollPane>
                                     </content>
                                   </TitledPane>
-                                    <TitledPane animated="false" text="Switch and Relay">
-                                       <content>
+                                  <TitledPane animated="false" text="Passive Components and Switches">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -128,149 +148,11 @@
                                                                         <Image url="@../images/circuit_diagrams/SPST%20Toggle%20Switch.GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="SPST Toggle Switch" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Toggle Switch" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/SPDT%20Toggle%20Switch.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="SPDT Toggle Switch" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Pushbutton%20Switch%20(N.O).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Pushbutton Switch (N.O)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Pushbutton%20Switch%20(N.C).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Pushbutton Switch (N.C)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/DIP%20Switch.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="DIP Switch" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/SPST%20Relay.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="SPST Relay" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/SPST%20Relay.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="SPST Relay" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/SPDT%20Toggle%20Switch.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="SPDT Relay" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Jumper.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Jumper" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Solder%20Bridge.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Solder Bridge" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Ground">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
-                                                   <children>
                                                       <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
@@ -291,64 +173,10 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Chassis%20Ground.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Chassis Ground" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Digital%20Ground.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Digital Ground" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Resistor">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
                                                                         <Image url="@../images/circuit_diagrams/Resistor%20(IEEE).GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Resistor (IEEE)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Resistor%20(IEC).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Resistor (IEC)" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Resistor" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
@@ -362,93 +190,11 @@
                                                                         <Image url="@../images/circuit_diagrams/Potentiometer%20(IEEE).GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Potentiometer (IEEE)" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Potentiometer" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Potentiometer%20(IEC).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Potentiometer (IEC)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Rheostat%20(IEEE).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Rheostat (IEEE)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Rheostat%20(IEC).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Rheostat (IEC)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Thermistor.gif" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Thermistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Photoresistor.gif" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Photoresistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Capacitor">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="251.0" styleClass="component-vbox">
-                                                   <children>
                                                       <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
@@ -469,46 +215,6 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Polarized%20Capacitor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Polarized Capacitor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Variable%20Capacitor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Variable Capacitor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Inductor and Coil">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
                                                                         <Image url="@../images/circuit_diagrams/Inductor.GIF" />
                                                                      </image>
                                                                   </ImageView>
@@ -517,42 +223,14 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Iron%20Core%20Inductor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Iron Core Inductor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Variable%20Inductor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Variable Inductor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
                                                    </children>
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Power Supply">
-                                       <content>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Power Sources">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -591,34 +269,6 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Generator.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Generator" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Battery%20Cell.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Battery Cell" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
                                                                         <Image url="@../images/circuit_diagrams/Battery.GIF" />
                                                                      </image>
                                                                   </ImageView>
@@ -627,42 +277,14 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Controlled%20Voltage%20Source.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Controlled Voltage Source" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Controlled%20Current%20Source.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Controlled Current Source" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
                                                    </children>
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Meter">
-                                       <content>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Measurement Instruments">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -687,10 +309,10 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Ammeter.GIF" />
+                                                                        <Image url="@../images/circuit_diagrams/Ohmmeter.GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Ammeter" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Ohmmeter" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
@@ -701,10 +323,10 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Ohmmeter.GIF" />
+                                                                        <Image url="@../images/circuit_diagrams/Ammeter.GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Ohmmeter" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Ammeter" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
@@ -727,10 +349,10 @@
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Diode and LED">
-                                       <content>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Semiconductors and Amplifiers">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -755,62 +377,6 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Zener%20Diode.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Zener Diode" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Schottky%20Diode.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Schottky Diode" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Varactor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Varactor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Tunnel%20Diode.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Tunnel Diode" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
                                                                         <Image url="@../images/circuit_diagrams/Light%20Emitting%20Diode.GIF" />
                                                                      </image>
                                                                   </ImageView>
@@ -819,32 +385,6 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Photodiode.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Photodiode" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Transistor">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
-                                                   <children>
                                                       <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
                                                          <graphic>
                                                             <HBox prefHeight="43.0" prefWidth="380.0">
@@ -879,66 +419,10 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/Darlington%20Transistor.GIF" />
+                                                                        <Image url="@../images/circuit_diagrams/operational%20amplifier.GIF" />
                                                                      </image>
                                                                   </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Darlington Transistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/JFET-N%20Transistor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="JFET-N Transistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/JFET-P%20Transistor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="JFET-P Transistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/NMOS%20Transistor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="NMOS Transistor" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/PMOS%20Transistor.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="PMOS Transistor" />
+                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Operational Amplifier" />
                                                                </children>
                                                             </HBox>
                                                          </graphic>
@@ -947,10 +431,10 @@
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Logic Gate">
-                                       <content>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Digital Logic Gates">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -1039,110 +523,14 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/D%20flip-flop.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="D Flip-Flop" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Multiplexer%20(mux%202-1).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Multiplexer (Mux 2-1)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Multiplexer%20(Mux%204-1).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Multiplexer (Mux 4-1)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Demultiplexer%20(%20Demux%204-1).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Demultiplexer (Demux 1-4)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
                                                    </children>
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Antenna">
-                                       <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
-                                             <content>
-                                                <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Antenna%20(Aerial).GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Antenna (aerial)" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/Dipole%20Antenna.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Dipole Antenna" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                    </TitledPane>
-                                    <TitledPane animated="false" text="Miscellaneous">
-                                       <content>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Electromechanical Components">
+                                    <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                                              <content>
                                                 <VBox prefHeight="728.0" prefWidth="265.0" styleClass="component-vbox">
@@ -1167,48 +555,6 @@
                                                                <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@../images/circuit_diagrams/transformer.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Transformer" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/fuse.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Fuze" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/optocoupler.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Octocoupler" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
                                                                         <Image url="@../images/circuit_diagrams/speaker.GIF" />
                                                                      </image>
                                                                   </ImageView>
@@ -1217,96 +563,12 @@
                                                             </HBox>
                                                          </graphic>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/microphone.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Microphone" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/operational%20amplifier.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Operational Amplifier" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/schmitt%20trigger.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Schmitt Trigger" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/adc.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Analog-to-Digital Converter" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/dac.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Digital-to-Analog Converter" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
-                                                      <Button mnemonicParsing="false" onAction="#handleComponentButtonClick" prefHeight="59.0" prefWidth="254.0" styleClass="component-button">
-                                                         <graphic>
-                                                            <HBox prefHeight="43.0" prefWidth="380.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@../images/circuit_diagrams/oscillator%20crystal.GIF" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                                  <Label prefHeight="50.0" prefWidth="303.0" text="Crystal Oscillator" />
-                                                               </children>
-                                                            </HBox>
-                                                         </graphic>
-                                                      </Button>
                                                    </children>
                                                 </VBox>
                                              </content>
                                           </ScrollPane>
-                                       </content>
-                                    </TitledPane>
+                                    </content>
+                                  </TitledPane>
                                 </panes>
                               </Accordion>
                            </children>
@@ -1341,7 +603,7 @@
                                    </ScrollPane>
                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="392.0" prefWidth="380.0" vbarPolicy="NEVER">
                                       <content>
-                                         <VBox fx:id="parametersPane" spacing="10" style="-fx-background-color: #666666;">
+                                         <VBox fx:id="parametersPane" spacing="10" styleClass="parameters-pane">
                                             <padding>
                                                <Insets top="10" right="10" bottom="10" left="10"/>
                                             </padding>
@@ -1362,23 +624,6 @@
                                        <content>
                                           <HBox prefHeight="123.0" prefWidth="1308.0" styleClass="graph-hbox" stylesheets="@../css/simulation.css">
                                              <children>
-                                                <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
-                                                   <graphic>
-                                                      <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
-                                                         <children>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="510.0" styleClass="graph-label" text="Node 1 - Voltage vs Time" />
-                                                            <LineChart prefHeight="229.0" prefWidth="462.0" styleClass="graph-chart">
-                                                              <xAxis>
-                                                                <CategoryAxis side="BOTTOM" />
-                                                              </xAxis>
-                                                              <yAxis>
-                                                                <NumberAxis side="LEFT" />
-                                                              </yAxis>
-                                                            </LineChart>
-                                                         </children>
-                                                      </VBox>
-                                                   </graphic>
-                                                </Button>
                                                 <Button mnemonicParsing="false" prefHeight="264.0" prefWidth="437.0" styleClass="graph-button">
                                                    <graphic>
                                                       <VBox prefHeight="270.0" prefWidth="419.0" styleClass="graph-vbox">
@@ -1507,22 +752,12 @@
                               <VBox prefHeight="200.0" prefWidth="100.0" styleClass="simulation-background">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" stylesheets="@../css/simulation.css" text="Circuit Feedback" />
-                                    <ScrollPane prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
+                                    <ScrollPane fx:id="feedbackScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
                                        <content>
-                                          <VBox>
-                                             <children>
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Circuit Closed" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Open Node" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 1 Placed / Voltage vs Time" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 2 Placed / Current vs Time" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Open Node" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Open Circuit" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Circuit Closed" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 3 Placed / Capacitance vs Time" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 4 Placed / Charge vs Time" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 5 Placed / Energy as a Curve" textFill="WHITE" />
-                                                <Label prefHeight="0.0" prefWidth="372.0" text="2024-02-12: Node 6 Placed / Resistance" textFill="WHITE" />
-                                             </children>
+                                          <VBox fx:id="circuitFeedbackPane" spacing="5" style="-fx-background-color:rgb(58, 58, 58);">
+                                             <padding>
+                                                <Insets top="10" right="10" bottom="10" left="10"/>
+                                             </padding>
                                           </VBox>
                                        </content>
                                     </ScrollPane>

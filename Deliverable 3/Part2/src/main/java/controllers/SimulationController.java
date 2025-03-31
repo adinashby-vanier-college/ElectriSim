@@ -38,6 +38,8 @@ public class SimulationController {
     @FXML private ScrollPane scrollPane;
     @FXML private Pane canvasContainer;
     @FXML private VBox parametersPane;
+    @FXML private VBox circuitFeedbackPane;
+    @FXML private ScrollPane feedbackScrollPane;
 
     // Simulation State
     private final List<ComponentsController.Drawable> drawables = new ArrayList<>();
@@ -64,6 +66,8 @@ public class SimulationController {
     // Importing Load/Save
     private saveLoadExtender sl = new saveLoadExtender();
 
+    private CircuitAnalyzer circuitAnalyzer;
+
     // Initialization
     @FXML
     public void initialize() {
@@ -80,6 +84,12 @@ public class SimulationController {
         setupFloatingImage();
         setupCanvasClickPlacement();
         setupWireDrawing();
+        
+        // Initialize circuit analyzer
+        circuitAnalyzer = new CircuitAnalyzer(drawables);
+
+        // Store this instance in the parametersPane properties
+        parametersPane.getProperties().put("simulationController", this);
     }
 
     // ==================== Component Placement ====================
@@ -150,16 +160,77 @@ public class SimulationController {
             }
         }
 
-        // Create new component
+        // Create new component based on type
         String componentType = determineComponentType(currentlySelectedImage.getUrl());
-        ComponentsController.ImageComponent newComponent = new ComponentsController.ImageComponent(
-                currentlySelectedImage, snappedX, snappedY,
-                selectedImageWidth, selectedImageHeight, componentType);
+        ComponentsController.ImageComponent newComponent;
+        
+        switch (componentType) {
+            case "SPSTToggleSwitch":
+                newComponent = new ComponentsController.SPSTToggleSwitch(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "PushbuttonSwitchNO":
+                newComponent = new ComponentsController.PushbuttonSwitchNO(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "EarthGround":
+                newComponent = new ComponentsController.EarthGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "ChassisGround":
+                newComponent = new ComponentsController.ChassisGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "ResistorIEEE":
+                newComponent = new ComponentsController.ResistorIEEE(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "ResistorIEC":
+                newComponent = new ComponentsController.ResistorIEC(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "PotentiometerIEEE":
+                newComponent = new ComponentsController.PotentiometerIEEE(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "PotentiometerIEC":
+                newComponent = new ComponentsController.PotentiometerIEC(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Capacitor":
+                newComponent = new ComponentsController.Capacitor(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Inductor":
+                newComponent = new ComponentsController.Inductor(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "VoltageSource":
+                newComponent = new ComponentsController.VoltageSource(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "BatteryCell":
+                newComponent = new ComponentsController.BatteryCell(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Battery":
+                newComponent = new ComponentsController.Battery(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Voltmeter":
+                newComponent = new ComponentsController.Voltmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Ammeter":
+                newComponent = new ComponentsController.Ammeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Ohmmeter":
+                newComponent = new ComponentsController.Ohmmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Diode":
+                newComponent = new ComponentsController.Diode(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Transformer":
+                newComponent = new ComponentsController.Transformer(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Fuse":
+                newComponent = new ComponentsController.Fuse(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            default:
+                newComponent = new ComponentsController.ImageComponent(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight, componentType);
+                break;
+        }
 
         newComponent.rotation = currentRotation;
         newComponent.updateEndPoints();
 
-        // Add to drawables list - this is the corrected line
+        // Add to drawables list
         drawables.add(newComponent);
         redrawCanvas();
 
@@ -175,6 +246,9 @@ public class SimulationController {
         currentlySelectedImage = null;
         floatingComponentImage.setRotate(0);
         currentRotation = 0;
+
+        // After adding the component and redrawing
+        updateCircuitAnalysis();
     }
 
     // Helper method to determine the component type based on the image URL
@@ -433,6 +507,7 @@ public class SimulationController {
                 isDrawingWire = false;
                 wireStartCircle = null;
                 redrawCanvas();
+                updateCircuitAnalysis();
             }
         });
     }
@@ -521,6 +596,7 @@ public class SimulationController {
                 updateWiresForComponent(draggedExistingComponent);
                 draggedExistingComponent = null;
                 redrawCanvas();
+                updateCircuitAnalysis();
             }
         });
     }
@@ -568,6 +644,7 @@ public class SimulationController {
     @FXML
     private void handleVerifyCircuit(ActionEvent event) {
         verifyCircuit();
+        updateCircuitAnalysis();
     }
 
     @FXML
@@ -585,6 +662,7 @@ public class SimulationController {
         wireStartCircle = null;
         parametersPane.getChildren().clear();
         redrawCanvas();
+        updateCircuitAnalysis();
     }
 
     // ==================== Helper Methods ====================
@@ -602,7 +680,7 @@ public class SimulationController {
         }
 
         if (powerSupply == null) {
-            System.out.println("Circuit open: No power supply found.");
+            addFeedbackMessage("Circuit open: No power supply found.", "error");
             return;
         }
 
@@ -615,10 +693,79 @@ public class SimulationController {
 
         // Perform traversal
         if (traverseCircuit(startX, startY, startX, startY, visited)) {
-            System.out.println("Circuit closed.");
+            addFeedbackMessage("Circuit closed.", "success");
         } else {
-            System.out.println("Circuit open.");
+            addFeedbackMessage("Circuit open.", "error");
         }
+
+        // Display meter measurements
+        for (ComponentsController.Drawable drawable : drawables) {
+            if (drawable instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                if (component instanceof ComponentsController.Voltmeter) {
+                    ComponentsController.Voltmeter voltmeter = (ComponentsController.Voltmeter) component;
+                    addFeedbackMessage("Voltmeter: " + String.format("%.2f V", voltmeter.getVoltage()), "info");
+                } else if (component instanceof ComponentsController.Ammeter) {
+                    ComponentsController.Ammeter ammeter = (ComponentsController.Ammeter) component;
+                    addFeedbackMessage("Ammeter: " + String.format("%.2f A", ammeter.getCurrent()), "info");
+                } else if (component instanceof ComponentsController.Ohmmeter) {
+                    ComponentsController.Ohmmeter ohmmeter = (ComponentsController.Ohmmeter) component;
+                    addFeedbackMessage("Ohmmeter: " + String.format("%.2f Ω", ohmmeter.getResistance()), "info");
+                }
+            }
+        }
+    }
+
+    private void addFeedbackMessage(String message, String type) {
+        // Create a container for the message
+        HBox messageContainer = new HBox(10);
+        messageContainer.setAlignment(Pos.CENTER_LEFT);
+        messageContainer.setMaxWidth(Double.MAX_VALUE);
+        messageContainer.setPadding(new Insets(5, 10, 5, 10));
+        
+        // Create timestamp
+        String timestamp = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+        Label timeLabel = new Label(timestamp);
+        timeLabel.setStyle("-fx-text-fill: #888888; -fx-font-size: 12px;");
+        
+        // Create message label
+        Label messageLabel = new Label(message);
+        messageLabel.setWrapText(true);
+        messageLabel.setMaxWidth(Double.MAX_VALUE);
+        
+        // Apply styling based on message type
+        switch (type) {
+            case "error":
+                messageLabel.setStyle("-fx-text-fill: #ff4444; -fx-font-weight: bold;");
+                break;
+            case "success":
+                messageLabel.setStyle("-fx-text-fill: #44ff44; -fx-font-weight: bold;");
+                break;
+            case "info":
+                messageLabel.setStyle("-fx-text-fill: #ffffff;");
+                break;
+        }
+        
+        // Add components to container
+        messageContainer.getChildren().addAll(timeLabel, messageLabel);
+        
+        // Add the message container to the feedback pane
+        circuitFeedbackPane.getChildren().add(messageContainer);
+        
+        // Ensure the feedback pane is laid out before scrolling
+        circuitFeedbackPane.layout();
+        
+        // Use Platform.runLater to ensure scrolling happens after the UI is updated
+        Platform.runLater(() -> {
+            feedbackScrollPane.setVvalue(1.0);
+            // Force a second scroll after a short delay to ensure it works
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> feedbackScrollPane.setVvalue(1.0));
+                }
+            }, 100);
+        });
     }
 
     private void addZoomFunctionality() {
@@ -646,23 +793,26 @@ public class SimulationController {
     }
 
     private boolean isPowerSupply(ComponentsController.ImageComponent component) {
-        String SearchedComponent = component.image.getUrl();
-        if (SearchedComponent.contains("Voltage%20Source.GIF")||SearchedComponent.contains("Current%20Source.GIF")||SearchedComponent.contains("Generator.GIF")
-                ||SearchedComponent.contains("Battery%20Cell.GIF")||SearchedComponent.contains("Battery.GIF")||SearchedComponent.contains("Controlled%20Voltage%20Source.GIF")||SearchedComponent.contains("Controlled%20Current%20Source.GIF")) {
-            return true;}
-        else return false;
+        String searchedComponent = component.image.getUrl();
+        return searchedComponent.contains("Voltage%20Source.GIF") ||
+               searchedComponent.contains("Current%20Source.GIF") ||
+               searchedComponent.contains("Generator.GIF") ||
+               searchedComponent.contains("Battery%20Cell.GIF") ||
+               searchedComponent.contains("Battery.GIF") ||
+               searchedComponent.contains("Controlled%20Voltage%20Source.GIF") ||
+               searchedComponent.contains("Controlled%20Current%20Source.GIF");
     }
 
     private boolean traverseCircuit(double startX, double startY, double initialX, double initialY, Set<ComponentsController.Drawable> visited) {
-        // Check if we have returned to the starting point
+        // If we've reached the initial point and visited at least one component, we've found a closed circuit
         if (startX == initialX && startY == initialY && !visited.isEmpty()) {
-            return true; // Circuit is closed
+            return true;
         }
 
-        // Look for connected wires or components
+        // Check all drawables for connections
         for (ComponentsController.Drawable drawable : drawables) {
             if (visited.contains(drawable)) {
-                continue; // Skip already visited elements
+                continue; // Skip already visited components
             }
 
             if (drawable instanceof ComponentsController.Wire) {
@@ -678,11 +828,40 @@ public class SimulationController {
             } else if (drawable instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
                 if ((component.startX == startX && component.startY == startY) || (component.endX == startX && component.endY == startY)) {
-                    visited.add(component); // Mark component as visited
-                    double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
-                    double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;
-                    if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
-                        return true; // Continue traversal
+                    // Skip voltmeters, ammeters, and ohmmeters as they don't affect circuit closure
+                    if (component instanceof ComponentsController.Voltmeter ||
+                        component instanceof ComponentsController.Ammeter ||
+                        component instanceof ComponentsController.Ohmmeter) {
+                        visited.add(component); // Mark meter as visited
+                        double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
+                        double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;
+                        if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
+                            return true; // Continue traversal
+                        }
+                        continue;
+                    }
+
+                    // Check if this is a switch component and if it's closed
+                    boolean isSwitchClosed = true;
+                    if (component instanceof ComponentsController.SPSTToggleSwitch) {
+                        ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) component;
+                        isSwitchClosed = spstSwitch.isClosed;
+                    } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
+                        ComponentsController.PushbuttonSwitchNO pushSwitch = (ComponentsController.PushbuttonSwitchNO) component;
+                        isSwitchClosed = pushSwitch.isPressed;
+                    }
+
+                    // Only proceed if the switch is closed or if it's not a switch component
+                    if (isSwitchClosed) {
+                        visited.add(component); // Mark component as visited
+                        double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
+                        double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;
+                        if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
+                            return true; // Continue traversal
+                        }
+                    } else {
+                        // If we find an open switch, the circuit is open
+                        return false;
                     }
                 }
             }
@@ -755,6 +934,25 @@ public class SimulationController {
             stage.setFullScreen(true);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void updateCircuitAnalysis() {
+        circuitAnalyzer = new CircuitAnalyzer(drawables);
+        circuitAnalyzer.analyzeCircuit();
+        
+        // Update all meter measurements
+        for (ComponentsController.Drawable drawable : drawables) {
+            if (drawable instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                if (component instanceof ComponentsController.Voltmeter) {
+                    ((ComponentsController.Voltmeter) component).setAnalyzer(circuitAnalyzer);
+                } else if (component instanceof ComponentsController.Ammeter) {
+                    ((ComponentsController.Ammeter) component).setAnalyzer(circuitAnalyzer);
+                } else if (component instanceof ComponentsController.Ohmmeter) {
+                    ((ComponentsController.Ohmmeter) component).setAnalyzer(circuitAnalyzer);
+                }
+            }
         }
     }
 }
