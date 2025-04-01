@@ -1324,65 +1324,61 @@ public class ComponentsController {
 
     // Main method to generate parameter controls
     public static void generateParameterControls(ImageComponent component, VBox parametersPane) {
-        VBox container = new VBox(5);
-        container.setStyle("-fx-background-color: #2A2A2A; -fx-padding: 10; -fx-background-radius: 5;");
-        container.getProperties().put("component", component);
+        parametersPane.getChildren().clear();
+        parametersPane.getProperties().put("component", component);
 
-        // Add component type label
-        Label typeLabel = new Label(component.componentType);
-        typeLabel.setStyle("-fx-text-fill: #F5F5F5; -fx-font-weight: bold;");
-        container.getChildren().add(typeLabel);
-
-        // Add controls based on component type
-        if (component instanceof SPSTToggleSwitch) {
-            SPSTToggleSwitch.addControls(container);
-        } else if (component instanceof PushbuttonSwitchNO) {
-            PushbuttonSwitchNO.addControls(container);
-        } else if (component instanceof ResistorIEEE) {
-            ResistorIEEE.addControls(container);
-        } else if (component instanceof ResistorIEC) {
-            ResistorIEC.addControls(container);
-        } else if (component instanceof PotentiometerIEEE) {
-            PotentiometerIEEE.addControls(container);
-        } else if (component instanceof PotentiometerIEC) {
-            PotentiometerIEC.addControls(container);
-        } else if (component instanceof Capacitor) {
-            Capacitor.addControls(container);
-        } else if (component instanceof Inductor) {
-            Inductor.addControls(container);
-        } else if (component instanceof VoltageSource) {
-            VoltageSource.addControls(container);
-        } else if (component instanceof BatteryCell) {
-            BatteryCell.addControls(container);
-        } else if (component instanceof Battery) {
-            Battery.addControls(container);
-        } else if (component instanceof Voltmeter) {
-            Voltmeter.addControls(container);
-        } else if (component instanceof Ammeter) {
-            Ammeter.addControls(container);
-        } else if (component instanceof Ohmmeter) {
-            Ohmmeter.addControls(container);
+        if (component.componentType.equals("SPSTToggleSwitch")) {
+            SPSTToggleSwitch.addControls(parametersPane);
+        } else if (component.componentType.equals("PushbuttonSwitchNO")) {
+            PushbuttonSwitchNO.addControls(parametersPane);
+        } else if (component.componentType.equals("EarthGround")) {
+            EarthGround.addControls(parametersPane);
+        } else if (component.componentType.equals("ChassisGround")) {
+            ChassisGround.addControls(parametersPane);
+        } else if (component.componentType.equals("ResistorIEEE")) {
+            ResistorIEEE.addControls(parametersPane);
+        } else if (component.componentType.equals("ResistorIEC")) {
+            ResistorIEC.addControls(parametersPane);
+        } else if (component.componentType.equals("PotentiometerIEEE")) {
+            PotentiometerIEEE.addControls(parametersPane);
+        } else if (component.componentType.equals("PotentiometerIEC")) {
+            PotentiometerIEC.addControls(parametersPane);
+        } else if (component.componentType.equals("Capacitor")) {
+            Capacitor.addControls(parametersPane);
+        } else if (component.componentType.equals("Inductor")) {
+            Inductor.addControls(parametersPane);
+        } else if (component.componentType.equals("VoltageSource")) {
+            VoltageSource.addControls(parametersPane);
+        } else if (component.componentType.equals("BatteryCell")) {
+            BatteryCell.addControls(parametersPane);
+        } else if (component.componentType.equals("Battery")) {
+            Battery.addControls(parametersPane);
+        } else if (component.componentType.equals("Voltmeter")) {
+            Voltmeter.addControls(parametersPane);
+        } else if (component.componentType.equals("Ammeter")) {
+            Ammeter.addControls(parametersPane);
+        } else if (component.componentType.equals("Ohmmeter")) {
+            Ohmmeter.addControls(parametersPane);
         } else if (component.componentType.equals("NOTGate")) {
-            NOTGate.addControls(container);
+            NOTGate.addControls(parametersPane);
         } else if (component.componentType.equals("ANDGate")) {
-            ANDGate.addControls(container);
+            ANDGate.addControls(parametersPane);
         } else if (component.componentType.equals("NANDGate")) {
-            NANDGate.addControls(container);
+            NANDGate.addControls(parametersPane);
         } else if (component.componentType.equals("ORGate")) {
-            ORGate.addControls(container);
+            ORGate.addControls(parametersPane);
         } else if (component.componentType.equals("NORGate")) {
-            NORGate.addControls(container);
+            NORGate.addControls(parametersPane);
         } else if (component.componentType.equals("XORGate")) {
-            XORGate.addControls(container);
+            XORGate.addControls(parametersPane);
+        } else if (component.componentType.equals("Diode")) {
+            Diode.addControls(parametersPane);
+        } else if (component.componentType.equals("LED")) {
+            LED.addControls(parametersPane);
+        } else if (component.componentType.equals("Transformer")) {
+            Transformer.addControls(parametersPane);
+        } else if (component.componentType.equals("Fuse")) {
+            Fuse.addControls(parametersPane);
         }
-
-        // Get the SimulationController instance from the parametersPane
-        SimulationController simulationController = (SimulationController) parametersPane.getProperties().get("simulationController");
-        if (simulationController != null) {
-            container.getProperties().put("simulationController", simulationController);
-        }
-
-        parametersPane.getChildren().add(container);
-        component.parameterControls = container;
     }
 }
