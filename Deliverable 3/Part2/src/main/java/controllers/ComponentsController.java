@@ -935,6 +935,157 @@ public class ComponentsController {
         }
     }
 
+    // Logic Gate Components
+    public static class NOTGate extends ComponentBase{
+        public double propagationDelay; // Propagation delay in nanoseconds
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                NOTGate component = (NOTGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
+    public static class ANDGate extends ComponentBase{
+        public double propagationDelay;
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                ANDGate component = (ANDGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
+    public static class NANDGate extends ComponentBase{
+        public double propagationDelay;
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                NANDGate component = (NANDGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
+    public static class ORGate extends ComponentBase{
+        public double propagationDelay;
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                ORGate component = (ORGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
+    public static class NORGate extends ComponentBase{
+        public double propagationDelay;
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                NORGate component = (NORGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
+    public static class XORGate extends ComponentBase{
+        public double propagationDelay;
+
+        public static void addControls(VBox container) {
+            Label label = new Label("Logic Gate Parameters");
+            label.setStyle("-fx-text-fill: #F5F5F5;");
+            container.getChildren().add(label);
+
+            Label propagationDelayLabel = new Label("Propagation Delay (ns):");
+            propagationDelayLabel.setStyle("-fx-text-fill: #F5F5F5;");
+            TextField propagationDelayField = new TextField("0.0");
+            propagationDelayField.setOnAction(e -> {
+                XORGate component = (XORGate) container.getProperties().get("component");
+                if (component != null) {
+                    try {
+                        component.propagationDelay = Double.parseDouble(propagationDelayField.getText());
+                    } catch (NumberFormatException ex) {
+                        propagationDelayField.setText(String.valueOf(component.propagationDelay));
+                    }
+                }
+            });
+            container.getChildren().addAll(propagationDelayLabel, propagationDelayField);
+        }
+    }
+
     // Diode and LED Components
     public static class Diode extends ImageComponent {
         public double forwardVoltage;
@@ -1211,6 +1362,18 @@ public class ComponentsController {
             Ammeter.addControls(container);
         } else if (component instanceof Ohmmeter) {
             Ohmmeter.addControls(container);
+        } else if (component.componentType.equals("NOTGate")) {
+            NOTGate.addControls(container);
+        } else if (component.componentType.equals("ANDGate")) {
+            ANDGate.addControls(container);
+        } else if (component.componentType.equals("NANDGate")) {
+            NANDGate.addControls(container);
+        } else if (component.componentType.equals("ORGate")) {
+            ORGate.addControls(container);
+        } else if (component.componentType.equals("NORGate")) {
+            NORGate.addControls(container);
+        } else if (component.componentType.equals("XORGate")) {
+            XORGate.addControls(container);
         }
 
         // Get the SimulationController instance from the parametersPane
