@@ -208,117 +208,26 @@
 }
 
 /* ---------------- SEARCH BAR ---------------- */
- .search-bar {
-     -fx-background-color: #7A7A7A;
-     -fx-text-fill: #111111;
-     -fx-font-size: 14px;
-     -fx-padding: 5px 10px;
-     -fx-border-radius: 5px;
-     -fx-background-radius: 5px;
-     -fx-border-color: transparent;
-     -fx-pref-width: 250px;
-     -fx-pref-height: 36px;
- }
+.search-bar {
+    -fx-background-color: #7A7A7A;
+    -fx-text-fill: #111111;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 36px;
+}
 
- /* ---------------- SEARCH BAR HOVER ---------------- */
- .search-bar:hover {
-     -fx-background-color: #E0E0E0;
- }
+/* ---------------- SEARCH BAR HOVER ---------------- */
+.search-bar:hover {
+    -fx-background-color: #E0E0E0;
+}
 
- /* ---------------- SEARCH HBOX ---------------- */
- .search-hbox {
-     -fx-alignment: center;
-     -fx-spacing: 10px;
-     -fx-padding: 20px 20px 0px 20px;
- }
-
-/* ---------------- PARAMETERS SECTION ---------------- */
-.parameters-pane {
-    -fx-background-color: #2A2A2A;
-    -fx-padding: 15px;
+/* ---------------- SEARCH HBOX ---------------- */
+.search-hbox {
+    -fx-alignment: center;
     -fx-spacing: 10px;
-}
-
-.parameters-pane .label,
-.parameters-pane > .label,
-VBox.parameters-pane .label,
-.parameters-pane Label {
-    -fx-text-fill: #F5F5F5 !important;
-    -fx-font-size: 14px !important;
-    -fx-font-weight: normal !important;
-}
-
-.parameters-pane .label.header,
-.parameters-pane > .label.header,
-VBox.parameters-pane .label.header,
-.parameters-pane Label.header {
-    -fx-text-fill: #FFFFFF !important;
-    -fx-font-size: 16px !important;
-    -fx-font-weight: bold !important;
-    -fx-padding: 0 0 10px 0;
-}
-
-.parameters-pane .text-field {
-    -fx-background-color: #3D3D3D;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: #888888;
-    -fx-padding: 8px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-}
-
-.parameters-pane .text-field:focused {
-    -fx-background-color: #4A4A4A;
-}
-
-.parameters-pane .combo-box {
-    -fx-background-color: #3D3D3D;
-    -fx-text-fill: white;
-    -fx-mark-color: white;
-    -fx-padding: 4px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-}
-
-.parameters-pane .combo-box .list-cell {
-    -fx-text-fill: white;
-    -fx-background-color: #3D3D3D;
-}
-
-.parameters-pane .combo-box .list-view {
-    -fx-background-color: #3D3D3D;
-}
-
-.parameters-pane .combo-box .list-cell:hover {
-    -fx-background-color: #4A4A4A;
-}
-
-.parameters-pane .check-box {
-    -fx-text-fill: white;
-}
-
-.parameters-pane .check-box .box {
-    -fx-background-color: #3D3D3D;
-    -fx-border-color: #555555;
-}
-
-.parameters-pane .check-box:selected .mark {
-    -fx-background-color: white;
-}
-
-.parameters-pane .button {
-    -fx-background-color: #4A4A4A;
-    -fx-text-fill: white;
-    -fx-padding: 8px 16px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-cursor: hand;
-}
-
-.parameters-pane .button:hover {
-    -fx-background-color: #5A5A5A;
-}
-
-.parameters-pane .button:pressed {
-    -fx-background-color: #3A3A3A;
+    -fx-padding: 20px 20px 0px 20px;
 }

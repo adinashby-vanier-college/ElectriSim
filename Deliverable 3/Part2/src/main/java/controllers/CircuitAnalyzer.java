@@ -61,9 +61,8 @@ public class CircuitAnalyzer {
                     comp instanceof ComponentsController.ResistorIEC) {
                     return comp.resistance;
                 } else if (comp instanceof ComponentsController.SPSTToggleSwitch) {
-                    return comp.isClosed ? 0.001 : 1e9;
-                } else if (comp instanceof ComponentsController.PushbuttonSwitchNO) {
-                    return comp.isPressed ? 0.001 : 1e9;
+                    ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) comp;
+                    return spstSwitch.isClosed ? 0.001 : 1e9;
                 } else if (comp instanceof ComponentsController.Voltmeter) {
                     return 1e6; // High internal resistance
                 } else if (comp instanceof ComponentsController.Ammeter) {
@@ -301,8 +300,6 @@ public class CircuitAnalyzer {
                     seriesComponents.add(component);
                     if (component instanceof ComponentsController.SPSTToggleSwitch) {
                         totalResistance += component.isClosed ? 0.001 : 1e9;
-                    } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
-                        totalResistance += component.isPressed ? 0.001 : 1e9;
                     } else {
                         totalResistance += component.resistance;
                     }
@@ -321,8 +318,6 @@ public class CircuitAnalyzer {
                 component.current = current;
                 if (component instanceof ComponentsController.SPSTToggleSwitch) {
                     component.voltage = current * (component.isClosed ? 0.001 : 1e9);
-                } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
-                    component.voltage = current * (component.isPressed ? 0.001 : 1e9);
                 } else {
                     component.voltage = current * component.resistance;
                 }
@@ -357,8 +352,6 @@ public class CircuitAnalyzer {
         for (ComponentsController.ImageComponent component : parallelComponents) {
             if (component instanceof ComponentsController.SPSTToggleSwitch) {
                 equivalentResistance += 1.0 / (component.isClosed ? 0.001 : 1e9);
-            } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
-                equivalentResistance += 1.0 / (component.isPressed ? 0.001 : 1e9);
             } else {
                 equivalentResistance += 1.0 / component.resistance;
             }
@@ -376,8 +369,6 @@ public class CircuitAnalyzer {
                 component.voltage = totalVoltage;
                 if (component instanceof ComponentsController.SPSTToggleSwitch) {
                     component.current = totalVoltage / (component.isClosed ? 0.001 : 1e9);
-                } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
-                    component.current = totalVoltage / (component.isPressed ? 0.001 : 1e9);
                 } else {
                     component.current = totalVoltage / component.resistance;
                 }
@@ -414,9 +405,8 @@ public class CircuitAnalyzer {
                     // Ammeter is treated as a short circuit (zero resistance)
                     conductanceMatrix[i][i] = 1e9;
                 } else if (component instanceof ComponentsController.SPSTToggleSwitch) {
-                    conductanceMatrix[i][i] = component.isClosed ? 1000.0 : 1e-9;
-                } else if (component instanceof ComponentsController.PushbuttonSwitchNO) {
-                    conductanceMatrix[i][i] = component.isPressed ? 1000.0 : 1e-9;
+                    ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) component;
+                    conductanceMatrix[i][i] = spstSwitch.isClosed ? 1000.0 : 1e-9;
                 } else {
                     conductanceMatrix[i][i] = 1.0 / component.resistance;
                 }
@@ -431,10 +421,8 @@ public class CircuitAnalyzer {
             ComponentsController.Drawable drawable = components.get(i);
             if (drawable instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
-                String startNode = component.startX + "," + component.startY;
-                String endNode = component.endX + "," + component.endY;
-                this.nodeVoltages.put(startNode, nodeVoltages[i]);
-                this.nodeVoltages.put(endNode, 0.0); // Initialize end node voltage to 0
+                String nodeId = component.startX + "," + component.startY;
+                this.nodeVoltages.put(nodeId, nodeVoltages[i]);
             }
         }
 
@@ -463,13 +451,7 @@ public class CircuitAnalyzer {
                         double current = voltageDiff / resistance;
                         String branchKey = startNode + "->" + endNode;
                         this.branchCurrents.put(branchKey, current);
-                    } else if (comp instanceof ComponentsController.PushbuttonSwitchNO) {
-                        ComponentsController.PushbuttonSwitchNO switch_ = (ComponentsController.PushbuttonSwitchNO) comp;
-                        double resistance = switch_.isPressed ? 0.001 : 1e9;
-                        double current = voltageDiff / resistance;
-                        String branchKey = startNode + "->" + endNode;
-                        this.branchCurrents.put(branchKey, current);
-                    }
+                    } 
                 }
             }
         }
@@ -599,129 +581,7 @@ public class CircuitAnalyzer {
 
     // Debug method to print circuit state
     public void debugPrintState() {
-        System.out.println("\n=== Circuit Analysis State ===");
-        
-        // Print detailed loop information with components
-        System.out.println("\nDetailed Loop Analysis:");
-        for (int i = 0; i < circuitGraph.loops.size(); i++) {
-            List<Node> loop = circuitGraph.loops.get(i);
-            System.out.printf("\nLoop %d:\n", i + 1);
-            
-            double totalVoltage = 0;
-            double totalResistance = 0;
-            
-            for (int j = 0; j < loop.size() - 1; j++) {
-                Node current = loop.get(j);
-                Node next = loop.get(j + 1);
-                Edge edge = circuitGraph.findEdge(current, next);
-                
-                if (edge != null && edge.component instanceof ComponentsController.ImageComponent) {
-                    ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) edge.component;
-                    System.out.print("  → ");
-                    
-                    if (comp instanceof ComponentsController.ResistorIEEE || 
-                        comp instanceof ComponentsController.ResistorIEC) {
-                        System.out.printf("Resistor: %.2f Ω", comp.resistance);
-                        totalResistance += comp.resistance;
-                    } else if (comp instanceof ComponentsController.VoltageSource) {
-                        System.out.printf("Voltage Source: %.2f V", comp.voltage);
-                        totalVoltage += comp.voltage;
-                    } else if (comp instanceof ComponentsController.Battery) {
-                        System.out.printf("Battery: %.2f V", comp.voltage);
-                        totalVoltage += comp.voltage;
-                    } else if (comp instanceof ComponentsController.BatteryCell) {
-                        System.out.printf("Battery Cell: %.2f V", comp.voltage);
-                        totalVoltage += comp.voltage;
-                    } else if (comp instanceof ComponentsController.SPSTToggleSwitch) {
-                        System.out.printf("Toggle Switch: %s", comp.isClosed ? "Closed" : "Open");
-                        totalResistance += comp.isClosed ? 0.001 : 1e9;
-                    } else if (comp instanceof ComponentsController.PushbuttonSwitchNO) {
-                        System.out.printf("Pushbutton Switch: %s", comp.isPressed ? "Pressed" : "Released");
-                        totalResistance += comp.isPressed ? 0.001 : 1e9;
-                    } else if (comp instanceof ComponentsController.Capacitor) {
-                        System.out.printf("Capacitor: %.2f F", comp.capacitance);
-                    } else if (comp instanceof ComponentsController.Inductor) {
-                        System.out.printf("Inductor: %.2f H", comp.inductance);
-                    } else if (comp instanceof ComponentsController.Voltmeter) {
-                        System.out.print("Voltmeter");
-                    } else if (comp instanceof ComponentsController.Ammeter) {
-                        System.out.print("Ammeter");
-                    }
-                    
-                    // Print voltage and current for the component
-                    System.out.printf(" (V=%.2f V, I=%.2f A)\n", comp.voltage, comp.current);
-                } else if (edge != null && edge.component instanceof ComponentsController.Wire) {
-                    System.out.println("  → Wire");
-                }
-            }
-            
-            // Print loop summary
-            System.out.printf("  Loop Summary:\n");
-            System.out.printf("    Total Voltage: %.2f V\n", totalVoltage);
-            System.out.printf("    Total Resistance: %.2f Ω\n", totalResistance);
-            if (totalResistance > 0) {
-                System.out.printf("    Loop Current: %.2f A\n", totalVoltage / totalResistance);
-            }
-        }
-        
-        // Print nodes
-        System.out.println("\nNodes:");
-        for (Node node : circuitGraph.nodes.values()) {
-            System.out.printf("Node %s at (%.2f, %.2f)\n", node.id, node.x, node.y);
-        }
-        
-        // Print edges
-        System.out.println("\nEdges:");
-        for (Edge edge : circuitGraph.edges) {
-            String componentType = edge.component instanceof ComponentsController.ImageComponent ?
-                ((ComponentsController.ImageComponent) edge.component).componentType : "Wire";
-            System.out.printf("Edge from %s to %s (Component: %s)\n", 
-                edge.from.id, edge.to.id, componentType);
-            System.out.printf("  Resistance: %.6f Ω\n", edge.resistance);
-            System.out.printf("  Voltage: %.6f V\n", edge.voltage);
-            System.out.printf("  Current: %.6f A\n", edge.current);
-        }
-        
-        // Print node voltages
-        System.out.println("\nNode Voltages:");
-        for (Map.Entry<String, Double> entry : nodeVoltages.entrySet()) {
-            System.out.printf("Node %s: %.6f V\n", entry.getKey(), entry.getValue());
-        }
-        
-        // Print branch currents
-        System.out.println("\nBranch Currents:");
-        for (Map.Entry<String, Double> entry : branchCurrents.entrySet()) {
-            System.out.printf("Branch %s: %.6f A\n", entry.getKey(), entry.getValue());
-        }
-        
-        // Print component values
-        System.out.println("\nComponent Values:");
-        for (ComponentsController.Drawable component : components) {
-            if (component instanceof ComponentsController.ImageComponent) {
-                ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) component;
-                System.out.printf("Component %s:\n", comp.componentType);
-                System.out.printf("  Position: (%.2f, %.2f) to (%.2f, %.2f)\n",
-                    comp.startX, comp.startY, comp.endX, comp.endY);
-                System.out.printf("  Voltage: %.6f V\n", comp.voltage);
-                System.out.printf("  Current: %.6f A\n", comp.current);
-                System.out.printf("  Resistance: %.6f Ω\n", comp.resistance);
-                
-                // Print additional properties based on component type
-                if (comp instanceof ComponentsController.ResistorIEEE || 
-                    comp instanceof ComponentsController.ResistorIEC) {
-                    System.out.printf("  Power Rating: %.2f W\n", comp.powerRating);
-                } else if (comp instanceof ComponentsController.Capacitor) {
-                    System.out.printf("  Capacitance: %.6f F\n", comp.capacitance);
-                    System.out.printf("  Voltage Rating: %.2f V\n", comp.voltageRating);
-                } else if (comp instanceof ComponentsController.Inductor) {
-                    System.out.printf("  Inductance: %.6f H\n", comp.inductance);
-                } else if (comp instanceof ComponentsController.VoltageSource) {
-                    System.out.printf("  Internal Resistance: %.6f Ω\n", comp.internalResistance);
-                }
-            }
-        }
-        
-        System.out.println("\n=== End Circuit State ===\n");
+        // Debug information removed
     }
 
     // Enum for circuit topology
