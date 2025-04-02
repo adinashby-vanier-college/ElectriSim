@@ -48,7 +48,10 @@ public class SimulationController {
     private double zoomScale = 1.0; // Current zoom scale
     private final double minZoom = 0.5; // Minimum zoom level
     private final double maxZoom = 3.0; // Maximum zoom level
-
+    // Undo/Redo functionality
+    private final Stack<UndoableAction> undoStack = new Stack<>();
+    private final Stack<UndoableAction> redoStack = new Stack<>();
+    private boolean isUndoRedoOperation = false;
     // Component Placement
     private ImageView floatingComponentImage; // Floating image for component placement
     private Image currentlySelectedImage; // Currently selected component image
@@ -255,18 +258,23 @@ public class SimulationController {
 
         // Add to drawables list
         drawables.add(newComponent);
-        redrawCanvas();
+        // Create and add parameter controls
+        if (newComponent.parameterControls != null) {
+            parametersPane.getChildren().add(newComponent.parameterControls);
+        }
+        // Add to undo stack
+        if (!isUndoRedoOperation) {
+            undoStack.push(new AddComponentAction(drawables, parametersPane, this, newComponent));
+            redoStack.clear();
+        }
 
-        // Generate parameter controls for the new component
-        ComponentsController.generateParameterControls(newComponent, parametersPane);
-
-        // Reset placement state
+        // Reset floating image
         floatingComponentImage.setVisible(false);
         currentlySelectedImage = null;
-        floatingComponentImage.setRotate(0);
-        currentRotation = 0;
 
-        // After adding the component and redrawing
+
+        // Redraw canvas and update analysis
+        redrawCanvas();
         updateCircuitAnalysis();
     }
 
@@ -466,7 +474,7 @@ public class SimulationController {
         for (double y = 0; y <= height; y += gridSize) gc.strokeLine(0, y, width, y);
     }
 
-    private void redrawCanvas() {
+    public void redrawCanvas() {
         GraphicsContext gc = builder.getGraphicsContext2D();
         gc.clearRect(0, 0, builder.getWidth(), builder.getHeight());
         drawGrid();
@@ -488,7 +496,8 @@ public class SimulationController {
     private void setupDragging() {
         final double[] offsetX = {0};
         final double[] offsetY = {0};
-
+        final double[] oldX = {0};
+        final double[] oldY = {0};
         builder.setOnMousePressed(e -> {
             for (ComponentsController.Drawable drawable : drawables) {
                 if (drawable instanceof ComponentsController.ImageComponent) {
@@ -498,6 +507,8 @@ public class SimulationController {
                         draggedExistingComponent = component;
                         offsetX[0] = e.getX() - component.x;
                         offsetY[0] = e.getY() - component.y;
+                        oldX[0] = component.x;
+                        oldY[0] = component.y;
                         break;
                     }
                 }
@@ -515,31 +526,33 @@ public class SimulationController {
 
         builder.setOnMouseReleased(e -> {
             if (draggedExistingComponent != null) {
-                draggedExistingComponent.x = Math.round(draggedExistingComponent.x / gridSize) * gridSize;
-                draggedExistingComponent.y = Math.round(draggedExistingComponent.y / gridSize) * gridSize;
-                updateWiresForComponent(draggedExistingComponent);
+                // Add move action to undo stack
+                if (!isUndoRedoOperation) {
+                    undoStack.push(new MoveComponentAction(drawables, parametersPane, this, draggedExistingComponent,
+                            oldX[0], oldY[0], draggedExistingComponent.x, draggedExistingComponent.y));
+                    redoStack.clear();
+                }
                 draggedExistingComponent = null;
-                redrawCanvas();
+
                 updateCircuitAnalysis();
             }
         });
     }
 
-    private void updateWiresForComponent(ComponentsController.ImageComponent component) {
+    public void updateWiresForComponent(ComponentsController.ImageComponent component) {
+        // Update wire positions when component moves
         for (ComponentsController.Drawable drawable : drawables) {
             if (drawable instanceof ComponentsController.Wire) {
                 ComponentsController.Wire wire = (ComponentsController.Wire) drawable;
-                if (wire.startX == component.startX && wire.startY == component.startY) {
-                    wire.startX = component.startX;
-                    wire.startY = component.startY;
-                    wire.endCircle.setCenterX(wire.endX);
-                    wire.endCircle.setCenterY(wire.endY);
+                if (wire.startX == component.x + component.width / 2 &&
+                        wire.startY == component.y + component.height / 2) {
+                    wire.startX = component.x + component.width / 2;
+                    wire.startY = component.y + component.height / 2;
                 }
-                if (wire.endX == component.endX && wire.endY == component.endY) {
-                    wire.endX = component.endX;
-                    wire.endY = component.endY;
-                    wire.endCircle.setCenterX(wire.endX);
-                    wire.endCircle.setCenterY(wire.endY);
+                if (wire.endX == component.x + component.width / 2 &&
+                        wire.endY == component.y + component.height / 2) {
+                    wire.endX = component.x + component.width / 2;
+                    wire.endY = component.y + component.height / 2;
                 }
             }
         }
@@ -737,29 +750,59 @@ public class SimulationController {
     @FXML private void handleExportText(ActionEvent event) {}
     @FXML private void handleExportImage(ActionEvent event) {}
     @FXML private void handleExit(ActionEvent event) { System.exit(0); }
-    @FXML private void handleUndo(ActionEvent event) {}
-    @FXML private void handleRedo(ActionEvent event) {}
+    @FXML private void handleUndo(ActionEvent event) {
+        if (!undoStack.isEmpty()) {
+            isUndoRedoOperation = true;
+            UndoableAction action = undoStack.pop();
+            action.undo();
+            redoStack.push(action);
+            isUndoRedoOperation = false;
+        }
+    }
+    @FXML private void handleRedo(ActionEvent event) {
+        if (!redoStack.isEmpty()) {
+            isUndoRedoOperation = true;
+            UndoableAction action = redoStack.pop();
+            action.redo();
+            undoStack.push(action);
+            isUndoRedoOperation = false;
+        }
+    }
     @FXML private void handleCopy(ActionEvent event) {}
     @FXML private void handlePaste(ActionEvent event) {}
     @FXML private void handleDelete(ActionEvent event) {
         if (selectedWire != null) {
+            // Store wire for undo
+            ComponentsController.Wire wireToDelete = selectedWire;
+
+            // Remove the wire
             drawables.remove(selectedWire);
             selectedWire = null;
+            // Add to undo stack
+            if (!isUndoRedoOperation) {
+                undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, wireToDelete));
+                redoStack.clear();
+            }
+
             redrawCanvas();
         } else if (draggedExistingComponent != null) {
-            // Remove the component from the drawables list
-            drawables.remove(draggedExistingComponent);
-            
-            // Remove the component's parameter controls
-            ComponentsController.removeParameterControls(draggedExistingComponent, parametersPane);
+            // Store component for undo
+            ComponentsController.ImageComponent componentToDelete = draggedExistingComponent;
 
-            // Remove any connected wires
+            // Remove the component
+            drawables.remove(draggedExistingComponent);
+
+            parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
             removeConnectedWires(draggedExistingComponent);
 
-            // Reset the dragged component
+
             draggedExistingComponent = null;
-            
-            // Redraw the canvas and update analysis
+            // Add to undo stack
+            if (!isUndoRedoOperation) {
+                undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, componentToDelete));
+                redoStack.clear();
+            }
+
             redrawCanvas();
             updateCircuitAnalysis();
         }
