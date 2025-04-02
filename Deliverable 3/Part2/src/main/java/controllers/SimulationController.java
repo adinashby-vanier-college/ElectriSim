@@ -635,7 +635,6 @@ public class SimulationController {
         // Check all drawables for connections
         for (ComponentsController.Drawable drawable : drawables) {
             if (visited.contains(drawable)) {
-                addFeedbackMessage("Skipping already visited component", "info");
                 continue; // Skip already visited components
             }
 
@@ -797,16 +796,29 @@ public class SimulationController {
         // Print debug information about the circuit analysis
         circuitAnalyzer.debugPrintState();
         
-        // Update all meter measurements
+        // Update all meter measurements and display them in feedback
         for (ComponentsController.Drawable drawable : drawables) {
             if (drawable instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
                 if (component instanceof ComponentsController.Voltmeter) {
-                    ((ComponentsController.Voltmeter) component).setAnalyzer(circuitAnalyzer);
+                    ComponentsController.Voltmeter voltmeter = (ComponentsController.Voltmeter) component;
+                    voltmeter.setAnalyzer(circuitAnalyzer);
+                    // Find the component being measured
+                    ComponentsController.ImageComponent measuredComponent = circuitAnalyzer.findMeasuredComponent(voltmeter);
+                    if (measuredComponent != null) {
+                        addFeedbackMessage("Voltmeter measuring " + measuredComponent.componentType + ": " + 
+                            String.format("%.2f V", voltmeter.getVoltage()), "info");
+                    } else {
+                        addFeedbackMessage("Voltmeter: " + String.format("%.2f V", voltmeter.getVoltage()), "info");
+                    }
                 } else if (component instanceof ComponentsController.Ammeter) {
-                    ((ComponentsController.Ammeter) component).setAnalyzer(circuitAnalyzer);
+                    ComponentsController.Ammeter ammeter = (ComponentsController.Ammeter) component;
+                    ammeter.setAnalyzer(circuitAnalyzer);
+                    addFeedbackMessage("Ammeter: " + String.format("%.2f A", ammeter.getCurrent()), "info");
                 } else if (component instanceof ComponentsController.Ohmmeter) {
-                    ((ComponentsController.Ohmmeter) component).setAnalyzer(circuitAnalyzer);
+                    ComponentsController.Ohmmeter ohmmeter = (ComponentsController.Ohmmeter) component;
+                    ohmmeter.setAnalyzer(circuitAnalyzer);
+                    addFeedbackMessage("Ohmmeter: " + String.format("%.2f Ω", ohmmeter.getResistance()), "info");
                 }
             }
         }

@@ -897,7 +897,7 @@ public class ComponentBase {
 
     // Default constructor
     public ComponentBase() {
-        // Initialize all numeric values to 0
+        // Initialize numeric values
         voltage = 0;
         current = 0;
         resistance = 0;

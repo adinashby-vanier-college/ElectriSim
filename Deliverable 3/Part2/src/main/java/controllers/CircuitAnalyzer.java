@@ -527,11 +527,12 @@ public class CircuitAnalyzer {
     }
 
     // Helper method to find the component being measured by a voltmeter
-    private ComponentsController.ImageComponent findMeasuredComponent(ComponentsController.ImageComponent voltmeter) {
+    public ComponentsController.ImageComponent findMeasuredComponent(ComponentsController.ImageComponent voltmeter) {
         // Find components connected to the same nodes as the voltmeter
         String voltStartNode = voltmeter.startX + "," + voltmeter.startY;
         String voltEndNode = voltmeter.endX + "," + voltmeter.endY;
         
+        // First try exact node match
         for (ComponentsController.Drawable drawable : components) {
             if (drawable instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
@@ -546,6 +547,44 @@ public class CircuitAnalyzer {
                 }
             }
         }
+        
+        // If no exact match, look for components in parallel
+        // A component is in parallel if it shares both nodes with the voltmeter
+        // but might be connected in a different order
+        for (ComponentsController.Drawable drawable : components) {
+            if (drawable instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                if (component != voltmeter) {  // Don't return the voltmeter itself
+                    String compStartNode = component.startX + "," + component.startY;
+                    String compEndNode = component.endX + "," + component.endY;
+                    
+                    // Check if the component shares both nodes with the voltmeter
+                    if ((voltStartNode.equals(compStartNode) || voltStartNode.equals(compEndNode)) &&
+                        (voltEndNode.equals(compStartNode) || voltEndNode.equals(compEndNode))) {
+                        return component;
+                    }
+                }
+            }
+        }
+        
+        // If still no match, look for components connected to either node
+        // This handles cases where the voltmeter might be measuring across multiple components
+        for (ComponentsController.Drawable drawable : components) {
+            if (drawable instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                if (component != voltmeter) {  // Don't return the voltmeter itself
+                    String compStartNode = component.startX + "," + component.startY;
+                    String compEndNode = component.endX + "," + component.endY;
+                    
+                    // Check if the component shares either node with the voltmeter
+                    if (voltStartNode.equals(compStartNode) || voltStartNode.equals(compEndNode) ||
+                        voltEndNode.equals(compStartNode) || voltEndNode.equals(compEndNode)) {
+                        return component;
+                    }
+                }
+            }
+        }
+        
         return null;
     }
 

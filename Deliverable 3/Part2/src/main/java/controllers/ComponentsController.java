@@ -295,10 +295,9 @@ public class ComponentsController {
 
     // Resistor Components
     public static class ResistorIEEE extends ImageComponent {
-        public double resistance = 1000; // Default 1kΩ
-
         public ResistorIEEE() {
             super("ResistorIEEE", "/images/components/ResistorIEEE.png");
+            setResistance(100); // Set default resistance to 100Ω
         }
 
         public static void addControls(ResistorIEEE resistor, VBox container) {
@@ -306,7 +305,7 @@ public class ComponentsController {
             resistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
             container.getChildren().add(resistanceLabel);
 
-            TextField resistanceField = new TextField(String.valueOf(resistor.resistance));
+            TextField resistanceField = new TextField(String.valueOf(resistor.getResistance())); // Use getter
             resistanceField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
             container.getChildren().add(resistanceField);
 
@@ -314,7 +313,7 @@ public class ComponentsController {
                 try {
                     double newResistance = Double.parseDouble(resistanceField.getText());
                     if (newResistance > 0) {
-                        resistor.resistance = newResistance;
+                        resistor.setResistance(newResistance); // Use setter
                         // Get the SimulationController instance and update circuit analysis
                         SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
                         if (simulationController != null) {
@@ -323,17 +322,16 @@ public class ComponentsController {
                     }
                 } catch (NumberFormatException ex) {
                     // Invalid input, revert to previous value
-                    resistanceField.setText(String.valueOf(resistor.resistance));
+                    resistanceField.setText(String.valueOf(resistor.getResistance())); // Use getter
                 }
             });
         }
     }
 
     public static class ResistorIEC extends ImageComponent {
-        public double resistance = 1000; // Default 1kΩ
-
         public ResistorIEC() {
             super("ResistorIEC", "/images/components/ResistorIEC.png");
+            setResistance(100); // Set default resistance to 100Ω
         }
 
         public static void addControls(ResistorIEC resistor, VBox container) {
@@ -341,7 +339,7 @@ public class ComponentsController {
             resistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
             container.getChildren().add(resistanceLabel);
 
-            TextField resistanceField = new TextField(String.valueOf(resistor.resistance));
+            TextField resistanceField = new TextField(String.valueOf(resistor.getResistance())); // Use getter
             resistanceField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
             container.getChildren().add(resistanceField);
 
@@ -349,7 +347,7 @@ public class ComponentsController {
                 try {
                     double newResistance = Double.parseDouble(resistanceField.getText());
                     if (newResistance > 0) {
-                        resistor.resistance = newResistance;
+                        resistor.setResistance(newResistance); // Use setter
                         // Get the SimulationController instance and update circuit analysis
                         SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
                         if (simulationController != null) {
@@ -358,7 +356,7 @@ public class ComponentsController {
                     }
                 } catch (NumberFormatException ex) {
                     // Invalid input, revert to previous value
-                    resistanceField.setText(String.valueOf(resistor.resistance));
+                    resistanceField.setText(String.valueOf(resistor.getResistance())); // Use getter
                 }
             });
         }
@@ -633,6 +631,7 @@ public class ComponentsController {
 
         public Battery() {
             super("Battery", "/images/components/Battery.png");
+            setVoltage(9); // Set the voltage in the base class
         }
 
         public static void addControls(Battery battery, VBox container) {
@@ -640,7 +639,7 @@ public class ComponentsController {
             voltageLabel.setStyle("-fx-text-fill: #FFFFFF;");
             container.getChildren().add(voltageLabel);
 
-            TextField voltageField = new TextField(String.valueOf(battery.voltage));
+            TextField voltageField = new TextField(String.valueOf(battery.getVoltage()));
             voltageField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
             container.getChildren().add(voltageField);
 
@@ -649,6 +648,7 @@ public class ComponentsController {
                     double newVoltage = Double.parseDouble(voltageField.getText());
                     if (newVoltage > 0) {
                         battery.voltage = newVoltage;
+                        battery.setVoltage(newVoltage);
                         // Get the SimulationController instance and update circuit analysis
                         SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
                         if (simulationController != null) {
@@ -657,7 +657,7 @@ public class ComponentsController {
                     }
                 } catch (NumberFormatException ex) {
                     // Invalid input, revert to previous value
-                    voltageField.setText(String.valueOf(battery.voltage));
+                    voltageField.setText(String.valueOf(battery.getVoltage()));
                 }
             });
         }
@@ -1334,6 +1334,13 @@ public class ComponentsController {
         VBox componentParams = new VBox(5);
         componentParams.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 10; -fx-background-radius: 5;");
         componentParams.getProperties().put("component", component);
+        
+        // Get the SimulationController instance from the main parametersPane
+        SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
+        if (simulationController != null) {
+            componentParams.getProperties().put("simulationController", simulationController);
+        }
+        
         component.parameterControls = componentParams; // Store reference to the parameter controls
 
         // Add component name header
