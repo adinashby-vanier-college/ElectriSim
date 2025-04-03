@@ -838,6 +838,7 @@ public class ComponentsController {
         public NOTGate() {
             super("NOTGate", "/images/components/NOTGate.png");
             this.propagationDelay = 10.0; // Default 10ns
+            setLogicGate(true);
         }
 
         public static void addControls(NOTGate gate, VBox container) {
@@ -877,21 +878,6 @@ public class ComponentsController {
             setLogicGate(true);
         }
 
-        public void setResult (ArrayList<ImageComponent> gateList) {
-            setGateResult(true);
-            if (!gateList.isEmpty()) {
-                for (ImageComponent gate: gateList) {
-                    if (!gate.isGateResult()) {
-                        setGateResult(false);
-                        break;
-                    }
-                }
-            }
-            else {
-                setGateResult(false);
-            }
-        }
-
         public static void addControls(ANDGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
             propagationDelayLabel.setStyle("-fx-text-fill: #FFFFFF;");
@@ -926,21 +912,7 @@ public class ComponentsController {
         public NANDGate() {
             super("NANDGate", "/images/components/NANDGate.png");
             this.propagationDelay = 10.0; // Default 10ns
-        }
-
-        public void setResult (ArrayList<ImageComponent> gateList) {
-            setGateResult(true);
-            if (!gateList.isEmpty()) {
-                for (ImageComponent gate: gateList) {
-                    if (!gate.isGateResult()) {
-                        return;
-                    }
-                }
-                setGateResult(false);
-            }
-            else {
-                setGateResult(false);
-            }
+            setLogicGate(true);
         }
         public static void addControls(NANDGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
@@ -976,6 +948,7 @@ public class ComponentsController {
         public ORGate() {
             super("ORGate", "/images/components/ORGate.png");
             this.propagationDelay = 10.0; // Default 10ns
+            setLogicGate(true);
         }
 
         public void setResult (ArrayList<ImageComponent> gateList) {
@@ -1021,6 +994,7 @@ public class ComponentsController {
         public NORGate() {
             super("NORGate", "/images/components/NORGate.png");
             this.propagationDelay = 10.0; // Default 10ns
+            setLogicGate(true);
         }
 
         public static void addControls(NORGate gate, VBox container) {
@@ -1057,6 +1031,7 @@ public class ComponentsController {
         public XORGate() {
             super("XORGate", "/images/components/XORGate.png");
             this.propagationDelay = 10.0; // Default 10ns
+            setLogicGate(true);
         }
 
         public static void addControls(XORGate gate, VBox container) {
