@@ -1,6 +1,9 @@
 package controllers;
 
+import java.sql.Array;
+import java.sql.SQLOutput;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CircuitAnalyzer {
     private final List<ComponentsController.Drawable> components;
@@ -604,13 +607,6 @@ public class CircuitAnalyzer {
         return 0.0;
     }
 
-    // Helper method to check if a component is a power supply
-    private boolean isPowerSupply(ComponentsController.ImageComponent component) {
-        return component instanceof ComponentsController.VoltageSource ||
-               component instanceof ComponentsController.BatteryCell ||
-               component instanceof ComponentsController.Battery;
-    }
-
     // Helper method to check if a component is a power source
     private boolean isPowerSource(ComponentsController.ImageComponent component) {
         return component instanceof ComponentsController.VoltageSource ||
@@ -689,4 +685,250 @@ public class CircuitAnalyzer {
             }
         }
     }
+
+    //TEST
+    Set<Edge> visitedEdges = new HashSet<>();
+    List<Edge> currentPath = new ArrayList<>();
+    List<List<Edge>> foundLoops = new ArrayList<>();
+    public void loopRecon(Node comp, Node start) {
+
+
+        for (Edge currentEdge: comp.edges) {
+            if (currentEdge == currentPath.getLast()) {
+                continue;
+            }
+
+            if (visitedEdges.contains(currentEdge)) {
+                if (currentPath.contains(currentEdge)) {
+                    List <Edge> loop = loopMaker(currentPath, currentEdge);
+                    foundLoops.add(loop);
+                }
+                continue;
+            }
+
+            if (currentEdge.component instanceof ComponentsController.ImageComponent) {
+                if(!isConductive((ComponentsController.ImageComponent) currentEdge.component)) {
+                    continue;
+                }
+            }
+
+            visitedEdges.add(currentEdge);
+            currentPath.add(currentEdge);
+
+            Node nextComp = (currentEdge.from == comp) ? currentEdge.to : currentEdge.from;
+            loopRecon(nextComp, comp);
+
+            currentPath.remove(currentEdge);
+            visitedEdges.remove(currentEdge);
+        }
+    }
+
+    List <Edge> loopMaker(List<Edge> loopPath, Edge lastEdge) {
+        int startingPoint = loopPath.indexOf(lastEdge);
+        return new ArrayList<>(loopPath.subList(startingPoint, loopPath.size()));
+    }
+
+    private boolean isConductive (ComponentsController.ImageComponent comp) {
+        if (comp instanceof ComponentsController.Voltmeter || !comp.isClosed()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public List<List<Edge>> findAllLoops() {
+        visitedEdges.clear();
+        currentPath.clear();
+        foundLoops.clear();
+
+        for (Node node: getAllNodes()) {
+            if (!hasVistedEdges(node)) {
+                loopRecon(node, null);
+            }
+        }
+
+        return filterUniqueLoops(foundLoops);
+    }
+
+    private List<Node> getAllNodes() {
+        Set<Node> nodes = new HashSet<>();
+        for (Edge edge: getAllEdges()) {
+            nodes.add(edge.from);
+            nodes.add(edge.to);
+        }
+        return new ArrayList<>(nodes);
+    }
+
+    private List<Edge> getAllEdges() {
+        return new ArrayList<>(circuitGraph.edges);
+    }
+
+    private boolean hasVistedEdges(Node node) {
+        for (Edge edge : node.edges) {
+            if (visitedEdges.contains(edge)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<List<Edge>> filterUniqueLoops(List<List<Edge>> loops) {
+        List<Set<Edge>> uniqueLoopSets = new ArrayList<>();
+        List<List<Edge>> uniqueLoops = new ArrayList<>();
+
+        for (List<Edge> loop : loops) {
+            Set<Edge> edgeSet = new HashSet<>(loop);
+
+            if (!containsLoop(uniqueLoopSets, edgeSet)) {
+                uniqueLoopSets.add(edgeSet);
+                uniqueLoops.add(loop);
+            }
+        }
+        return uniqueLoops;
+    }
+
+    private boolean containsLoop(List<Set<Edge>> loopSets, Set<Edge> target) {
+        for (Set<Edge> exists: loopSets) {
+            if (exists.equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Node findTerminalNode() {
+
+        // 1 connection
+        for (Node node: circuitGraph.nodes.values()) {
+            if (getConductiveConnections(node).size() == 1) {
+                return node;
+            }
+        }
+        // No terminal
+        if (!findAllLoops().isEmpty()) {
+            return circuitGraph.nodes.values().iterator().next();
+        }
+
+        boolean isClosedLoop = circuitGraph.nodes.values().stream()
+                .allMatch(node -> getConductiveConnections(node).size() == 2);
+
+        if (isClosedLoop) {
+            // Pick the node with the power source if exists
+            return circuitGraph.nodes.values().stream()
+                    .filter(node -> node.edges.stream().anyMatch(edge ->
+                            edge.component instanceof ComponentsController.VoltageSource))
+                    .findFirst()
+                    .orElseGet(() -> circuitGraph.nodes.values().iterator().next());
+        }
+        // Complex
+        throw new IllegalStateException("Cannot find the terminal. It might be malformed.");
+    }
+
+    private List<Edge> getConductiveConnections(Node node) {
+        return node.edges.stream().filter(edge ->{
+            if (edge.component instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) edge.component;
+                return isConductive(comp);
+            }
+            return true;
+        }).collect(Collectors.toList());
+    }
+
+    private List<Edge> findSeriesPath(Node startNode) {
+        List<Edge> path = new ArrayList<>();
+        Node start = startNode;
+
+        Node current = start;
+        Edge previous = null;
+
+        while (true) {
+            Edge finalPrevious = previous;
+            List<Edge> nextEdges = current.edges.stream().filter(e -> e.equals(finalPrevious)).toList();
+
+            if (nextEdges.isEmpty()) {
+                break;
+            }
+
+            Edge nextEdge = nextEdges.get(0);
+            path.add(nextEdge);
+            previous = nextEdge;
+            current = (nextEdge.from == current) ? nextEdge.to : nextEdge.from;
+
+        }
+        return path;
+    }
+
+    private double getEffectiveResistance(ComponentsController.ImageComponent comp) {
+        if (comp instanceof ComponentsController.SPSTToggleSwitch) {
+            return ((ComponentsController.SPSTToggleSwitch) comp).isClosed() ?
+                    0.001 : // Closed switch resistance
+                    1e9;    // Open switch resistance
+        }
+        return comp.resistance;
+    }
+
+    public void seriesAnalysis() {
+        try {
+            Node terminal = findTerminalNode();
+
+            List<Edge> path = findSeriesPath(terminal);
+
+            if (path.isEmpty()) {
+                throw new IllegalStateException("The path is empty");
+            }
+
+            double totalVoltage = 0;
+            double totalResistance = 0;
+
+            for (Edge edge : path) {
+                if (edge.component instanceof ComponentsController.ImageComponent) {
+                    ComponentsController.ImageComponent comp =
+                            (ComponentsController.ImageComponent) edge.component;
+
+                    if (isPowerSource(comp)) {
+                        totalVoltage += comp.voltage;
+                    } else if (isConductive(comp)) {
+                        totalResistance += getEffectiveResistance(comp);
+                    }
+                }
+            }
+
+            double circuitCurrent = totalVoltage / totalResistance;
+            double accumulatedVoltage = 0;
+            Node referenceNode = terminal;
+
+            for (Edge edge : path) {
+                if (edge.component instanceof ComponentsController.ImageComponent) {
+                    ComponentsController.ImageComponent comp =
+                            (ComponentsController.ImageComponent) edge.component;
+
+                    if (isConductive(comp)) {
+                        double resistance = getEffectiveResistance(comp);
+                        double voltageDrop = circuitCurrent * resistance;
+
+                        comp.current = circuitCurrent;
+                        comp.voltage = voltageDrop;
+
+                        if (edge.from == referenceNode) {
+                            nodeVoltages.put(edge.to.id, accumulatedVoltage + voltageDrop);
+                            referenceNode = edge.to;
+                        } else {
+                            nodeVoltages.put(edge.from.id, accumulatedVoltage + voltageDrop);
+                            referenceNode = edge.from;
+                        }
+                        accumulatedVoltage += voltageDrop;
+                    }
+                }
+            }
+        } catch (IllegalStateException e) {
+            System.out.println("Series analysis error: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
+
+
+
 } 

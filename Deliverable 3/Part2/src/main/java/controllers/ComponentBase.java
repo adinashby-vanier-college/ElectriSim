@@ -804,7 +804,7 @@ public class ComponentBase {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-    
+
     public boolean isLogicGate() {
         return logicGate;
     }
