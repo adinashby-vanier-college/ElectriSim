@@ -29,21 +29,30 @@ class AddComponentAction extends UndoableAction {
 
     @Override
     public void undo() {
+        System.out.println("Undoing AddComponentAction");
         drawables.remove(component);
         if (component instanceof ComponentsController.ImageComponent) {
             ComponentsController.ImageComponent imageComponent = (ComponentsController.ImageComponent) component;
+            if (imageComponent.parameterControls != null) {
             parametersPane.getChildren().remove(imageComponent.parameterControls);
         }
+    }
         controller.redrawCanvas();
         controller.updateCircuitAnalysis();
     }
 
     @Override
     public void redo() {
+        System.out.println("Redoing AddComponentAction");
         drawables.add(component);
         if (component instanceof ComponentsController.ImageComponent) {
             ComponentsController.ImageComponent imageComponent = (ComponentsController.ImageComponent) component;
-            parametersPane.getChildren().add(imageComponent.parameterControls);
+            // Recreate parameter controls if they don't exist
+            if (imageComponent.parameterControls == null) {
+                ComponentsController.generateParameterControls(imageComponent, parametersPane);
+            } else {
+                parametersPane.getChildren().add(imageComponent.parameterControls);
+            }
         }
         controller.redrawCanvas();
         controller.updateCircuitAnalysis();
@@ -63,6 +72,7 @@ class DeleteComponentAction extends UndoableAction {
 
     @Override
     public void undo() {
+        System.out.println("Undoing DeleteComponentAction");
         drawables.add(index, component);
         if (component instanceof ComponentsController.ImageComponent) {
             ComponentsController.ImageComponent imageComponent = (ComponentsController.ImageComponent) component;
@@ -74,6 +84,7 @@ class DeleteComponentAction extends UndoableAction {
 
     @Override
     public void redo() {
+        System.out.println("Redoing DeleteComponentAction");
         drawables.remove(component);
         if (component instanceof ComponentsController.ImageComponent) {
             ComponentsController.ImageComponent imageComponent = (ComponentsController.ImageComponent) component;
@@ -102,6 +113,7 @@ class MoveComponentAction extends UndoableAction {
 
     @Override
     public void undo() {
+        System.out.println("Undoing MoveComponentAction");
         component.x = oldX;
         component.y = oldY;
         controller.updateWiresForComponent(component);
@@ -111,6 +123,7 @@ class MoveComponentAction extends UndoableAction {
 
     @Override
     public void redo() {
+        System.out.println("Redoing MoveComponentAction");
         component.x = newX;
         component.y = newY;
         controller.updateWiresForComponent(component);
@@ -137,11 +150,13 @@ class ParameterChangeAction extends UndoableAction {
 
     @Override
     public void undo() {
+        System.out.println("Undoing ParameterChangeAction");
         setParameterValue(oldValue);
     }
 
     @Override
     public void redo() {
+        System.out.println("Redoing ParameterChangeAction");
         setParameterValue(newValue);
     }
 

@@ -262,10 +262,12 @@ public class SimulationController {
         if (newComponent.parameterControls != null) {
             parametersPane.getChildren().add(newComponent.parameterControls);
         }
+
         // Add to undo stack
         if (!isUndoRedoOperation) {
             undoStack.push(new AddComponentAction(drawables, parametersPane, this, newComponent));
             redoStack.clear();
+            System.out.println("Component placed. Undo stack size: " + undoStack.size());
         }
 
         // Reset floating image
@@ -531,6 +533,7 @@ public class SimulationController {
                     undoStack.push(new MoveComponentAction(drawables, parametersPane, this, draggedExistingComponent,
                             oldX[0], oldY[0], draggedExistingComponent.x, draggedExistingComponent.y));
                     redoStack.clear();
+                    System.out.println("Component moved. Undo stack size: " + undoStack.size());
                 }
                 draggedExistingComponent = null;
 
@@ -757,6 +760,8 @@ public class SimulationController {
             action.undo();
             redoStack.push(action);
             isUndoRedoOperation = false;
+            System.out.println("Undo performed. Undo stack size: " + undoStack.size() +
+                    ", Redo stack size: " + redoStack.size());
         }
     }
     @FXML private void handleRedo(ActionEvent event) {
@@ -766,6 +771,8 @@ public class SimulationController {
             action.redo();
             undoStack.push(action);
             isUndoRedoOperation = false;
+            System.out.println("Redo performed. Undo stack size: " + undoStack.size() +
+                    ", Redo stack size: " + redoStack.size());
         }
     }
     @FXML private void handleCopy(ActionEvent event) {}
@@ -782,6 +789,7 @@ public class SimulationController {
             if (!isUndoRedoOperation) {
                 undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, wireToDelete));
                 redoStack.clear();
+                System.out.println("Wire deleted. Undo stack size: " + undoStack.size());
             }
 
             redrawCanvas();
@@ -801,6 +809,7 @@ public class SimulationController {
             if (!isUndoRedoOperation) {
                 undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, componentToDelete));
                 redoStack.clear();
+                System.out.println("Component deleted. Undo stack size: " + undoStack.size());
             }
 
             redrawCanvas();
