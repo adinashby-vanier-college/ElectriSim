@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -873,6 +874,22 @@ public class ComponentsController {
         public ANDGate() {
             super("ANDGate", "/images/components/ANDGate.png");
             this.propagationDelay = 10.0; // Default 10ns
+            setLogicGate(true);
+        }
+
+        public void setResult (ArrayList<ImageComponent> gateList) {
+            setGateResult(true);
+            if (!gateList.isEmpty()) {
+                for (ImageComponent gate: gateList) {
+                    if (!gate.isGateResult()) {
+                        setGateResult(false);
+                        break;
+                    }
+                }
+            }
+            else {
+                setGateResult(false);
+            }
         }
 
         public static void addControls(ANDGate gate, VBox container) {
@@ -911,6 +928,20 @@ public class ComponentsController {
             this.propagationDelay = 10.0; // Default 10ns
         }
 
+        public void setResult (ArrayList<ImageComponent> gateList) {
+            setGateResult(true);
+            if (!gateList.isEmpty()) {
+                for (ImageComponent gate: gateList) {
+                    if (!gate.isGateResult()) {
+                        return;
+                    }
+                }
+                setGateResult(false);
+            }
+            else {
+                setGateResult(false);
+            }
+        }
         public static void addControls(NANDGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
             propagationDelayLabel.setStyle("-fx-text-fill: #FFFFFF;");
@@ -947,6 +978,15 @@ public class ComponentsController {
             this.propagationDelay = 10.0; // Default 10ns
         }
 
+        public void setResult (ArrayList<ImageComponent> gateList) {
+            setGateResult(false);
+            for (ImageComponent gate:gateList) {
+                if (gate.isGateResult()) {
+                    setGateResult(true);
+                    break;
+                }
+            }
+        }
         public static void addControls(ORGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
             propagationDelayLabel.setStyle("-fx-text-fill: #FFFFFF;");

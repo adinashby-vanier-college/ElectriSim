@@ -77,6 +77,8 @@ public class ComponentBase {
     public double propagationDelay;
     public double setupTime;
     public double holdTime;
+    public boolean gateResult;
+    public boolean logicGate;
 
     // Antenna specific
     public double frequencyRange;
@@ -804,6 +806,22 @@ public class ComponentBase {
         this.selected = selected;
     }
 
+    public boolean isGateResult() {
+        return gateResult;
+    }
+
+    public void setGateResult(boolean gateResult) {
+        this.gateResult = gateResult;
+    }
+
+    public boolean isLogicGate() {
+        return logicGate;
+    }
+
+    public void setLogicGate(boolean logicGate) {
+        this.logicGate = logicGate;
+    }
+
     // toString
 
 
@@ -965,7 +983,8 @@ public class ComponentBase {
         isEnergized = false;
         isPolarityRespected = false;
         selected = false;
-
+        logicGate = false;
+        gateResult = false;
         // Initialize resolution to 0
         resolution = 0;
     }

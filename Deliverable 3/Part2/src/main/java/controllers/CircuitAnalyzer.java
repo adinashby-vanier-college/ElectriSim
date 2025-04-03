@@ -667,13 +667,7 @@ public class CircuitAnalyzer {
         for (ComponentsController.Drawable component : components) {
             if (component instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) component;
-                if (comp.componentType.equals("NOTGate") ||
-                    comp.componentType.equals("ANDGate") ||
-                    comp.componentType.equals("NANDGate") ||
-                    comp.componentType.equals("ORGate") ||
-                    comp.componentType.equals("NORGate") ||
-                    comp.componentType.equals("XORGate")) {
-                    
+                if (comp.isLogicGate()) {
                     // Get input voltages
                     List<Boolean> inputs = new ArrayList<>();
                     for (Edge edge : circuitGraph.edges) {
