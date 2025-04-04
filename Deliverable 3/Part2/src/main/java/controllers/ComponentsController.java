@@ -950,16 +950,7 @@ public class ComponentsController {
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
-
-        public void setResult (ArrayList<ImageComponent> gateList) {
-            setGateResult(false);
-            for (ImageComponent gate:gateList) {
-                if (gate.isGateResult()) {
-                    setGateResult(true);
-                    break;
-                }
-            }
-        }
+        
         public static void addControls(ORGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
             propagationDelayLabel.setStyle("-fx-text-fill: #FFFFFF;");
