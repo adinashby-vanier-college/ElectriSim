@@ -204,7 +204,7 @@ public class ComponentsController {
         public boolean isClosed = false;
 
         public SPSTToggleSwitch() {
-            super("SPSTToggleSwitch", "/images/components/SPSTToggleSwitch.png");
+            super("SPSTToggleSwitch", "/images/circuit_diagrams/SPSTToggleSwitch.GIF");
         }
 
         public static void addControls(SPSTToggleSwitch switch_, VBox container) {
@@ -242,7 +242,6 @@ public class ComponentsController {
         }
     }
 
-    // Ground Components
     public static class EarthGround extends ImageComponent {
         public double resistance;
 
@@ -270,75 +269,13 @@ public class ComponentsController {
         }
     }
 
-    public static class ChassisGround extends ImageComponent {
-        public double resistance;
-
-        public ChassisGround(Image image, double x, double y, double width, double height) {
-            super(image, x, y, width, height, "ChassisGround");
-            this.resistance = 0.0;
-        }
-
-        public static void addControls(VBox container) {
-            Label resistanceLabel = new Label("Resistance (Ω):");
-            resistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
-            TextField resistanceField = new TextField("0.0");
-            resistanceField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
-            resistanceField.setOnAction(e -> {
-                ChassisGround component = (ChassisGround) container.getProperties().get("component");
-                if (component != null) {
-                try {
-                        component.resistance = Double.parseDouble(resistanceField.getText());
-                } catch (NumberFormatException ex) {
-                        resistanceField.setText(String.valueOf(component.resistance));
-                    }
-                }
-            });
-            container.getChildren().addAll(resistanceLabel, resistanceField);
-        }
-    }
-
-    // Resistor Components
     public static class ResistorIEEE extends ImageComponent {
         public ResistorIEEE() {
-            super("ResistorIEEE", "/images/components/ResistorIEEE.png");
+            super("ResistorIEEE", "/images/circuit_diagrams/ResistorIEEE.GIF");
             setResistance(100); // Set default resistance to 100Ω
         }
 
         public static void addControls(ResistorIEEE resistor, VBox container) {
-            Label resistanceLabel = new Label("Resistance (Ω):");
-            resistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
-            container.getChildren().add(resistanceLabel);
-
-            TextField resistanceField = new TextField(String.valueOf(resistor.getResistance())); // Use getter
-            resistanceField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
-            container.getChildren().add(resistanceField);
-
-            resistanceField.setOnAction(e -> {
-                try {
-                    double newResistance = Double.parseDouble(resistanceField.getText());
-                    if (newResistance > 0) {
-                        resistor.setResistance(newResistance); // Use setter
-                        // Get the SimulationController instance and update circuit analysis
-                        SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
-                        if (simulationController != null) {
-                            simulationController.updateCircuitAnalysis();
-                        }
-                    }
-                } catch (NumberFormatException ex) {
-                    // Invalid input, revert to previous value
-                    resistanceField.setText(String.valueOf(resistor.getResistance())); // Use getter
-                }
-            });
-        }
-    }
-
-    public static class ResistorIEC extends ImageComponent {
-        public ResistorIEC() {
-            super("ResistorIEC", "/images/components/ResistorIEC.png");
-            setResistance(100); // Set default resistance to 100Ω
-        }
-
-        public static void addControls(ResistorIEC resistor, VBox container) {
             Label resistanceLabel = new Label("Resistance (Ω):");
             resistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
             container.getChildren().add(resistanceLabel);
@@ -429,72 +366,11 @@ public class ComponentsController {
         }
     }
 
-    public static class PotentiometerIEC extends ImageComponent {
-        public double resistance;
-        public double powerRating;
-        public double wiperPosition;
-
-        public PotentiometerIEC(Image image, double x, double y, double width, double height) {
-            super(image, x, y, width, height, "PotentiometerIEC");
-            this.resistance = 1000.0;
-            this.powerRating = 0.25;
-            this.wiperPosition = 0.5;
-        }
-
-        public static void addControls(VBox container) {
-            Label resistanceLabel = new Label("Total Resistance (Ω):");
-            TextField resistanceField = new TextField("1000.0");
-            resistanceField.setOnAction(e -> {
-                PotentiometerIEC component = (PotentiometerIEC) container.getProperties().get("component");
-                if (component != null) {
-                try {
-                        component.resistance = Double.parseDouble(resistanceField.getText());
-                } catch (NumberFormatException ex) {
-                        resistanceField.setText(String.valueOf(component.resistance));
-                    }
-                }
-            });
-
-            Label powerLabel = new Label("Power Rating (W):");
-            powerLabel.setStyle("-fx-text-fill: #FFFFFF;");
-            TextField powerField = new TextField("0.25");
-            powerField.setOnAction(e -> {
-                PotentiometerIEC component = (PotentiometerIEC) container.getProperties().get("component");
-                if (component != null) {
-                    try {
-                        component.powerRating = Double.parseDouble(powerField.getText());
-                } catch (NumberFormatException ex) {
-                        powerField.setText(String.valueOf(component.powerRating));
-                    }
-                }
-            });
-
-            Label wiperLabel = new Label("Wiper Position (0-1):");
-            wiperLabel.setStyle("-fx-text-fill: #FFFFFF;");
-            TextField wiperField = new TextField("0.5");
-            wiperField.setOnAction(e -> {
-                PotentiometerIEC component = (PotentiometerIEC) container.getProperties().get("component");
-                if (component != null) {
-                    try {
-                        double position = Double.parseDouble(wiperField.getText());
-                        component.wiperPosition = Math.max(0, Math.min(1, position));
-                        wiperField.setText(String.valueOf(component.wiperPosition));
-                } catch (NumberFormatException ex) {
-                        wiperField.setText(String.valueOf(component.wiperPosition));
-                    }
-                }
-            });
-
-            container.getChildren().addAll(resistanceLabel, resistanceField, powerLabel, powerField, wiperLabel, wiperField);
-        }
-    }
-
-    // Capacitor Components
     public static class Capacitor extends ImageComponent {
         public double capacitance = 100e-6; // Default 100µF
 
         public Capacitor() {
-            super("Capacitor", "/images/components/Capacitor.png");
+            super("Capacitor", "/images/circuit_diagrams/Capacitor.GIF");
         }
 
         public static void addControls(Capacitor capacitor, VBox container) {
@@ -525,12 +401,11 @@ public class ComponentsController {
         }
     }
 
-    // Inductor and Coil Components
     public static class Inductor extends ImageComponent {
         public double inductance = 1e-3; // Default 1mH
 
         public Inductor() {
-            super("Inductor", "/images/components/Inductor.png");
+            super("Inductor", "/images/circuit_diagrams/Inductor.GIF");
         }
 
         public static void addControls(Inductor inductor, VBox container) {
@@ -566,7 +441,7 @@ public class ComponentsController {
         public double voltage = 12; // Default 12V
 
         public VoltageSource() {
-            super("VoltageSource", "/images/components/VoltageSource.png");
+            super("VoltageSource", "/images/circuit_diagrams/VoltageSource.GIF");
         }
 
         public static void addControls(VoltageSource source, VBox container) {
@@ -595,27 +470,51 @@ public class ComponentsController {
         }
     }
 
-    public static class BatteryCell extends ImageComponent {
-        public double voltage = 1.5; // Default 1.5V
+    public static class CurrentSource extends ImageComponent {
+        public double current = 1.0; // Default 1A
+        public double internalResistance = 100.0; // Default 100Ω
 
-        public BatteryCell() {
-            super("BatteryCell", "/images/components/BatteryCell.png");
+        public CurrentSource() {
+            super("CurrentSource", "/images/circuit_diagrams/Current Source.GIF");
         }
 
-        public static void addControls(BatteryCell cell, VBox container) {
-            Label voltageLabel = new Label("Voltage (V):");
-            voltageLabel.setStyle("-fx-text-fill: #FFFFFF;");
-            container.getChildren().add(voltageLabel);
+        public static void addControls(CurrentSource source, VBox container) {
+            Label currentLabel = new Label("Current (A):");
+            currentLabel.setStyle("-fx-text-fill: #FFFFFF;");
+            container.getChildren().add(currentLabel);
 
-            TextField voltageField = new TextField(String.valueOf(cell.voltage));
-            voltageField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
-            container.getChildren().add(voltageField);
+            TextField currentField = new TextField(String.valueOf(source.current));
+            currentField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
+            container.getChildren().add(currentField);
 
-            voltageField.setOnAction(e -> {
+            currentField.setOnAction(e -> {
                 try {
-                    double newVoltage = Double.parseDouble(voltageField.getText());
-                    if (newVoltage > 0) {
-                        cell.voltage = newVoltage;
+                    double newCurrent = Double.parseDouble(currentField.getText());
+                    source.current = newCurrent;
+                    // Get the SimulationController instance and update circuit analysis
+                    SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
+                    if (simulationController != null) {
+                        simulationController.updateCircuitAnalysis();
+                    }
+                } catch (NumberFormatException ex) {
+                    // Invalid input, revert to previous value
+                    currentField.setText(String.valueOf(source.current));
+                }
+            });
+
+            Label internalResistanceLabel = new Label("Internal Resistance (Ω):");
+            internalResistanceLabel.setStyle("-fx-text-fill: #FFFFFF;");
+            container.getChildren().add(internalResistanceLabel);
+
+            TextField internalResistanceField = new TextField(String.valueOf(source.internalResistance));
+            internalResistanceField.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
+            container.getChildren().add(internalResistanceField);
+
+            internalResistanceField.setOnAction(e -> {
+                try {
+                    double newResistance = Double.parseDouble(internalResistanceField.getText());
+                    if (newResistance >= 0) {
+                        source.internalResistance = newResistance;
                         // Get the SimulationController instance and update circuit analysis
                         SimulationController simulationController = (SimulationController) container.getProperties().get("simulationController");
                         if (simulationController != null) {
@@ -624,7 +523,7 @@ public class ComponentsController {
                     }
                 } catch (NumberFormatException ex) {
                     // Invalid input, revert to previous value
-                    voltageField.setText(String.valueOf(cell.voltage));
+                    internalResistanceField.setText(String.valueOf(source.internalResistance));
                 }
             });
         }
@@ -636,7 +535,7 @@ public class ComponentsController {
         CircuitAnalyzerTest.CircuitGraph.Node negativeTerminal;
 
         public Battery() {
-            super("Battery", "/images/components/Battery.png");
+            super("Battery", "/images/circuit_diagrams/Battery.GIF");
             setVoltage(9); // Set the voltage in the base class
         }
 
@@ -836,12 +735,51 @@ public class ComponentsController {
         }
     }
 
+    public static class Wattmeter extends ImageComponent {
+        public double voltageRange;
+        public double currentRange;
+
+        public Wattmeter(Image image, double x, double y, double width, double height) {
+            super(image, x, y, width, height, "Wattmeter");
+            this.voltageRange = 20.0;
+            this.currentRange = 10.0;
+        }
+
+        public static void addControls(VBox container) {
+            TextField voltageRangeField = new TextField();
+            voltageRangeField.setPromptText("Voltage Range (Volts)");
+            voltageRangeField.setText("0.0");
+            voltageRangeField.setOnAction(e -> {
+                try {
+                    double voltageRange = Double.parseDouble(voltageRangeField.getText());
+                    // Update component voltageRange
+                } catch (NumberFormatException ex) {
+                    voltageRangeField.setText("Invalid input");
+                }
+            });
+            container.getChildren().add(voltageRangeField);
+
+            TextField currentRangeField = new TextField();
+            currentRangeField.setPromptText("Current Range (Amps)");
+            currentRangeField.setText("0.0");
+            currentRangeField.setOnAction(e -> {
+                try {
+                    double currentRange = Double.parseDouble(currentRangeField.getText());
+                    // Update component currentRange
+                } catch (NumberFormatException ex) {
+                    currentRangeField.setText("Invalid input");
+                }
+            });
+            container.getChildren().add(currentRangeField);
+        }
+    }
+
     // Logic Gate Components
     public static class NOTGate extends ImageComponent {
         public double propagationDelay; // Propagation delay in nanoseconds
 
         public NOTGate() {
-            super("NOTGate", "/images/components/NOTGate.png");
+            super("NOTGate", "/images/circuit_diagrams/NOTGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -878,7 +816,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public ANDGate() {
-            super("ANDGate", "/images/components/ANDGate.png");
+            super("ANDGate", "/images/circuit_diagrams/ANDGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -915,7 +853,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public NANDGate() {
-            super("NANDGate", "/images/components/NANDGate.png");
+            super("NANDGate", "/images/circuit_diagrams/NANDGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -951,7 +889,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public ORGate() {
-            super("ORGate", "/images/components/ORGate.png");
+            super("ORGate", "/images/circuit_diagrams/ORGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -988,7 +926,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public NORGate() {
-            super("NORGate", "/images/components/NORGate.png");
+            super("NORGate", "/images/circuit_diagrams/NORGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -1025,7 +963,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public XORGate() {
-            super("XORGate", "/images/components/XORGate.png");
+            super("XORGate", "/images/circuit_diagrams/XORGate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -1064,7 +1002,7 @@ public class ComponentsController {
         public double maxCurrent = 1.0; // Default 1A
 
         public Diode() {
-            super("Diode", "/images/components/Diode.png");
+            super("Diode", "/images/circuit_diagrams/Diode.GIF");
         }
 
         public static void addControls(Diode diode, VBox container) {
@@ -1186,7 +1124,7 @@ public class ComponentsController {
         public double coupling = 0.99; // Default coupling coefficient
 
         public Transformer() {
-            super("Transformer", "/images/components/Transformer.png");
+            super("Transformer", "/images/circuit_diagrams/Transformer.GIF");
         }
 
         public static void addControls(Transformer transformer, VBox container) {
@@ -1272,7 +1210,7 @@ public class ComponentsController {
         public boolean isBlown = false;
 
         public Fuse() {
-            super("Fuse", "/images/components/Fuse.png");
+            super("Fuse", "/images/circuit_diagrams/Fuse.GIF");
         }
 
         public static void addControls(Fuse fuse, VBox container) {
@@ -1363,24 +1301,18 @@ public class ComponentsController {
             SPSTToggleSwitch.addControls((SPSTToggleSwitch) component, componentParams);
         } else if (component.componentType.equals("EarthGround")) {
             EarthGround.addControls(componentParams);
-        } else if (component.componentType.equals("ChassisGround")) {
-            ChassisGround.addControls(componentParams);
         } else if (component.componentType.equals("ResistorIEEE")) {
             ResistorIEEE.addControls((ResistorIEEE) component, componentParams);
-        } else if (component.componentType.equals("ResistorIEC")) {
-            ResistorIEC.addControls((ResistorIEC) component, componentParams);
         } else if (component.componentType.equals("PotentiometerIEEE")) {
             PotentiometerIEEE.addControls(componentParams);
-        } else if (component.componentType.equals("PotentiometerIEC")) {
-            PotentiometerIEC.addControls(componentParams);
         } else if (component.componentType.equals("Capacitor")) {
             Capacitor.addControls((Capacitor) component, componentParams);
         } else if (component.componentType.equals("Inductor")) {
             Inductor.addControls((Inductor) component, componentParams);
         } else if (component.componentType.equals("VoltageSource")) {
             VoltageSource.addControls((VoltageSource) component, componentParams);
-        } else if (component.componentType.equals("BatteryCell")) {
-            BatteryCell.addControls((BatteryCell) component, componentParams);
+        } else if (component.componentType.equals("CurrentSource")) {
+            CurrentSource.addControls((CurrentSource) component, componentParams);
         } else if (component.componentType.equals("Battery")) {
             Battery.addControls((Battery) component, componentParams);
         } else if (component.componentType.equals("Voltmeter")) {
@@ -1389,6 +1321,8 @@ public class ComponentsController {
             Ammeter.addControls(componentParams);
         } else if (component.componentType.equals("Ohmmeter")) {
             Ohmmeter.addControls(componentParams);
+        } else if (component.componentType.equals("Wattmeter")) {
+            Wattmeter.addControls(componentParams);
         } else if (component instanceof NOTGate) {
             NOTGate.addControls((NOTGate) component, componentParams);
         } else if (component instanceof ANDGate) {

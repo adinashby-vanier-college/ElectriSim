@@ -60,8 +60,7 @@ public class CircuitAnalyzer {
         private double calculateResistance(ComponentsController.Drawable component) {
             if (component instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) component;
-                if (comp instanceof ComponentsController.ResistorIEEE || 
-                    comp instanceof ComponentsController.ResistorIEC) {
+                if (comp instanceof ComponentsController.ResistorIEEE) {
                     return comp.resistance;
                 } else if (comp instanceof ComponentsController.SPSTToggleSwitch) {
                     ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) comp;
@@ -443,8 +442,7 @@ public class CircuitAnalyzer {
                 if (startVoltage != null && endVoltage != null) {
                     double voltageDiff = startVoltage - endVoltage;
                     
-                    if (comp instanceof ComponentsController.ResistorIEEE || 
-                        comp instanceof ComponentsController.ResistorIEC) {
+                    if (comp instanceof ComponentsController.ResistorIEEE) {
                         double current = voltageDiff / comp.resistance;
                         String branchKey = startNode + "->" + endNode;
                         this.branchCurrents.put(branchKey, current);
@@ -600,8 +598,7 @@ public class CircuitAnalyzer {
 
     // Get resistance of a component
     public double getResistance(ComponentsController.ImageComponent component) {
-        if (component instanceof ComponentsController.ResistorIEEE || 
-            component instanceof ComponentsController.ResistorIEC) {
+        if (component instanceof ComponentsController.ResistorIEEE) {
             return component.resistance;
         }
         return 0.0;
@@ -610,7 +607,7 @@ public class CircuitAnalyzer {
     // Helper method to check if a component is a power source
     private boolean isPowerSource(ComponentsController.ImageComponent component) {
         return component instanceof ComponentsController.VoltageSource ||
-               component instanceof ComponentsController.BatteryCell ||
+               component instanceof ComponentsController.CurrentSource ||
                component instanceof ComponentsController.Battery;
     }
 

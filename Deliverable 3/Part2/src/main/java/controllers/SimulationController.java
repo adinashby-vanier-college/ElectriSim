@@ -179,20 +179,11 @@ public class SimulationController {
             case "EarthGround":
                 newComponent = new ComponentsController.EarthGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
                 break;
-            case "ChassisGround":
-                newComponent = new ComponentsController.ChassisGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-                break;
             case "ResistorIEEE":
                 newComponent = new ComponentsController.ResistorIEEE();
                 break;
-            case "ResistorIEC":
-                newComponent = new ComponentsController.ResistorIEC();
-                break;
             case "PotentiometerIEEE":
                 newComponent = new ComponentsController.PotentiometerIEEE(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-                break;
-            case "PotentiometerIEC":
-                newComponent = new ComponentsController.PotentiometerIEC(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
                 break;
             case "Capacitor":
                 newComponent = new ComponentsController.Capacitor();
@@ -204,7 +195,7 @@ public class SimulationController {
                 newComponent = new ComponentsController.VoltageSource();
                 break;
             case "BatteryCell":
-                newComponent = new ComponentsController.BatteryCell();
+                newComponent = new ComponentsController.CurrentSource();
                 break;
             case "Battery":
                 newComponent = new ComponentsController.Battery();
@@ -217,6 +208,9 @@ public class SimulationController {
                 break;
             case "Ohmmeter":
                 newComponent = new ComponentsController.Ohmmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Wattmeter":
+                newComponent = new ComponentsController.Wattmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
                 break;
             case "Diode":
                 newComponent = new ComponentsController.Diode();
@@ -288,28 +282,20 @@ public class SimulationController {
     private String determineComponentType(String imageUrl) {
         if (imageUrl.contains("SPST%20Toggle%20Switch")) {
             return "SPSTToggleSwitch";
-        } else if (imageUrl.contains("Pushbutton%20Switch%20NO")) {
-            return "PushbuttonSwitchNO";
         } else if (imageUrl.contains("Earth%20Ground")) {
             return "EarthGround";
-        } else if (imageUrl.contains("Chassis%20Ground")) {
-            return "ChassisGround";
         } else if (imageUrl.contains("Resistor%20(IEEE)")) {
             return "ResistorIEEE";
-        } else if (imageUrl.contains("Resistor%20(IEC)")) {
-            return "ResistorIEC";
         } else if (imageUrl.contains("Potentiometer%20(IEEE)")) {
             return "PotentiometerIEEE";
-        } else if (imageUrl.contains("Potentiometer%20(IEC)")) {
-            return "PotentiometerIEC";
         } else if (imageUrl.contains("Capacitor")) {
             return "Capacitor";
         } else if (imageUrl.contains("Inductor")) {
             return "Inductor";
         } else if (imageUrl.contains("Voltage%20Source")) {
             return "VoltageSource";
-        } else if (imageUrl.contains("Battery%20Cell")) {
-            return "BatteryCell";
+        } else if (imageUrl.contains("Current%Source")) {
+            return "CurrentSource";
         } else if (imageUrl.contains("Battery")) {
             return "Battery";
         } else if (imageUrl.contains("Voltmeter")) {
@@ -318,6 +304,8 @@ public class SimulationController {
             return "Ammeter";
         } else if (imageUrl.contains("Ohmmeter")) {
             return "Ohmmeter";
+        } else if (imageUrl.contains("Wattmeter")) {
+            return "Wattmeter";
         } else if (imageUrl.contains("Diode")) {
             return "Diode";
         } else if (imageUrl.contains("Transformer")) {
@@ -736,11 +724,11 @@ public class SimulationController {
                         ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) component;
                         isSwitchClosed = spstSwitch.isClosed;
                         addFeedbackMessage("SPST Toggle Switch: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), state(" + (isSwitchClosed ? "closed" : "open") + ")", "info");
-                    } else if (component instanceof ComponentsController.ResistorIEEE || component instanceof ComponentsController.ResistorIEC) {
+                    } else if (component instanceof ComponentsController.ResistorIEEE) {
                         addFeedbackMessage("Resistor: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), resistance(" + component.resistance + "Ω)", "info");
                     } else if (component instanceof ComponentsController.VoltageSource) {
                         addFeedbackMessage("Voltage Source: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
-                    } else if (component instanceof ComponentsController.Battery || component instanceof ComponentsController.BatteryCell) {
+                    } else if (component instanceof ComponentsController.Battery) {
                         addFeedbackMessage("Battery: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
                     }
 
