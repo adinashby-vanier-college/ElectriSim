@@ -22,7 +22,7 @@ public class CircuitAnalyzerTest {
     }
     public static class CircuitGraph {
         public static final Map<String, Node> nodes = new HashMap<>();
-        public static final List<Edge> edges = new ArrayList<>();
+        public static final List<Edge> globalEdges = new ArrayList<>();
         private ComponentsController.Battery battery; // Reference to the single battery
         private static Node batteryPlusTerminal;
         private static Node batteryMinusTerminal;
@@ -68,7 +68,7 @@ public class CircuitAnalyzerTest {
             Node to = nodes.get(toId);
             if (from != null && to != null) {
                 Edge edge = new Edge(from, to, component);
-                edges.add(edge);
+                globalEdges.add(edge);
                 from.edges.add(edge);
                 to.edges.add(edge);
 
@@ -167,11 +167,11 @@ public class CircuitAnalyzerTest {
         }
 
         public List<Edge> getEdges() {
-            return Collections.unmodifiableList(edges);
+            return Collections.unmodifiableList(globalEdges);
         }
 
         public static void locateBatteryTerminals() {
-            for (Edge edge : edges) {
+            for (Edge edge : globalEdges) {
                 if (edge.component instanceof ComponentsController.Battery battery) {
                     batteryPlusTerminal = edge.from;
                     batteryMinusTerminal = edge.to;
@@ -376,7 +376,7 @@ public class CircuitAnalyzerTest {
                 .collect(Collectors.toSet());
 
 
-        for (CircuitGraph.Edge edge : CircuitGraph.edges) {
+        for (CircuitGraph.Edge edge : CircuitGraph.globalEdges) {
             if (!isConductive(edge.component)) continue;
 
             String key = generateEdgeKey(edge.from, edge.to);

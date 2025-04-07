@@ -612,6 +612,8 @@ public class SimulationController {
             if (drawable instanceof ComponentsController.ImageComponent) {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
                 if (isPowerSupply(component)) {
+                    CircuitAnalyzerTest.CircuitGraph.nodes.clear();
+                    CircuitAnalyzerTest.CircuitGraph.globalEdges.clear();
                     powerSupply = component;
                     battStartX = component.getStartX();
                     battStartY = component.getStartY();
@@ -621,6 +623,7 @@ public class SimulationController {
                     //This is the node for negative end
                     CG.addNode(numberOfComp+"",battStartX,battStartY,battEndX,battEndY);
                     System.out.println("Main Branch:");
+                    System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created (- end)");
                     break;
                 }
             }
@@ -674,23 +677,38 @@ public class SimulationController {
                 // Check if this wire connects to our current position
                 if ((wire.startX == startX && wire.startY == startY) || (wire.endX == startX && wire.endY == startY)) {
                     previousComp = numberOfComp;
+                    System.out.println("Wire");
+                    System.out.println("PreviousComp: " +previousComp);
                     numberOfComp++;
-                    CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
-                    if (wire.startX == battStartX && wire.startY == battStartY && previousComp != 0) {
+                    System.out.println("Coordinates of wire: " +wire.startX +", " + wire.startY + ", " + wire.endX + ", " + wire.endY);
+                    System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
+                    if ((wire.startX == battStartX && wire.startY == battStartY && previousComp != 0) || (wire.endX == battStartX && wire.endY == battStartY && previousComp != 0)) {
                         CG.addEdge(previousComp+"", "0", wire);
-                        System.out.println("- connected");
+                        System.out.println("- connected (from wire to bat)");
                     }
-                    else if (wire.endX == battEndX && wire.endY == battEndY && previousComp != 0) {
-                        CG.addEdge("1",numberOfComp+"",  wire);
-                        System.out.println("+ connected");
+                    else if ((wire.startX == battEndX && wire.startY == battEndY && previousComp != 0) || (wire.endX == battEndX && wire.endY == battEndY && previousComp != 0)) {
+                        CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
+                        CG.addEdge("1", numberOfComp+"", wire);
+                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                        System.out.println("+ connected (from bat to wire)");
                     }
                     else {
+                        CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
                         CG.addEdge(previousComp+"", numberOfComp+"", wire);
+                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
                     }
-                    System.out.println(CG.nodes.get(numberOfComp+"").id);
-                    System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
+                    System.out.println("Current edges: ");
+                    int i = 0;
+                    for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
+                        System.out.println("Edge number: " + i);
+                        System.out.println("From: " + edge.from.id);
+                        System.out.println("to: " + edge.to.id);
+                        i++;
+                    }
+                    //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
                     addFeedbackMessage("Wire: start(" + wire.startX + "," + wire.startY + "), end(" + wire.endX + "," + wire.endY + ")", "info");
                     visited.add(wire); // Mark wire as visited
+                    System.out.println();
                     // Move to the other end of the wire
                     double nextX = (wire.startX == startX && wire.startY == startY) ? wire.endX : wire.startX;
                     double nextY = (wire.startY == startY && wire.startX == startX) ? wire.endY : wire.startY;
@@ -740,22 +758,38 @@ public class SimulationController {
 
                     // If we get here, either it's not a switch or the switch is closed
                     previousComp = numberOfComp;
+                    System.out.println("Component");
+                    System.out.println("PreviousComp: " +previousComp);
                     numberOfComp++;
-                    CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
-                    if (component.startX == battStartX && component.startY == battStartY && previousComp != 0) {
+                    System.out.println("Component: Type: " + component.imageURL);
+                    System.out.println("Coordinates of comp: " +component.startX +", " + component.startY + ", " + component.endX + ", " + component.endY);
+                    System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
+                    if (component.endX == battStartX && component.endY == battStartY && previousComp != 0 || (component.startX == battStartX && component.startY == battStartY && previousComp != 0)) {
                         CG.addEdge(previousComp+"", "0", component);
-                        System.out.println("- connected");
+                        System.out.println("- connected (from comp to bat");
                     }
-                    else if (component.endX == battEndX && component.endY == battEndY && previousComp != 0) {
-                        CG.addEdge("1",numberOfComp+"",  component);
-                        System.out.println("+ connected");
+                    else if ((component.startX == battEndX && component.startY == battEndY && previousComp != 0) || (component.endX == battEndX && component.endY == battEndY && previousComp != 0)) {
+                        CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
+                        CG.addEdge("1", numberOfComp+"", component);
+                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                        System.out.println("+ connected (from bat to comp)");
                     }
                     else {
+                        CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
                         CG.addEdge(previousComp+"", numberOfComp+"", component);
+                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
                     }
-                    System.out.println(CG.nodes.get(numberOfComp+"").id);
-                    System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
+                    System.out.println("Current edges: ");
+                    int i = 0;
+                    for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
+                        System.out.println("Edge number: " + i);
+                        System.out.println("From: " + edge.from.id);
+                        System.out.println("to: " + edge.to.id);
+                        i++;
+                    }
+                    //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
                     visited.add(component);
+                    System.out.println();
                     double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
                     double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;
                     if (traverseCircuit(nextX, nextY, initialX, initialY, visited)) {
