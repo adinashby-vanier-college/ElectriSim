@@ -72,6 +72,10 @@ public class SimulationController {
 
     private CircuitAnalyzer circuitAnalyzer;
 
+    private CircuitAnalyzerTest al = new CircuitAnalyzerTest();
+
+    private CircuitAnalyzerTest.CircuitGraph CG = new CircuitAnalyzerTest.CircuitGraph();
+
     // Initialization
     @FXML
     public void initialize() {
@@ -606,6 +610,12 @@ public class SimulationController {
         updateCircuitAnalysis();
     }
 
+    int numberOfComp = 0;
+    int previousComp = 0;
+    double battStartX = 0;
+    double battStartY = 0;
+    double battEndX = 0;
+    double battEndY = 0;
     // ==================== Helper Methods ====================
     private boolean verifyCircuit() {
         // Find a power supply component to start from
@@ -615,6 +625,14 @@ public class SimulationController {
                 ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
                 if (isPowerSupply(component)) {
                     powerSupply = component;
+                    battStartX = component.getStartX();
+                    battStartY = component.getStartY();
+                    battEndX = component.getEndX();
+                    battEndY = component.getEndY();
+                    numberOfComp = 0;
+                    //This is the node for negative end
+                    CG.addNode(numberOfComp+"",battStartX,battStartY,battEndX,battEndY);
+                    System.out.println("Main Branch:");
                     break;
                 }
             }
@@ -626,20 +644,29 @@ public class SimulationController {
         }
 
         // Start traversal from the power supply
-        Set<ComponentsController.Drawable> visited = new HashSet<>();
+
         addFeedbackMessage("Starting circuit verification from power supply...", "info");
-        
+        Set<ComponentsController.Drawable> visited = new HashSet<>();
         boolean isClosed = traverseCircuit(powerSupply.startX, powerSupply.startY, 
                                          powerSupply.startX, powerSupply.startY, visited);
         
         if (isClosed) {
             addFeedbackMessage("Circuit is closed! Found a complete path.", "success");
+            addingUpAllTheCircuits();
             return true;
         } else {
             addFeedbackMessage("Circuit is open! No complete path found.", "error");
             return false;
         }
+
     }
+
+    private void addingUpAllTheCircuits() {
+        for (ComponentsController.Drawable draw: drawables) {
+
+        }
+    }
+
 
     private boolean traverseCircuit(double startX, double startY, double initialX, double initialY, Set<ComponentsController.Drawable> visited) {
         // If we've reached the initial point and visited at least one component, we've found a closed circuit
@@ -658,6 +685,22 @@ public class SimulationController {
                 ComponentsController.Wire wire = (ComponentsController.Wire) drawable;
                 // Check if this wire connects to our current position
                 if ((wire.startX == startX && wire.startY == startY) || (wire.endX == startX && wire.endY == startY)) {
+                    previousComp = numberOfComp;
+                    numberOfComp++;
+                    CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
+                    if (wire.startX == battStartX && wire.startY == battStartY && previousComp != 0) {
+                        CG.addEdge(previousComp+"", "0", wire);
+                        System.out.println("- connected");
+                    }
+                    else if (wire.endX == battEndX && wire.endY == battEndY && previousComp != 0) {
+                        CG.addEdge("1",numberOfComp+"",  wire);
+                        System.out.println("+ connected");
+                    }
+                    else {
+                        CG.addEdge(previousComp+"", numberOfComp+"", wire);
+                    }
+                    System.out.println(CG.nodes.get(numberOfComp+"").id);
+                    System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
                     addFeedbackMessage("Wire: start(" + wire.startX + "," + wire.startY + "), end(" + wire.endX + "," + wire.endY + ")", "info");
                     visited.add(wire); // Mark wire as visited
                     // Move to the other end of the wire
@@ -708,6 +751,22 @@ public class SimulationController {
                     }
 
                     // If we get here, either it's not a switch or the switch is closed
+                    previousComp = numberOfComp;
+                    numberOfComp++;
+                    CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
+                    if (component.startX == battStartX && component.startY == battStartY && previousComp != 0) {
+                        CG.addEdge(previousComp+"", "0", component);
+                        System.out.println("- connected");
+                    }
+                    else if (component.endX == battEndX && component.endY == battEndY && previousComp != 0) {
+                        CG.addEdge("1",numberOfComp+"",  component);
+                        System.out.println("+ connected");
+                    }
+                    else {
+                        CG.addEdge(previousComp+"", numberOfComp+"", component);
+                    }
+                    System.out.println(CG.nodes.get(numberOfComp+"").id);
+                    System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
                     visited.add(component);
                     double nextX = (component.startX == startX && component.startY == startY) ? component.endX : component.startX;
                     double nextY = (component.startY == startY && component.startX == startX) ? component.endY : component.startY;

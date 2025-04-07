@@ -819,7 +819,11 @@ public class ComponentBase {
     @Override
     public String toString() {
         return "ComponentBase{" +
-                "voltage=" + voltage +
+                "startX=" + startX +
+                ", startY=" + startY +
+                ", endX=" + endX +
+                ", endY=" + endY +
+                ", voltage=" + voltage +
                 ", current=" + current +
                 ", resistance=" + resistance +
                 ", powerRating=" + powerRating +
@@ -891,10 +895,6 @@ public class ComponentBase {
                 ", width=" + width +
                 ", height=" + height +
                 ", rotation=" + rotation +
-                ", startX=" + startX +
-                ", startY=" + startY +
-                ", endX=" + endX +
-                ", endY=" + endY +
                 ", startCircle=" + startCircle +
                 ", endCircle=" + endCircle +
                 ", componentType='" + componentType + '\'' +

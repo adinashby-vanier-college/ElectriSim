@@ -24,6 +24,7 @@ public class ComponentsController {
     // Interface for drawable objects
 
     public interface Drawable {
+        double testCurrent = 0;
         void draw(GraphicsContext gc);
     }
 
@@ -123,6 +124,8 @@ public class ComponentsController {
             gc.fillOval(startX - 6, startY - 6, 12, 12);
             gc.fillOval(endX - 6, endY - 6, 12, 12);
         }
+
+        public void setCurrent() {}
     }
 
     // Distinguishing Types in Json
@@ -629,6 +632,8 @@ public class ComponentsController {
 
     public static class Battery extends ImageComponent {
         public double voltage = 9; // Default 9V
+        CircuitAnalyzerTest.CircuitGraph.Node positiveTerminal;
+        CircuitAnalyzerTest.CircuitGraph.Node negativeTerminal;
 
         public Battery() {
             super("Battery", "/images/components/Battery.png");
@@ -950,7 +955,7 @@ public class ComponentsController {
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
-        
+
         public static void addControls(ORGate gate, VBox container) {
             Label propagationDelayLabel = new Label("Propagation Delay (ns):");
             propagationDelayLabel.setStyle("-fx-text-fill: #FFFFFF;");
