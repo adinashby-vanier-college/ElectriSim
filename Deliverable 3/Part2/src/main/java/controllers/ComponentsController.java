@@ -46,7 +46,6 @@ public class ComponentsController {
     public static class ImageComponent extends ComponentBase implements Drawable {
         @JsonIgnore
         public Image image;
-
         public String imageURL;
         public double x;
         public double y;
@@ -190,6 +189,7 @@ public class ComponentsController {
             return selected;
         }
 
+        @JsonIgnore
         @Override
         public void draw(GraphicsContext gc) {
             endCircle = new Circle(endX, endY, 6, Color.BLACK);
