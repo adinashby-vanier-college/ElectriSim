@@ -44,7 +44,9 @@ public class ComponentsController {
 
     // Base class for all image components
     public static class ImageComponent extends ComponentBase implements Drawable {
+        @JsonIgnore
         public Image image;
+
         public String imageURL;
         public double x;
         public double y;

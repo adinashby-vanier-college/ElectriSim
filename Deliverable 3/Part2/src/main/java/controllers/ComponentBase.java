@@ -133,7 +133,7 @@ public class ComponentBase {
 
     // Visual properties (from ImageComponent)
     @JsonIgnore
-    public Image image;
+    public transient Image image;
     public double x, y;
     public double width, height;
     public double rotation;
@@ -142,7 +142,7 @@ public class ComponentBase {
     public Circle startCircle, endCircle;
     public String imageURL;
     @JsonIgnore
-    public VBox parameterControls;
+    public transient VBox parameterControls;
 
     // Wire specific
     public boolean selected;
@@ -677,10 +677,12 @@ public class ComponentBase {
         this.reverseVoltage = reverseVoltage;
     }
 
+    @JsonIgnore
     public Image getImage() {
         return image;
     }
 
+    @JsonIgnore
     public void setImage(Image image) {
         this.image = image;
     }
@@ -789,10 +791,12 @@ public class ComponentBase {
         this.imageURL = imageURL;
     }
 
+    @JsonIgnore
     public VBox getParameterControls() {
         return parameterControls;
     }
 
+    @JsonIgnore
     public void setParameterControls(VBox parameterControls) {
         this.parameterControls = parameterControls;
     }
