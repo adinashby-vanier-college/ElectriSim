@@ -6,15 +6,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class contains nested classes for each electrical component in the FXML file.
@@ -26,6 +20,15 @@ public class ComponentsController {
     public interface Drawable {
         double testCurrent = 0;
         void draw(GraphicsContext gc);
+
+        double getXStart();
+        double getYStart();
+        double getXEnd();
+        double getYEnd();
+
+        double getVoltage();
+        double getCurrent();
+        double getResistance();
     }
 
     // Distinguishing Types in Json
@@ -125,7 +128,25 @@ public class ComponentsController {
             gc.fillOval(endX - 6, endY - 6, 12, 12);
         }
 
-        public void setCurrent() {}
+        @Override
+        public double getXStart() {
+            return startX;
+        }
+
+        @Override
+        public double getYStart() {
+            return startY;
+        }
+
+        @Override
+        public double getXEnd() {
+            return endX;
+        }
+
+        @Override
+        public double getYEnd() {
+            return endY;
+        }
     }
 
     // Distinguishing Types in Json
@@ -181,6 +202,41 @@ public class ComponentsController {
 
             gc.setFill(Color.BLACK);
             gc.fillOval(endX - 6, endY - 6, 12, 12);
+        }
+
+        @Override
+        public double getXStart() {
+            return startX;
+        }
+
+        @Override
+        public double getYStart() {
+            return startY;
+        }
+
+        @Override
+        public double getXEnd() {
+            return endX;
+        }
+
+        @Override
+        public double getYEnd() {
+            return endY;
+        }
+
+        @Override
+        public double getVoltage() {
+            return 0;
+        }
+
+        @Override
+        public double getCurrent() {
+            return 0;
+        }
+
+        @Override
+        public double getResistance() {
+            return 0.005;
         }
 
         @Override
