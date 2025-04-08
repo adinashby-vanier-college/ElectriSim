@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javafx.scene.control.*;
@@ -10,6 +11,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.Objects;
+
 /**
  * This class contains nested classes for each electrical component in the FXML file.
  * Each component is represented as a separate class with relevant electrical properties.
@@ -17,6 +20,9 @@ import javafx.scene.shape.Circle;
 public class ComponentsController {
     // Interface for drawable objects
 
+    // Distinguishing Types in Json
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public interface Drawable {
         double testCurrent = 0;
         void draw(GraphicsContext gc);
@@ -30,29 +36,15 @@ public class ComponentsController {
         double getCurrent();
         double getResistance();
     }
-
-    // Distinguishing Types in Json
-    @JsonTypeInfo(
-            use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.PROPERTY,
-            property = "type"
-    )
-    @JsonSubTypes({
-            @JsonSubTypes.Type(value = ImageComponent.class, name = "component"),
-            @JsonSubTypes.Type(value = Wire.class, name = "wire")
-    })
-
     // Base class for all image components
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "@type")
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = controllers.ComponentsController.ImageComponent.class, name = "component"),
+            @JsonSubTypes.Type(value = controllers.ComponentsController.Wire.class, name = "wire")
+    })
     public static class ImageComponent extends ComponentBase implements Drawable {
-        @JsonIgnore
-        public Image image;
-        public String imageURL;
-        public double x;
-        public double y;
-        public double width;
-        public double height;
-        public String componentType;
-        public VBox parameterControls;
 
         public ImageComponent() {
             this.image = null;
@@ -68,7 +60,7 @@ public class ComponentsController {
         public ImageComponent(String componentType, String imagePath) {
             this.componentType = componentType;
             try {
-                this.image = new Image(ComponentsController.class.getResourceAsStream(imagePath));
+                this.image = new Image(Objects.requireNonNull(ComponentsController.class.getResourceAsStream(imagePath)));
                 this.imageURL = image.getUrl();
                 this.width = 40;
                 this.height = 40;
@@ -151,14 +143,12 @@ public class ComponentsController {
     }
 
     // Distinguishing Types in Json
-    @JsonTypeInfo(
-            use = JsonTypeInfo.Id.NAME,
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
             include = JsonTypeInfo.As.PROPERTY,
-            property = "type"
-    )
+            property = "@type")
     @JsonSubTypes({
-            @JsonSubTypes.Type(value = ComponentBase.class, name = "component"),
-            @JsonSubTypes.Type(value = Wire.class, name = "wire")
+            @JsonSubTypes.Type(value = controllers.ComponentsController.ImageComponent.class, name = "component"),
+            @JsonSubTypes.Type(value = controllers.ComponentsController.Wire.class, name = "wire")
     })
     public static class Wire implements Drawable {
         public String componentType = "Wire";

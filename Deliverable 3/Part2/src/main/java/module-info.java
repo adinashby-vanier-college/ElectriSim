@@ -8,4 +8,5 @@ module com.example.part1 {
     opens components to com.fasterxml.jackson.databind;
     opens controllers to javafx.fxml, com.fasterxml.jackson.databind;
     exports app;
+    exports controllers;
 }
