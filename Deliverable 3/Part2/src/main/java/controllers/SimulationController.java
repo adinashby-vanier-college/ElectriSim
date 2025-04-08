@@ -126,7 +126,7 @@ public class SimulationController {
         // Handle key presses for component placement
         Platform.runLater(() -> {
             rootPane.getScene().setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.ESCAPE || e.getCode() == KeyCode.E) {
+                if (e.getCode() == KeyCode.ESCAPE) {
                     if (draggedExistingComponent != null) {
                         // Remove the component from the drawables list
                         drawables.remove(draggedExistingComponent);
@@ -139,6 +139,40 @@ public class SimulationController {
                     } else if (floatingComponentImage.isVisible()) {
                         floatingComponentImage.setVisible(false);
                         currentlySelectedImage = null;
+                    }
+                } else if (e.getCode() == KeyCode.E) {
+                    // Delete selected wire when 'E' is pressed
+                    if (selectedWire != null) {
+                        // Store wire for undo
+                        ComponentsController.Wire wireToDelete = selectedWire;
+
+                        // Remove the wire
+                        drawables.remove(selectedWire);
+                        selectedWire = null;
+
+                        // Add to undo stack
+                        if (!isUndoRedoOperation) {
+                            undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, wireToDelete));
+                            redoStack.clear();
+                            System.out.println("Wire deleted. Undo stack size: " + undoStack.size());
+                        }
+
+                        redrawCanvas();
+                    } else if (draggedExistingComponent != null) {
+                        // Existing component deletion code...
+                        ComponentsController.ImageComponent componentToDelete = draggedExistingComponent;
+                        drawables.remove(draggedExistingComponent);
+                        parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
+                        removeConnectedWires(draggedExistingComponent);
+                        draggedExistingComponent = null;
+
+                        if (!isUndoRedoOperation) {
+                            undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, componentToDelete));
+                            redoStack.clear();
+                            System.out.println("Component deleted. Undo stack size: " + undoStack.size());
+                        }
+
+                        redrawCanvas();
                     }
                 } else if (e.getCode() == KeyCode.R) {
                     currentRotation = (currentRotation + 90) % 360;

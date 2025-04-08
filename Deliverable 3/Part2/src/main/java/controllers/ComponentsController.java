@@ -260,7 +260,7 @@ public class ComponentsController {
         public boolean isClosed = false;
 
         public SPSTToggleSwitch() {
-            super("SPSTToggleSwitch", "/images/circuit_diagrams/SPSTToggleSwitch.GIF");
+            super("SPSTToggleSwitch", "/images/circuit_diagrams/SPST Toggle Switch.GIF");
         }
 
         public static void addControls(SPSTToggleSwitch switch_, VBox container) {
@@ -302,7 +302,7 @@ public class ComponentsController {
         public double resistance;
 
         public EarthGround(Image image, double x, double y, double width, double height) {
-            super(image, x, y, width, height, "EarthGround");
+            super(image, x, y, width, height, "Earth Ground");
             this.resistance = 0.0;
         }
 
@@ -327,7 +327,7 @@ public class ComponentsController {
 
     public static class ResistorIEEE extends ImageComponent {
         public ResistorIEEE() {
-            super("ResistorIEEE", "/images/circuit_diagrams/ResistorIEEE.GIF");
+            super("ResistorIEEE", "/images/circuit_diagrams/Resistor IEEE.GIF");
             setResistance(100); // Set default resistance to 100Ω
         }
 
@@ -497,7 +497,7 @@ public class ComponentsController {
         public double voltage = 12; // Default 12V
 
         public VoltageSource() {
-            super("VoltageSource", "/images/circuit_diagrams/VoltageSource.GIF");
+            super("VoltageSource", "/images/circuit_diagrams/Voltage Source.GIF");
         }
 
         public static void addControls(VoltageSource source, VBox container) {
@@ -835,7 +835,7 @@ public class ComponentsController {
         public double propagationDelay; // Propagation delay in nanoseconds
 
         public NOTGate() {
-            super("NOTGate", "/images/circuit_diagrams/NOTGate.GIF");
+            super("NOTGate", "/images/circuit_diagrams/NOT Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -872,7 +872,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public ANDGate() {
-            super("ANDGate", "/images/circuit_diagrams/ANDGate.GIF");
+            super("ANDGate", "/images/circuit_diagrams/AND Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -909,7 +909,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public NANDGate() {
-            super("NANDGate", "/images/circuit_diagrams/NANDGate.GIF");
+            super("NANDGate", "/images/circuit_diagrams/NAND Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -945,7 +945,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public ORGate() {
-            super("ORGate", "/images/circuit_diagrams/ORGate.GIF");
+            super("ORGate", "/images/circuit_diagrams/OR Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -982,7 +982,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public NORGate() {
-            super("NORGate", "/images/circuit_diagrams/NORGate.GIF");
+            super("NORGate", "/images/circuit_diagrams/NOR Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
@@ -1019,7 +1019,7 @@ public class ComponentsController {
         public double propagationDelay;
 
         public XORGate() {
-            super("XORGate", "/images/circuit_diagrams/XORGate.GIF");
+            super("XORGate", "/images/circuit_diagrams/XOR Gate.GIF");
             this.propagationDelay = 10.0; // Default 10ns
             setLogicGate(true);
         }
