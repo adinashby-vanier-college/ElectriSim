@@ -178,74 +178,116 @@ public class SimulationController {
 
         // Create new component based on type
         String componentType = determineComponentType(currentlySelectedImage.getUrl());
-        ComponentsController.ImageComponent newComponent = switch (componentType) {
-            case "SPSTToggleSwitch" -> new ComponentsController.SPSTToggleSwitch();
-            case "EarthGround" ->
-                    new ComponentsController.EarthGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "ResistorIEEE" -> new ComponentsController.ResistorIEEE();
-            case "PotentiometerIEEE" ->
-                    new ComponentsController.PotentiometerIEEE(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "Capacitor" -> new ComponentsController.Capacitor();
-            case "Inductor" -> new ComponentsController.Inductor();
-            case "VoltageSource" -> new ComponentsController.VoltageSource();
-            case "BatteryCell" -> new ComponentsController.CurrentSource();
-            case "Battery" -> new ComponentsController.Battery();
-            case "Voltmeter" ->
-                    new ComponentsController.Voltmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "Ammeter" ->
-                    new ComponentsController.Ammeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "Ohmmeter" ->
-                    new ComponentsController.Ohmmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "Wattmeter" ->
-                    new ComponentsController.Wattmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
-            case "Diode" -> new ComponentsController.Diode();
-            case "Transformer" -> new ComponentsController.Transformer();
-            case "Fuse" -> new ComponentsController.Fuse();
-            case "NOTGate" -> new ComponentsController.NOTGate();
-            case "ANDGate" -> new ComponentsController.ANDGate();
-            case "NANDGate" -> new ComponentsController.NANDGate();
-            case "ORGate" -> new ComponentsController.ORGate();
-            case "NORGate" -> new ComponentsController.NORGate();
-            case "XORGate" -> new ComponentsController.XORGate();
-            default ->
-                    new ComponentsController.ImageComponent(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight, componentType);
-        };
+        ComponentsController.ImageComponent newComponent;
 
-        // Set position and dimensions
+        // Create the specific component type
+        switch (componentType) {
+            case "SPSTToggleSwitch":
+                newComponent = new ComponentsController.SPSTToggleSwitch();
+                break;
+            case "EarthGround":
+                newComponent = new ComponentsController.EarthGround(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "ResistorIEEE":
+                newComponent = new ComponentsController.ResistorIEEE();
+                break;
+            case "PotentiometerIEEE":
+                newComponent = new ComponentsController.PotentiometerIEEE(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Capacitor":
+                newComponent = new ComponentsController.Capacitor();
+                break;
+            case "Inductor":
+                newComponent = new ComponentsController.Inductor();
+                break;
+            case "VoltageSource":
+                newComponent = new ComponentsController.VoltageSource();
+                break;
+            case "BatteryCell":
+                newComponent = new ComponentsController.CurrentSource();
+                break;
+            case "Battery":
+                newComponent = new ComponentsController.Battery();
+                break;
+            case "Voltmeter":
+                newComponent = new ComponentsController.Voltmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Ammeter":
+                newComponent = new ComponentsController.Ammeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Ohmmeter":
+                newComponent = new ComponentsController.Ohmmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Wattmeter":
+                newComponent = new ComponentsController.Wattmeter(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight);
+                break;
+            case "Diode":
+                newComponent = new ComponentsController.Diode();
+                break;
+            case "Transformer":
+                newComponent = new ComponentsController.Transformer();
+                break;
+            case "Fuse":
+                newComponent = new ComponentsController.Fuse();
+                break;
+            case "NOTGate":
+                newComponent = new ComponentsController.NOTGate();
+                break;
+            case "ANDGate":
+                newComponent = new ComponentsController.ANDGate();
+                break;
+            case "NANDGate":
+                newComponent = new ComponentsController.NANDGate();
+                break;
+            case "ORGate":
+                newComponent = new ComponentsController.ORGate();
+                break;
+            case "NORGate":
+                newComponent = new ComponentsController.NORGate();
+                break;
+            case "XORGate":
+                newComponent = new ComponentsController.XORGate();
+                break;
+            default:
+                newComponent = new ComponentsController.ImageComponent(currentlySelectedImage, snappedX, snappedY, selectedImageWidth, selectedImageHeight, componentType);
+                break;
+        }
+
+        // Set common properties for all components
         newComponent.x = snappedX;
         newComponent.y = snappedY;
         newComponent.width = selectedImageWidth;
         newComponent.height = selectedImageHeight;
         newComponent.image = currentlySelectedImage;
-        newComponent.setImageURL(currentlySelectedImage.getUrl());
+        newComponent.imageURL = currentlySelectedImage.getUrl();
         newComponent.rotation = currentRotation;
         newComponent.updateEndPoints();
 
         // Add to drawables list
         drawables.add(newComponent);
-        System.out.println(currentlySelectedImage.getUrl());
-        System.out.println(newComponent.getImageURL());
-        // Create and add parameter controls
+
+        // Remove any existing parameter controls before adding new ones
         if (newComponent.parameterControls != null) {
-            parametersPane.getChildren().add(newComponent.parameterControls);
+            parametersPane.getChildren().remove(newComponent.parameterControls);
         }
+
+        // Generate new parameter controls
+        ComponentsController.generateParameterControls(newComponent, parametersPane);
 
         // Add to undo stack
         if (!isUndoRedoOperation) {
             undoStack.push(new AddComponentAction(drawables, parametersPane, this, newComponent));
             redoStack.clear();
-            System.out.println("Component placed. Undo stack size: " + undoStack.size());
         }
 
-        // Reset floating image
+        // Reset placement state
         floatingComponentImage.setVisible(false);
         currentlySelectedImage = null;
+        floatingComponentImage.setRotate(0);
+        currentRotation = 0;
 
-
-        // Redraw canvas and update analysis
+        // Redraw canvas
         redrawCanvas();
-
-        //updateCircuitAnalysis();
     }
 
     // Helper method to determine the component type based on the image URL
