@@ -327,7 +327,7 @@ public class ComponentsController {
 
     public static class ResistorIEEE extends ImageComponent {
         public ResistorIEEE() {
-            super("ResistorIEEE", "/images/circuit_diagrams/Resistor IEEE.GIF");
+            super("ResistorIEEE", "/images/circuit_diagrams/Resistor (IEEE).GIF");
             setResistance(100); // Set default resistance to 100Ω
         }
 

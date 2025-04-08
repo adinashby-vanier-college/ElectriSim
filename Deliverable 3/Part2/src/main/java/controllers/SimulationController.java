@@ -100,7 +100,7 @@ public class SimulationController {
         setupFloatingImage();
         setupCanvasClickPlacement();
         setupWireDrawing();
-        
+
         // Initialize circuit analyzer
         circuitAnalyzer = new CircuitAnalyzer(drawables);
 
@@ -126,7 +126,7 @@ public class SimulationController {
         // Handle key presses for component placement
         Platform.runLater(() -> {
             rootPane.getScene().setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.ESCAPE) {
+                if (e.getCode() == KeyCode.ESCAPE || e.getCode() == KeyCode.E) {
                     if (draggedExistingComponent != null) {
                         // Remove the component from the drawables list
                         drawables.remove(draggedExistingComponent);
@@ -139,40 +139,6 @@ public class SimulationController {
                     } else if (floatingComponentImage.isVisible()) {
                         floatingComponentImage.setVisible(false);
                         currentlySelectedImage = null;
-                    }
-                } else if (e.getCode() == KeyCode.E) {
-                    // Delete selected wire when 'E' is pressed
-                    if (selectedWire != null) {
-                        // Store wire for undo
-                        ComponentsController.Wire wireToDelete = selectedWire;
-
-                        // Remove the wire
-                        drawables.remove(selectedWire);
-                        selectedWire = null;
-
-                        // Add to undo stack
-                        if (!isUndoRedoOperation) {
-                            undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, wireToDelete));
-                            redoStack.clear();
-                            System.out.println("Wire deleted. Undo stack size: " + undoStack.size());
-                        }
-
-                        redrawCanvas();
-                    } else if (draggedExistingComponent != null) {
-                        // Existing component deletion code...
-                        ComponentsController.ImageComponent componentToDelete = draggedExistingComponent;
-                        drawables.remove(draggedExistingComponent);
-                        parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
-                        removeConnectedWires(draggedExistingComponent);
-                        draggedExistingComponent = null;
-
-                        if (!isUndoRedoOperation) {
-                            undoStack.push(new DeleteComponentAction(drawables, parametersPane, this, componentToDelete));
-                            redoStack.clear();
-                            System.out.println("Component deleted. Undo stack size: " + undoStack.size());
-                        }
-
-                        redrawCanvas();
                     }
                 } else if (e.getCode() == KeyCode.R) {
                     currentRotation = (currentRotation + 90) % 360;
@@ -213,7 +179,7 @@ public class SimulationController {
         // Create new component based on type
         String componentType = determineComponentType(currentlySelectedImage.getUrl());
         ComponentsController.ImageComponent newComponent;
-        
+
         switch (componentType) {
             case "SPSTToggleSwitch":
                 newComponent = new ComponentsController.SPSTToggleSwitch();
@@ -396,7 +362,7 @@ public class SimulationController {
 
                     // Remove the component from the drawables list
                     iterator.remove();
-                    
+
                     // Remove the component's parameter controls
                     ComponentsController.removeParameterControls(component, parametersPane);
 
@@ -685,9 +651,9 @@ public class SimulationController {
 
         addFeedbackMessage("Starting circuit verification from power supply...", "info");
         Set<ComponentsController.Drawable> visited = new HashSet<>();
-        boolean isClosed = traverseCircuit(powerSupply.startX, powerSupply.startY, 
-                                         powerSupply.startX, powerSupply.startY, powerSupply,visited);
-        
+        boolean isClosed = traverseCircuit(powerSupply.startX, powerSupply.startY,
+                powerSupply.startX, powerSupply.startY, powerSupply,visited);
+
         if (isClosed) {
             addFeedbackMessage("Circuit is closed! Found a complete path.", "success");
             return true;
@@ -720,49 +686,103 @@ public class SimulationController {
 
         // Check all drawables for connections
 
-            if (currentDraw instanceof ComponentsController.Wire) {
-                ComponentsController.Wire wire = (ComponentsController.Wire) currentDraw;
-                // Check if this wire connects to our current position
-                if ((wire.startX == startX && wire.startY == startY) || (wire.endX == startX && wire.endY == startY)) {
-                    previousComp = numberOfComp;
-                    System.out.println("Wire");
-                    System.out.println("PreviousComp: " +previousComp);
-                    numberOfComp++;
-                    System.out.println("Coordinates of wire: " +wire.startX +", " + wire.startY + ", " + wire.endX + ", " + wire.endY);
-                    System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
-                    if ((wire.startX == battStartX && wire.startY == battStartY && previousComp != 0) || (wire.endX == battStartX && wire.endY == battStartY && previousComp != 0)) {
-                        CG.addEdge(previousComp+"", "0", wire);
-                        System.out.println("- connected (from wire to bat)");
-                        negativeConnected = true;
+        if (currentDraw instanceof ComponentsController.Wire) {
+            ComponentsController.Wire wire = (ComponentsController.Wire) currentDraw;
+            // Check if this wire connects to our current position
+            if ((wire.startX == startX && wire.startY == startY) || (wire.endX == startX && wire.endY == startY)) {
+                previousComp = numberOfComp;
+                System.out.println("Wire");
+                System.out.println("PreviousComp: " +previousComp);
+                numberOfComp++;
+                System.out.println("Coordinates of wire: " +wire.startX +", " + wire.startY + ", " + wire.endX + ", " + wire.endY);
+                System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
+                if ((wire.startX == battStartX && wire.startY == battStartY && previousComp != 0) || (wire.endX == battStartX && wire.endY == battStartY && previousComp != 0)) {
+                    CG.addEdge(previousComp+"", "0", wire);
+                    System.out.println("- connected (from wire to bat)");
+                    negativeConnected = true;
+                }
+                else if ((wire.startX == battEndX && wire.startY == battEndY && previousComp != 0) || (wire.endX == battEndX && wire.endY == battEndY && previousComp != 0)) {
+                    CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
+                    CG.addEdge("1", numberOfComp+"", wire);
+                    System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                    System.out.println("+ connected (from bat to wire)");
+                    positiveConnected = true;
+                }
+                else {
+                    CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
+                    CG.addEdge(previousComp+"", numberOfComp+"", wire);
+                    System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                }
+                System.out.println("Current edges: ");
+                int i = 0;
+                for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
+                    System.out.println("Edge number: " + i);
+                    System.out.println("From: " + edge.from.id);
+                    System.out.println("to: " + edge.to.id);
+                    i++;
+                }
+                //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
+                addFeedbackMessage("Wire: start(" + wire.startX + "," + wire.startY + "), end(" + wire.endX + "," + wire.endY + ")", "info");
+                visited.add(wire); // Mark wire as visited
+                // Move to the other end of the wire
+                boolean match = wire.startX == startX && wire.startY == startY;
+
+                double nextX = match ? wire.endX : wire.startX;
+                double nextY = match ? wire.endY : wire.startY;
+                priority.clear();
+                for (ComponentsController.Drawable draw: drawables) {
+                    if (visited.contains(draw)) {
+                        continue;
                     }
-                    else if ((wire.startX == battEndX && wire.startY == battEndY && previousComp != 0) || (wire.endX == battEndX && wire.endY == battEndY && previousComp != 0)) {
-                        CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
-                        CG.addEdge("1", numberOfComp+"", wire);
-                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
-                        System.out.println("+ connected (from bat to wire)");
-                        positiveConnected = true;
+                    if (Math.abs(draw.getXStart() - nextX) < EPSILON &&
+                            Math.abs(draw.getYStart() - nextY) < EPSILON) {
+                        double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY) - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
+                        priority.put(distance, draw);
+                    }
+                    else if (Math.abs(draw.getXEnd() - nextX) < EPSILON &&
+                            Math.abs(draw.getYEnd() - nextY) < EPSILON) {
+                        double distance = distanceBetween(draw.getXStart(), draw.getYStart(), battStartX, battStartY) - distanceBetween(draw.getXStart(), draw.getYStart(), battEndX, battEndY);
+                        priority.put(distance, draw);
+                    }
+                }
+                ComponentsController.Drawable nextDraw;
+                if (!priority.isEmpty()) {
+                    double smallest = priority.firstKey();
+                    nextDraw = priority.get(smallest);
+                    System.out.println("Main is going to: " + nextDraw.toString());
+                    System.out.println();
+                    if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw,visited)) {
+                        return true;
+                    }
+                }
+                else {
+                    System.out.println("Fail to load next main line or the circuit ends here,");
+                    System.out.println();
+                }
+            }
+        } else if (currentDraw instanceof ComponentsController.ImageComponent) {
+            ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) currentDraw;
+            // Check if this component connects to our current position
+            if ((component.startX == startX && component.startY == startY) ||
+                    (component.endX == startX && component.endY == startY)) {
+                // Skip meters as they don't affect circuit closure
+                if (component instanceof ComponentsController.Voltmeter ||
+                        component instanceof ComponentsController.Ammeter ||
+                        component instanceof ComponentsController.Ohmmeter) {
+                    addFeedbackMessage("Meter: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + ")", "info");
+                    visited.add(component);
+                    boolean match = component.startX == startX && component.startY == startY;
+                    double nextX = match ? component.endX : component.startX;
+                    double nextY = match ? component.endY : component.startY;
+                    if (component instanceof ComponentsController.Voltmeter) {
+                        hasVoltmeter = true;
+                    }
+                    else if (component instanceof ComponentsController.Ammeter) {
+                        hasAmmeter = true;
                     }
                     else {
-                        CG.addNode(numberOfComp+"",wire.startX,wire.startY,wire.endX,wire.endY);
-                        CG.addEdge(previousComp+"", numberOfComp+"", wire);
-                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                        hasOhmmeter = true;
                     }
-                    System.out.println("Current edges: ");
-                    int i = 0;
-                    for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
-                        System.out.println("Edge number: " + i);
-                        System.out.println("From: " + edge.from.id);
-                        System.out.println("to: " + edge.to.id);
-                        i++;
-                    }
-                    //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
-                    addFeedbackMessage("Wire: start(" + wire.startX + "," + wire.startY + "), end(" + wire.endX + "," + wire.endY + ")", "info");
-                    visited.add(wire); // Mark wire as visited
-                    // Move to the other end of the wire
-                    boolean match = wire.startX == startX && wire.startY == startY;
-
-                    double nextX = match ? wire.endX : wire.startX;
-                    double nextY = match ? wire.endY : wire.startY;
                     priority.clear();
                     for (ComponentsController.Drawable draw: drawables) {
                         if (visited.contains(draw)) {
@@ -770,178 +790,124 @@ public class SimulationController {
                         }
                         if (Math.abs(draw.getXStart() - nextX) < EPSILON &&
                                 Math.abs(draw.getYStart() - nextY) < EPSILON) {
-                            double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY) - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
+                            double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY)  - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
                             priority.put(distance, draw);
+                            System.out.println(draw.toString());
                         }
                         else if (Math.abs(draw.getXEnd() - nextX) < EPSILON &&
                                 Math.abs(draw.getYEnd() - nextY) < EPSILON) {
                             double distance = distanceBetween(draw.getXStart(), draw.getYStart(), battStartX, battStartY) - distanceBetween(draw.getXStart(), draw.getYStart(), battEndX, battEndY);
                             priority.put(distance, draw);
+                            System.out.println(draw.toString());
                         }
                     }
                     ComponentsController.Drawable nextDraw;
                     if (!priority.isEmpty()) {
                         double smallest = priority.firstKey();
                         nextDraw = priority.get(smallest);
-                        System.out.println("Main is going to: " + nextDraw.toString());
-                        System.out.println();
-                        if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw,visited)) {
+                        if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw ,visited)) {
                             return true;
                         }
                     }
                     else {
-                        System.out.println("Fail to load next main line or the circuit ends here,");
+                        System.out.println("Fail!");
                         System.out.println();
                     }
                 }
-            } else if (currentDraw instanceof ComponentsController.ImageComponent) {
-                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) currentDraw;
-                // Check if this component connects to our current position
-                if ((component.startX == startX && component.startY == startY) || 
-                    (component.endX == startX && component.endY == startY)) {
-                    // Skip meters as they don't affect circuit closure
-                    if (component instanceof ComponentsController.Voltmeter ||
-                        component instanceof ComponentsController.Ammeter ||
-                        component instanceof ComponentsController.Ohmmeter) {
-                        addFeedbackMessage("Meter: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + ")", "info");
-                        visited.add(component);
-                        boolean match = component.startX == startX && component.startY == startY;
-                        double nextX = match ? component.endX : component.startX;
-                        double nextY = match ? component.endY : component.startY;
-                        if (component instanceof ComponentsController.Voltmeter) {
-                            hasVoltmeter = true;
-                        }
-                        else if (component instanceof ComponentsController.Ammeter) {
-                            hasAmmeter = true;
-                        }
-                        else {
-                            hasOhmmeter = true;
-                        }
-                        priority.clear();
-                        for (ComponentsController.Drawable draw: drawables) {
-                            if (visited.contains(draw)) {
-                                continue;
-                            }
-                            if (Math.abs(draw.getXStart() - nextX) < EPSILON &&
-                                    Math.abs(draw.getYStart() - nextY) < EPSILON) {
-                                double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY)  - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
-                                priority.put(distance, draw);
-                                System.out.println(draw.toString());
-                            }
-                            else if (Math.abs(draw.getXEnd() - nextX) < EPSILON &&
-                                    Math.abs(draw.getYEnd() - nextY) < EPSILON) {
-                                double distance = distanceBetween(draw.getXStart(), draw.getYStart(), battStartX, battStartY) - distanceBetween(draw.getXStart(), draw.getYStart(), battEndX, battEndY);
-                                priority.put(distance, draw);
-                                System.out.println(draw.toString());
-                            }
-                        }
-                        ComponentsController.Drawable nextDraw;
-                        if (!priority.isEmpty()) {
-                            double smallest = priority.firstKey();
-                            nextDraw = priority.get(smallest);
-                            if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw ,visited)) {
-                                return true;
-                            }
-                        }
-                        else {
-                            System.out.println("Fail!");
-                            System.out.println();
-                        }
-                    }
-                    // Check switch state
-                    boolean isSwitchClosed = true;
-                    if (component instanceof ComponentsController.SPSTToggleSwitch) {
-                        ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) component;
-                        isSwitchClosed = spstSwitch.isClosed;
-                        addFeedbackMessage("SPST Toggle Switch: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), state(" + (isSwitchClosed ? "closed" : "open") + ")", "info");
-                    } else if (component instanceof ComponentsController.ResistorIEEE) {
-                        addFeedbackMessage("Resistor: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), resistance(" + component.resistance + "Ω)", "info");
-                    } else if (component instanceof ComponentsController.VoltageSource) {
-                        addFeedbackMessage("Voltage Source: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
-                    } else if (component instanceof ComponentsController.Battery) {
-                        addFeedbackMessage("Battery: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
-                    }
+                // Check switch state
+                boolean isSwitchClosed = true;
+                if (component instanceof ComponentsController.SPSTToggleSwitch) {
+                    ComponentsController.SPSTToggleSwitch spstSwitch = (ComponentsController.SPSTToggleSwitch) component;
+                    isSwitchClosed = spstSwitch.isClosed;
+                    addFeedbackMessage("SPST Toggle Switch: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), state(" + (isSwitchClosed ? "closed" : "open") + ")", "info");
+                } else if (component instanceof ComponentsController.ResistorIEEE) {
+                    addFeedbackMessage("Resistor: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), resistance(" + component.resistance + "Ω)", "info");
+                } else if (component instanceof ComponentsController.VoltageSource) {
+                    addFeedbackMessage("Voltage Source: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
+                } else if (component instanceof ComponentsController.Battery) {
+                    addFeedbackMessage("Battery: start(" + component.startX + "," + component.startY + "), end(" + component.endX + "," + component.endY + "), voltage(" + component.voltage + "V)", "info");
+                }
 
-                    // If it's a switch and it's open, the circuit is open
-                    if (!isSwitchClosed) {
-                        addFeedbackMessage("Found open switch, circuit is open!", "error");
-                        return false;
-                    }
+                // If it's a switch and it's open, the circuit is open
+                if (!isSwitchClosed) {
+                    addFeedbackMessage("Found open switch, circuit is open!", "error");
+                    return false;
+                }
 
-                    // If we get here, either it's not a switch or the switch is closed
-                    previousComp = numberOfComp;
-                    System.out.println("Component");
-                    System.out.println("PreviousComp: " +previousComp);
-                    numberOfComp++;
-                    System.out.println("Component: Type: " + component.imageURL);
-                    System.out.println("Coordinates of comp: " +component.startX +", " + component.startY + ", " + component.endX + ", " + component.endY);
-                    System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
-                    if (component.endX == battStartX && component.endY == battStartY && previousComp != 0 || (component.startX == battStartX && component.startY == battStartY && previousComp != 0)) {
-                        CG.addEdge(previousComp+"", "0", component);
-                        System.out.println("- connected (from comp to bat");
-                        negativeConnected = true;
-                    }
-                    else if ((component.startX == battEndX && component.startY == battEndY && previousComp != 0) || (component.endX == battEndX && component.endY == battEndY && previousComp != 0)) {
-                        CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
-                        CG.addEdge("1", numberOfComp+"", component);
-                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
-                        System.out.println("+ connected (from bat to comp)");
-                        positiveConnected = true;
-                    }
-                    else {
-                        CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
-                        CG.addEdge(previousComp+"", numberOfComp+"", component);
-                        System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
-                    }
-                    System.out.println("Current edges: ");
-                    int i = 0;
-                    for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
-                        System.out.println("Edge number: " + i);
-                        System.out.println("From: " + edge.from.id);
-                        System.out.println("to: " + edge.to.id);
-                        i++;
-                    }
-                    //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
-                    visited.add(component);
-                    boolean match = component.startX == startX && component.startY == startY;
+                // If we get here, either it's not a switch or the switch is closed
+                previousComp = numberOfComp;
+                System.out.println("Component");
+                System.out.println("PreviousComp: " +previousComp);
+                numberOfComp++;
+                System.out.println("Component: Type: " + component.imageURL);
+                System.out.println("Coordinates of comp: " +component.startX +", " + component.startY + ", " + component.endX + ", " + component.endY);
+                System.out.println("Coordinates of batt: " +battStartX+", " +battStartY + ", " + battEndX + ", " + battEndY);
+                if (component.endX == battStartX && component.endY == battStartY && previousComp != 0 || (component.startX == battStartX && component.startY == battStartY && previousComp != 0)) {
+                    CG.addEdge(previousComp+"", "0", component);
+                    System.out.println("- connected (from comp to bat");
+                    negativeConnected = true;
+                }
+                else if ((component.startX == battEndX && component.startY == battEndY && previousComp != 0) || (component.endX == battEndX && component.endY == battEndY && previousComp != 0)) {
+                    CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
+                    CG.addEdge("1", numberOfComp+"", component);
+                    System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                    System.out.println("+ connected (from bat to comp)");
+                    positiveConnected = true;
+                }
+                else {
+                    CG.addNode(numberOfComp+"",component.startX,component.startY,component.endX,component.endY);
+                    CG.addEdge(previousComp+"", numberOfComp+"", component);
+                    System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created");
+                }
+                System.out.println("Current edges: ");
+                int i = 0;
+                for (CircuitAnalyzerTest.CircuitGraph.Edge edge : CG.getEdges()) {
+                    System.out.println("Edge number: " + i);
+                    System.out.println("From: " + edge.from.id);
+                    System.out.println("to: " + edge.to.id);
+                    i++;
+                }
+                //System.out.println(CG.getEdges().get(numberOfComp - 1).component.toString());
+                visited.add(component);
+                boolean match = component.startX == startX && component.startY == startY;
 
-                    double nextX = match ? component.endX : component.startX;
-                    double nextY = match ? component.endY : component.startY;
+                double nextX = match ? component.endX : component.startX;
+                double nextY = match ? component.endY : component.startY;
 
-                    priority.clear();
-                    for (ComponentsController.Drawable draw: drawables) {
-                        if (visited.contains(draw)) {
-                            continue;
-                        }
-                        if (Math.abs(draw.getXStart() - nextX) < EPSILON &&
-                                Math.abs(draw.getYStart() - nextY) < EPSILON) {
-                            double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY) - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
-                            priority.put(distance, draw);
-                            System.out.println(draw.toString());
-                        }
-                        else if (Math.abs(draw.getXEnd() - nextX) < EPSILON &&
-                                Math.abs(draw.getYEnd() - nextY) < EPSILON) {
-                            double distance = distanceBetween(draw.getXStart(), draw.getYStart(), battStartX, battStartY) - distanceBetween(draw.getXStart(), draw.getYStart(), battEndX, battEndY);
-                            priority.put(distance, draw);
-                            System.out.println(draw.toString());
-                        }
+                priority.clear();
+                for (ComponentsController.Drawable draw: drawables) {
+                    if (visited.contains(draw)) {
+                        continue;
                     }
-                    ComponentsController.Drawable nextDraw;
-                    if (!priority.isEmpty() && (!(positiveConnected) || !(negativeConnected))) {
-                        double smallest = priority.firstKey();
-                        nextDraw = priority.get(smallest);
-                        System.out.println("Main is going to: " + nextDraw.toString());
-                        System.out.println();
-                        if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw,visited)) {
-                            return true;
-                        }
+                    if (Math.abs(draw.getXStart() - nextX) < EPSILON &&
+                            Math.abs(draw.getYStart() - nextY) < EPSILON) {
+                        double distance = distanceBetween(draw.getXEnd(), draw.getYEnd(), battStartX, battStartY) - distanceBetween(draw.getXEnd(), draw.getYEnd(), battEndX, battEndY);
+                        priority.put(distance, draw);
+                        System.out.println(draw.toString());
                     }
-                    else {
-                        System.out.println("Failed to get next main line or the circuit ends here");
-                        System.out.println();
+                    else if (Math.abs(draw.getXEnd() - nextX) < EPSILON &&
+                            Math.abs(draw.getYEnd() - nextY) < EPSILON) {
+                        double distance = distanceBetween(draw.getXStart(), draw.getYStart(), battStartX, battStartY) - distanceBetween(draw.getXStart(), draw.getYStart(), battEndX, battEndY);
+                        priority.put(distance, draw);
+                        System.out.println(draw.toString());
                     }
+                }
+                ComponentsController.Drawable nextDraw;
+                if (!priority.isEmpty() && (!(positiveConnected) || !(negativeConnected))) {
+                    double smallest = priority.firstKey();
+                    nextDraw = priority.get(smallest);
+                    System.out.println("Main is going to: " + nextDraw.toString());
+                    System.out.println();
+                    if (traverseCircuit(nextX, nextY, initialX, initialY, nextDraw,visited)) {
+                        return true;
+                    }
+                }
+                else {
+                    System.out.println("Failed to get next main line or the circuit ends here");
+                    System.out.println();
                 }
             }
+        }
         if (positiveConnected && negativeConnected) {
             addFeedbackMessage("Found closed circuit! Reached initial point.", "success");
             return true;
@@ -1080,10 +1046,10 @@ public class SimulationController {
     public void updateCircuitAnalysis() {
         circuitAnalyzer = new CircuitAnalyzer(drawables);
         circuitAnalyzer.analyzeCircuit();
-        
+
         // Print debug information about the circuit analysis
         circuitAnalyzer.debugPrintState();
-        
+
         // Update all meter measurements and display them in feedback
         for (ComponentsController.Drawable drawable : drawables) {
             if (drawable instanceof ComponentsController.ImageComponent) {
@@ -1094,8 +1060,8 @@ public class SimulationController {
                     // Find the component being measured
                     ComponentsController.ImageComponent measuredComponent = circuitAnalyzer.findMeasuredComponent(voltmeter);
                     if (measuredComponent != null) {
-                        addFeedbackMessage("Voltmeter measuring " + measuredComponent.componentType + ": " + 
-                            String.format("%.2f V", voltmeter.getVoltage()), "info");
+                        addFeedbackMessage("Voltmeter measuring " + measuredComponent.componentType + ": " +
+                                String.format("%.2f V", voltmeter.getVoltage()), "info");
                     } else {
                         addFeedbackMessage("Voltmeter: " + String.format("%.2f V", voltmeter.getVoltage()), "info");
                     }
@@ -1157,12 +1123,12 @@ public class SimulationController {
     private boolean isPowerSupply(ComponentsController.ImageComponent component) {
         String searchedComponent = component.image.getUrl();
         return searchedComponent.contains("Voltage%20Source.GIF") ||
-               searchedComponent.contains("Current%20Source.GIF") ||
-               searchedComponent.contains("Generator.GIF") ||
-               searchedComponent.contains("Battery%20Cell.GIF") ||
-               searchedComponent.contains("Battery.GIF") ||
-               searchedComponent.contains("Controlled%20Voltage%20Source.GIF") ||
-               searchedComponent.contains("Controlled%20Current%20Source.GIF");
+                searchedComponent.contains("Current%20Source.GIF") ||
+                searchedComponent.contains("Generator.GIF") ||
+                searchedComponent.contains("Battery%20Cell.GIF") ||
+                searchedComponent.contains("Battery.GIF") ||
+                searchedComponent.contains("Controlled%20Voltage%20Source.GIF") ||
+                searchedComponent.contains("Controlled%20Current%20Source.GIF");
     }
 
     private void addFeedbackMessage(String message, String type) {
@@ -1171,17 +1137,17 @@ public class SimulationController {
         messageContainer.setAlignment(Pos.CENTER_LEFT);
         messageContainer.setMaxWidth(Double.MAX_VALUE);
         messageContainer.setPadding(new Insets(5, 10, 5, 10));
-        
+
         // Create timestamp
         String timestamp = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
         Label timeLabel = new Label(timestamp);
         timeLabel.setStyle("-fx-text-fill: #888888; -fx-font-size: 12px;");
-        
+
         // Create message label
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
         messageLabel.setMaxWidth(Double.MAX_VALUE);
-        
+
         // Apply styling based on message type
         switch (type) {
             case "error":
@@ -1194,16 +1160,16 @@ public class SimulationController {
                 messageLabel.setStyle("-fx-text-fill: #ffffff;");
                 break;
         }
-        
+
         // Add components to container
         messageContainer.getChildren().addAll(timeLabel, messageLabel);
-        
+
         // Add the message container to the feedback pane
         circuitFeedbackPane.getChildren().add(messageContainer);
-        
+
         // Ensure the feedback pane is laid out before scrolling
         circuitFeedbackPane.layout();
-        
+
         // Use Platform.runLater to ensure scrolling happens after the UI is updated
         Platform.runLater(() -> {
             feedbackScrollPane.setVvalue(1.0);
@@ -1225,9 +1191,9 @@ public class SimulationController {
             if (drawable instanceof ComponentsController.Wire) {
                 ComponentsController.Wire wire = (ComponentsController.Wire) drawable;
                 if ((wire.startX == component.startX && wire.startY == component.startY) ||
-                    (wire.startX == component.endX && wire.startY == component.endY) ||
-                    (wire.endX == component.startX && wire.endY == component.startY) ||
-                    (wire.endX == component.endX && wire.endY == component.endY)) {
+                        (wire.startX == component.endX && wire.startY == component.endY) ||
+                        (wire.endX == component.startX && wire.endY == component.startY) ||
+                        (wire.endX == component.endX && wire.endY == component.endY)) {
                     iterator.remove();
                 }
             }
