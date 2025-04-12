@@ -13,7 +13,7 @@
 
 <!-- SETTINGS OVERLAY (Initially Hidden & Centered with 800x600 size) -->
 
-<StackPane id="settingsOverlay" prefHeight="600.0" prefWidth="800.0" style="-fx-border-radius: 100;" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewSimulationController">
+<StackPane fx:controller="controllers.NewSimulationController" id="settingsOverlay" prefHeight="600.0" prefWidth="800.0" style="-fx-border-radius: 100;" stylesheets="@../css/settings.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
 
      <!-- Centered Container with Fixed Size -->
      <VBox alignment="CENTER" maxHeight="616.0" maxWidth="853.0" prefHeight="616.0" prefWidth="853.0" spacing="20" style="-fx-padding: 20; -fx-background-radius: 10; -fx-background-color: WHITE; -fx-background-radius: 10;">
@@ -32,10 +32,13 @@
                </content>
                  </TitledPane>
                  <TitledPane animated="false" text="Keybinds">
-               <content>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-               </content>
+                     <content>
+                         <VBox fx:id="keybindsVBox" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+
+                         </VBox>
+                     </content>
                  </TitledPane>
+
                  <TitledPane animated="false" text="Background">
                <content>
                   <AnchorPane>

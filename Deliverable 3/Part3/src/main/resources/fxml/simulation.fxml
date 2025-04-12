@@ -781,12 +781,16 @@
                <panes>
                   <TitledPane animated="false" text="Help">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                        <VBox fx:id="helpVBox" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+
+                        </VBox>
                      </content>
                   </TitledPane>
                   <TitledPane animated="false" text="Keybinds">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                        <VBox fx:id="keybindsVBox" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+
+                        </VBox>
                      </content>
                   </TitledPane>
                   <TitledPane animated="false" text="Background">

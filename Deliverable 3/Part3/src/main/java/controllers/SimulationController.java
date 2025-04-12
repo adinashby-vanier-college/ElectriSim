@@ -40,6 +40,9 @@ public class SimulationController {
     @FXML private VBox circuitFeedbackPane;
     @FXML private ScrollPane feedbackScrollPane;
     @FXML private TextArea feedbackText;
+    @FXML private VBox keybindsVBox;
+    @FXML private VBox helpVBox;
+
 
     // Simulation State
     private static final double EPSILON = 1e-6; //For more accurate double comparison
@@ -94,6 +97,8 @@ public class SimulationController {
         zoomGroup.getChildren().add(canvasContainer);
         scrollPane.setContent(zoomGroup);
 
+        setupKeybindsSection();
+        setupHelpSection();
         createBuilder();
         centerScrollBars();
         setupDragging();
@@ -106,6 +111,133 @@ public class SimulationController {
 
         // Store this instance in the parametersPane properties
         parametersPane.getProperties().put("simulationController", this);
+    }
+
+    private void setupKeybindsSection() {
+        if (keybindsVBox != null) {
+            keybindsVBox.setAlignment(Pos.TOP_LEFT); // Align children to top-left
+
+            Label deleteLabel = new Label("- Press E while dragging a component to delete it.");
+            Label rotateLabel = new Label("- Press R while dragging a component to rotate it by 90 degrees.");
+
+            deleteLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+            rotateLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+
+            deleteLabel.setMaxWidth(Double.MAX_VALUE);
+            deleteLabel.setAlignment(Pos.TOP_LEFT);
+
+            rotateLabel.setMaxWidth(Double.MAX_VALUE);
+            rotateLabel.setAlignment(Pos.TOP_LEFT);
+
+            // Create the "Add Keybind" button
+            Button addKeybindButton = new Button("Add Keybind");
+            addKeybindButton.setStyle("-fx-font-size: 16px;");
+
+            // Track how many custom keybinds have been added
+            final int maxKeybinds = 5;
+
+            addKeybindButton.setOnAction(event -> {
+                // Count how many custom keybinds are already there
+                int keybindCount = (int) keybindsVBox.getChildren().stream()
+                        .filter(node -> node instanceof HBox)
+                        .count();
+
+                if (keybindCount < maxKeybinds) {
+                    HBox keybindHBox = new HBox(5); // spacing of 5 between elements
+                    keybindHBox.setAlignment(Pos.TOP_LEFT);
+                    keybindHBox.setMaxWidth(Double.MAX_VALUE);
+                    keybindHBox.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+
+                    Label pressLabel = new Label("- Press ");
+                    pressLabel.setStyle("-fx-text-fill: black;");
+
+                    TextField keyField = new TextField();
+                    keyField.setPromptText("Key");
+                    keyField.setPrefWidth(50);
+
+                    // Restrict TextField to only one character
+                    keyField.textProperty().addListener((observable, oldValue, newValue) -> {
+                        if (newValue.length() > 1) {
+                            keyField.setText(newValue.substring(0, 1));
+                        }
+                    });
+
+                    Label toLabel = new Label(" to ");
+                    toLabel.setStyle("-fx-text-fill: black;");
+
+                    ComboBox<String> actionComboBox = new ComboBox<>();
+                    actionComboBox.getItems().addAll("Copy", "Paste", "Cut", "Undo", "Redo");
+                    actionComboBox.setPromptText("Select Action");
+
+                    keybindHBox.getChildren().addAll(pressLabel, keyField, toLabel, actionComboBox);
+
+                    // Insert the new HBox right before the Add Keybind button
+                    int buttonIndex = keybindsVBox.getChildren().indexOf(addKeybindButton);
+                    keybindsVBox.getChildren().add(buttonIndex, keybindHBox);
+
+                    // After adding, if we've hit the max, remove the button
+                    if (keybindCount + 1 >= maxKeybinds) {
+                        keybindsVBox.getChildren().remove(addKeybindButton);
+                    }
+                }
+            });
+
+            keybindsVBox.getChildren().addAll(deleteLabel, rotateLabel, addKeybindButton);
+        } else {
+            System.out.println("Keybinds VBox is null. Make sure fx:id is set correctly in FXML.");
+        }
+    }
+
+    private void setupHelpSection() {
+        if (keybindsVBox != null) {
+
+            Label helpDescription = new Label(
+                    "- Welcome to the Application!\n\n" +
+                            "- This application is a builder of electric circuits that allows you to spawn and interact with components on the builder and customize keybinds.\n\n" +
+                            "Main Features:\n" +
+                            "• Creating Components:\n" +
+                            "    → You can click on components on the components list to make them appear on your screen.\n" +
+                            "• Dragging Components:\n" +
+                            "    → You can drag components around the interface freely.\n" +
+                            "    → While dragging:\n" +
+                            "        - Press 'E' to delete a component instantly.\n" +
+                            "        - Press 'R' to rotate the component by 90 degrees.\n\n" +
+                            "• Zoom In / Zoom Out:\n" +
+                            "    → Use ctrl + the mouse scroll wheel to zoom in or out.\n" +
+                            "    → Zooming helps you focus on fine details or get a broader view of your simulation.\n\n" +
+                            "• Save and Load:\n" +
+                            "    → You can save your current simulation to a file.\n" +
+                            "    → Supported formats include JSON, CSV, and text files.\n" +
+                            "    → Use the 'Save' or 'Save and Quit' options under the File menu.\n" +
+                            "    → To load a saved simulation, use the 'Load' option and select your file type.\n\n" +
+                            "• Custom Keybinds:\n" +
+                            "    → Click the 'Add Keybind' button to define your own shortcuts.\n" +
+                            "    → Each keybind lets you assign a key (one character only) to an action (Copy, Paste, Cut, Undo, Redo).\n" +
+                            "    → You can add up to 5 custom keybinds.\n\n" +
+                            "• Interface Behavior:\n" +
+                            "    → All labels, fields, and controls are styled for readability.\n"
+            );
+            helpDescription.setWrapText(true);
+            helpDescription.setMaxWidth(Double.MAX_VALUE);
+            helpDescription.setAlignment(Pos.TOP_LEFT);
+            helpDescription.setStyle("-fx-font-size: 16px; -fx-text-fill: black; -fx-background-color: white;");
+
+            VBox vbox = new VBox();
+            vbox.getChildren().add(helpDescription);
+            vbox.setStyle("-fx-background-color: white;");
+
+            ScrollPane helpScrollPane = new ScrollPane(vbox);
+            helpScrollPane.setFitToWidth(true);
+            helpScrollPane.setStyle(
+                    "-fx-background: white;" +
+                            "-fx-background-color: white;" +
+                            "-fx-control-inner-background: white;"
+            );
+
+            helpVBox.getChildren().add(helpScrollPane);
+        } else {
+            System.out.println("Help VBox is null. Make sure fx:id is set correctly in FXML.");
+        }
     }
 
     // ==================== Component Placement ====================
