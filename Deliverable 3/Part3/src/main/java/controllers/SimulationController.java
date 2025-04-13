@@ -63,6 +63,13 @@ public class SimulationController {
     private ComponentsController.ImageComponent draggedExistingComponent = null; // Component being dragged
     private double currentRotation = 0; // Current rotation of the component
 
+    // Store active keybinds: key (Character) -> action (String)
+    private final Map<Character, String> customKeybinds = new HashMap<>();
+
+    // Copy buffer for component
+    private ComponentsController.ImageComponent copiedComponent = null;
+
+
     // Wire Drawing
     private boolean isDrawingWire = false; // Whether a wire is being drawn
     private double wireStartX, wireStartY; // Start coordinates of the wire
@@ -137,7 +144,6 @@ public class SimulationController {
             final int maxKeybinds = 5;
 
             addKeybindButton.setOnAction(event -> {
-                // Count how many custom keybinds are already there
                 int keybindCount = (int) keybindsVBox.getChildren().stream()
                         .filter(node -> node instanceof HBox)
                         .count();
@@ -155,7 +161,6 @@ public class SimulationController {
                     keyField.setPromptText("Key");
                     keyField.setPrefWidth(50);
 
-                    // Restrict TextField to only one character
                     keyField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue.length() > 1) {
                             keyField.setText(newValue.substring(0, 1));
@@ -169,13 +174,40 @@ public class SimulationController {
                     actionComboBox.getItems().addAll("Copy", "Paste", "Cut", "Undo", "Redo");
                     actionComboBox.setPromptText("Select Action");
 
-                    keybindHBox.getChildren().addAll(pressLabel, keyField, toLabel, actionComboBox);
+                    Button saveRemoveButton = new Button("Save");
+                    saveRemoveButton.setStyle("-fx-font-size: 14px;");
 
-                    // Insert the new HBox right before the Add Keybind button
+                    saveRemoveButton.setOnAction(e -> {
+                        if (saveRemoveButton.getText().equals("Save")) {
+                            if (keyField.getText().isEmpty() || actionComboBox.getValue() == null) {
+                                Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a key and select an action.");
+                                alert.show();
+                            } else {
+                                keyField.setEditable(false);
+                                actionComboBox.setDisable(true);
+                                saveRemoveButton.setText("Remove");
+
+                                // === NEW: Save to custom keybinds Map ===
+                                customKeybinds.put(keyField.getText().toUpperCase().charAt(0), actionComboBox.getValue());
+                            }
+                        } else {
+                            // Remove logic
+                            keybindsVBox.getChildren().remove(keybindHBox);
+
+                            // === NEW: Remove from custom keybinds Map ===
+                            customKeybinds.remove(keyField.getText().toUpperCase().charAt(0));
+
+                            if (keybindsVBox.getChildren().stream().noneMatch(node -> node instanceof Button && ((Button) node).getText().equals("Add Keybind"))) {
+                                keybindsVBox.getChildren().add(addKeybindButton);
+                            }
+                        }
+                    });
+
+                    keybindHBox.getChildren().addAll(pressLabel, keyField, toLabel, actionComboBox, saveRemoveButton);
+
                     int buttonIndex = keybindsVBox.getChildren().indexOf(addKeybindButton);
                     keybindsVBox.getChildren().add(buttonIndex, keybindHBox);
 
-                    // After adding, if we've hit the max, remove the button
                     if (keybindCount + 1 >= maxKeybinds) {
                         keybindsVBox.getChildren().remove(addKeybindButton);
                     }
@@ -240,7 +272,53 @@ public class SimulationController {
         }
     }
 
+    private ComponentsController.ImageComponent cloneComponent(ComponentsController.ImageComponent original) {
+        ComponentsController.ImageComponent clone = new ComponentsController.ImageComponent(
+                original.getImage(),
+                original.x,
+                original.y,
+                original.width,
+                original.height,
+                original.componentType
+        );
+        clone.rotation = original.rotation;
+        clone.updateEndPoints();
+        return clone;
+    }
+
+    private void updateCustomKeybinds() {
+        customKeybinds.clear();
+        for (Node node : keybindsVBox.getChildren()) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField keyField = null;
+                ComboBox<String> actionBox = null;
+
+                for (Node child : hbox.getChildren()) {
+                    if (child instanceof TextField) {
+                        keyField = (TextField) child;
+                    } else if (child instanceof ComboBox) {
+                        actionBox = (ComboBox<String>) child;
+                    }
+                }
+
+                if (keyField != null && actionBox != null && !keyField.isEditable() && !actionBox.isDisable()) {
+                    // Only add saved (non-editable) keybinds
+                    String keyText = keyField.getText().toUpperCase();
+                    String actionText = actionBox.getValue();
+                    if (!keyText.isEmpty() && actionText != null) {
+                        customKeybinds.put(keyText.charAt(0), actionText);
+                    }
+                }
+            }
+        }
+    }
+
+
+
     // ==================== Component Placement ====================
+    private ComponentsController.ImageComponent selectedComponent = null; // <-- ADD this field to your controller!
+
     private void setupFloatingImage() {
         floatingComponentImage = new ImageView();
         floatingComponentImage.setMouseTransparent(true);
@@ -260,13 +338,9 @@ public class SimulationController {
             rootPane.getScene().setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.ESCAPE || e.getCode() == KeyCode.E) {
                     if (draggedExistingComponent != null) {
-                        // Remove the component from the drawables list
                         drawables.remove(draggedExistingComponent);
-                        // Remove the component's parameter controls from the parametersPane
                         parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
-                        // Reset the dragged component
                         draggedExistingComponent = null;
-                        // Redraw the canvas
                         redrawCanvas();
                     } else if (floatingComponentImage.isVisible()) {
                         floatingComponentImage.setVisible(false);
@@ -275,10 +349,95 @@ public class SimulationController {
                 } else if (e.getCode() == KeyCode.R) {
                     currentRotation = (currentRotation + 90) % 360;
                     floatingComponentImage.setRotate(currentRotation);
+                } else {
+                    // Handle custom keybinds safely
+                    String text = e.getText();
+                    if (text != null && !text.isEmpty()) {
+                        char keyChar = Character.toUpperCase(text.charAt(0));
+                        String action = customKeybinds.getOrDefault(keyChar, null);
+
+                        if (action != null) {
+                            switch (action) {
+                                case "Copy":
+                                    if (draggedExistingComponent != null) {
+                                        copiedComponent = cloneComponent(draggedExistingComponent);
+                                        addFeedbackMessage(copiedComponent.componentType+" copied!", "info");
+                                    } else if (selectedComponent != null) { // <-- NEW!
+                                        copiedComponent = cloneComponent(selectedComponent);
+                                        addFeedbackMessage(copiedComponent.componentType+" copied!", "info");
+                                    }
+                                    break;
+
+                                case "Paste":
+                                    if (copiedComponent != null && !floatingComponentImage.isVisible()) {
+                                        currentlySelectedImage = copiedComponent.getImage();
+                                        floatingComponentImage.setImage(currentlySelectedImage);
+                                        floatingComponentImage.setFitWidth(copiedComponent.width);
+                                        floatingComponentImage.setFitHeight(copiedComponent.height);
+                                        floatingComponentImage.setRotate(copiedComponent.rotation);
+                                        floatingComponentImage.setVisible(true);
+                                        currentRotation = copiedComponent.rotation;
+                                        selectedImageWidth = copiedComponent.width;
+                                        selectedImageHeight = copiedComponent.height;
+                                        addFeedbackMessage("Pasted "+copiedComponent.componentType+"!", "info");
+                                    }
+                                    break;
+
+                                case "Cut":
+                                    if (draggedExistingComponent != null) {
+                                        copiedComponent = cloneComponent(draggedExistingComponent);
+                                        drawables.remove(draggedExistingComponent);
+                                        parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
+                                        removeConnectedWires(draggedExistingComponent); // <-- add this!
+                                        draggedExistingComponent = null;
+                                        redrawCanvas();
+                                        addFeedbackMessage(copiedComponent.componentType + " cut!", "success");
+                                    } else if (selectedComponent != null) {
+                                        copiedComponent = cloneComponent(selectedComponent);
+                                        drawables.remove(selectedComponent);
+                                        parametersPane.getChildren().remove(selectedComponent.parameterControls);
+                                        removeConnectedWires(selectedComponent); // <-- add this!
+                                        selectedComponent = null;
+                                        redrawCanvas();
+                                        if (!undoStack.isEmpty()) {
+                                            isUndoRedoOperation = true;
+                                            UndoableAction actionUndo = undoStack.pop();
+                                            actionUndo.undo();
+                                            isUndoRedoOperation = false;
+                                        }
+                                        addFeedbackMessage(copiedComponent.componentType + " cut!", "info");
+                                    }
+                                    break;
+
+                                case "Undo":
+                                    if (!undoStack.isEmpty()) {
+                                        isUndoRedoOperation = true;
+                                        UndoableAction actionUndo = undoStack.pop();
+                                        actionUndo.undo();
+                                        redoStack.push(actionUndo);
+                                        isUndoRedoOperation = false;
+                                        addFeedbackMessage("Undo action performed.", "info");
+                                    }
+                                    break;
+
+                                case "Redo":
+                                    if (!redoStack.isEmpty()) {
+                                        isUndoRedoOperation = true;
+                                        UndoableAction actionRedo = redoStack.pop();
+                                        actionRedo.redo();
+                                        undoStack.push(actionRedo);
+                                        isUndoRedoOperation = false;
+                                        addFeedbackMessage("Redo action performed.", "info");
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             });
         });
     }
+
 
     // ==================== Canvas Interaction ====================
     private void setupCanvasClickPlacement() {
@@ -487,6 +646,7 @@ public class SimulationController {
                 if (x >= component.x && x <= component.x + component.width &&
                         y >= component.y && y <= component.y + component.height) {
                     currentlySelectedImage = component.image;
+                    selectedComponent = component;
                     floatingComponentImage.setImage(currentlySelectedImage);
                     floatingComponentImage.setFitWidth(component.width);
                     floatingComponentImage.setFitHeight(component.height);
