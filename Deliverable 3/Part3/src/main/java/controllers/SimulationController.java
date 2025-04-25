@@ -442,6 +442,7 @@ public class SimulationController {
     // ==================== Canvas Interaction ====================
     private void setupCanvasClickPlacement() {
         builder.setOnMouseClicked(e -> {
+            if (isDrawingWire) return;
             if (floatingComponentImage.isVisible() && currentlySelectedImage != null) {
                 placeComponent(e.getX(), e.getY());
             } else {
@@ -450,7 +451,10 @@ public class SimulationController {
         });
     }
 
+
     private void placeComponent(double x, double y) {
+        if (isDrawingWire) return;
+
         double snappedX = Math.round((x - selectedImageWidth / 2) / gridSize) * gridSize;
         double snappedY = Math.round((y - selectedImageHeight / 2) / gridSize) * gridSize;
 
@@ -632,6 +636,8 @@ public class SimulationController {
     }
 
     private void selectOrCreateComponent(double x, double y) {
+        if (isDrawingWire) return;
+
         // First, deselect any previously selected wire
         if (selectedWire != null) {
             selectedWire.setSelected(false);
@@ -796,7 +802,12 @@ public class SimulationController {
         final double[] offsetY = {0};
         final double[] oldX = {0};
         final double[] oldY = {0};
+
         builder.setOnMousePressed(e -> {
+            if (isDrawingWire) {
+                e.consume();
+                return;
+            }
             for (ComponentsController.Drawable drawable : drawables) {
                 if (drawable instanceof ComponentsController.ImageComponent) {
                     ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
@@ -814,6 +825,10 @@ public class SimulationController {
         });
 
         builder.setOnMouseDragged(e -> {
+            if (isDrawingWire) {
+                e.consume();
+                return;
+            }
             if (draggedExistingComponent != null) {
                 draggedExistingComponent.x = e.getX() - offsetX[0];
                 draggedExistingComponent.y = e.getY() - offsetY[0];
@@ -823,6 +838,10 @@ public class SimulationController {
         });
 
         builder.setOnMouseReleased(e -> {
+            if (isDrawingWire) {
+                e.consume();
+                return;
+            }
             if (draggedExistingComponent != null) {
                 // Add move action to undo stack
                 if (!isUndoRedoOperation) {
