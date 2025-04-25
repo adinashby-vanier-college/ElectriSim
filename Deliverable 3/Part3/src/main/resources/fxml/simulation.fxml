@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -24,7 +25,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.geometry.Insets?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SimulationController">
    <children>
       <BorderPane fx:id="mainPane" stylesheets="@../css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -580,8 +580,8 @@
                                     <Label prefHeight="0.0" prefWidth="270.0" styleClass="simulation-label" text="Simulation Controls" />
                                     <HBox prefHeight="202.0" prefWidth="487.0" styleClass="simulation-button-hbox">
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Simuate" onAction="#handleVerifyCircuit"/>
-                                          <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Reset" onAction="#handleReset"/>
+                                          <Button mnemonicParsing="false" onAction="#handleVerifyCircuit" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Simuate" />
+                                          <Button mnemonicParsing="false" onAction="#handleReset" prefHeight="38.0" prefWidth="120.0" styleClass="simulation-button" text="Reset" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -605,7 +605,7 @@
                                       <content>
                                          <VBox fx:id="parametersPane" spacing="10" styleClass="parameters-pane">
                                             <padding>
-                                               <Insets top="10" right="10" bottom="10" left="10"/>
+                                               <Insets bottom="10" left="10" right="10" top="10" />
                                             </padding>
                                             <!-- Parameter controls will be dynamically added here -->
                                          </VBox>
@@ -615,7 +615,7 @@
                               </SplitPane>
                            </items>
                         </SplitPane>
-                        <SplitPane dividerPositions="0.8137492428831011" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
+                        <SplitPane dividerPositions="0.7401500938086304" prefHeight="116.0" prefWidth="600.0" styleClass="simulation-background">
                            <items>
                               <VBox prefHeight="330.0" prefWidth="915.0" styleClass="simulation-background">
                                  <children>
@@ -754,9 +754,9 @@
                                     <Label prefHeight="17.0" prefWidth="766.0" styleClass="simulation-label" stylesheets="@../css/simulation.css" text="Circuit Feedback" />
                                     <ScrollPane fx:id="feedbackScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="432.0" prefWidth="327.0" styleClass="simulation-background">
                                        <content>
-                                          <VBox fx:id="circuitFeedbackPane" spacing="5" style="-fx-background-color:rgb(58, 58, 58);">
+                                          <VBox fx:id="circuitFeedbackPane" spacing="5">
                                              <padding>
-                                                <Insets top="10" right="10" bottom="10" left="10"/>
+                                                <Insets bottom="10" left="10" right="10" top="10" />
                                              </padding>
                                           </VBox>
                                        </content>
@@ -781,14 +781,14 @@
                <panes>
                   <TitledPane animated="false" text="Help">
                      <content>
-                        <VBox fx:id="helpVBox" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+                        <VBox fx:id="helpVBox" alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
 
                         </VBox>
                      </content>
                   </TitledPane>
                   <TitledPane animated="false" text="Keybinds">
                      <content>
-                        <VBox fx:id="keybindsVBox" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+                        <VBox fx:id="keybindsVBox" alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
 
                         </VBox>
                      </content>
