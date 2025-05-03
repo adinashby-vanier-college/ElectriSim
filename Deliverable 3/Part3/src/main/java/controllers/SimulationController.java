@@ -979,8 +979,6 @@ public class SimulationController {
 
     }
 
-
-
     private boolean traverseCircuit(double startX, double startY, double initialX, double initialY, ComponentsController.Drawable currentDraw, Set<ComponentsController.Drawable> visited) {
         // If we've reached the initial point and visited at least one component, we've found a closed circuit
         if (positiveConnected && negativeConnected) {
@@ -1517,34 +1515,44 @@ public class SimulationController {
 
     private void temporaryAnalysis() {
         if (positiveConnected && negativeConnected) {
-            double totalResistanceSeries = 0;
-            double sourceVolt = 0;
-            double currentSeries = 0;
-            for (CircuitAnalyzerTest.CircuitGraph.Edge ed : CG.getEdges()) {
-                totalResistanceSeries += ed.component.getResistance();
-                if (ed.component instanceof ComponentsController.Battery) {
-                    sourceVolt += ed.component.getVoltage();
-                }
-            }
-            if (totalResistanceSeries != 0) {
-                currentSeries = sourceVolt/totalResistanceSeries;
-                for (CircuitAnalyzerTest.CircuitGraph.Edge ed : CG.getEdges()) {
-                    if (ed.component instanceof ComponentsController.ImageComponent) {
-                        ((ComponentsController.ImageComponent) ed.component).setCurrent(currentSeries);
-                        if(ed.component instanceof ComponentsController.ResistorIEEE) {
-                            ((ComponentsController.ResistorIEEE) ed.component).setVoltage(ed.component.getResistance()*ed.component.getCurrent());
-                        }
-                        String message = "The info of the following component: " + ((ComponentsController.ImageComponent) ed.component).componentType + " from node " + ed.from.id +" to node " +ed.to.id
-                                + " has resistance of " + ed.component.getResistance() + ", " + " current of " + ed.component.getCurrent() + " and voltage of " + ed.component.getVoltage();
-                        addFeedbackMessage(message,"info");
+            List<CircuitAnalyzerTest.CircuitGraph.Edge> path =
+                    CG.findConductivePath(CG.getBatteryPlusTerminal(), CG.getBatteryMinusTerminal());
 
+            double totalResistanceSeries = path.stream()
+                    .mapToDouble(e -> e.component.getResistance())
+                    .sum();
+
+            double sourceVolt = path.stream()
+                    .filter(e -> e.component instanceof ComponentsController.Battery)
+                    .mapToDouble(e -> e.component.getVoltage())
+                    .sum();
+
+            if (totalResistanceSeries != 0) {
+                double currentSeries = sourceVolt / totalResistanceSeries;
+
+                for (CircuitAnalyzerTest.CircuitGraph.Edge ed : path) {
+                    if (ed.component instanceof ComponentsController.ImageComponent) {
+                        ComponentsController.ImageComponent ic = (ComponentsController.ImageComponent) ed.component;
+                        ic.setCurrent(currentSeries);
+
+                        if (ic instanceof ComponentsController.ResistorIEEE) {
+                            ic.setVoltage(ic.getResistance() * currentSeries);
+                        }
+
+                        addFeedbackMessage(
+                                String.format("Component: %s from %s to %s — R=%.2f, I=%.2f, V=%.2f",
+                                        ic.componentType, ed.from.id, ed.to.id,
+                                        ic.getResistance(), ic.getCurrent(), ic.getVoltage()),
+                                "info"
+                        );
                     }
                 }
+
+                addFeedbackMessage(
+                        String.format("Req: %.2f Ω, I: %.2f A", totalResistanceSeries, currentSeries),
+                        "info"
+                );
             }
-            String message = "The Req of the main line is: " + totalResistanceSeries + " and current flowing on it is: " + currentSeries;
-            addFeedbackMessage(message, "info");
-
         }
-
     }
 }

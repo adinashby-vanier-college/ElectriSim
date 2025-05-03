@@ -40,7 +40,7 @@ public class CircuitAnalyzer {
     }
 
     // Inner class to represent a circuit edge (component or wire)
-    private static class Edge {
+    public static class Edge {
         Node from;
         Node to;
         ComponentsController.Drawable component;
@@ -242,7 +242,7 @@ public class CircuitAnalyzer {
         // Then apply appropriate theorems based on topology
         switch (topology) {
             case SERIES:
-                applySeriesAnalysis();
+                seriesAnalysis();
                 break;
             case PARALLEL:
                 applyParallelAnalysis();
@@ -255,21 +255,30 @@ public class CircuitAnalyzer {
 
     // Identify the circuit topology
     private CircuitTopology identifyCircuitTopology() {
-        // Count the number of branches and nodes
         int branchCount = 0;
-        int nodeCount = 0;
         Set<String> nodes = new HashSet<>();
 
         for (ComponentsController.Drawable component : components) {
-            if (component instanceof ComponentsController.Wire) {
+            String startNodeId, endNodeId;
+
+            if (component instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent comp = (ComponentsController.ImageComponent) component;
+                startNodeId = comp.startX + "," + comp.startY;
+                endNodeId = comp.endX + "," + comp.endY;
+            } else if (component instanceof ComponentsController.Wire) {
                 ComponentsController.Wire wire = (ComponentsController.Wire) component;
-                nodes.add(wire.startX + "," + wire.startY);
-                nodes.add(wire.endX + "," + wire.endY);
-                branchCount++;
+                startNodeId = wire.startX + "," + wire.startY;
+                endNodeId = wire.endX + "," + wire.endY;
+            } else {
+                continue;
             }
+
+            nodes.add(startNodeId);
+            nodes.add(endNodeId);
+            branchCount++;
         }
 
-        nodeCount = nodes.size();
+        int nodeCount = nodes.size();
 
         // Determine topology based on branch and node count
         if (branchCount == nodeCount - 1) {
@@ -512,19 +521,10 @@ public class CircuitAnalyzer {
 
     // Get voltage across a component
     public double getVoltageAcross(ComponentsController.ImageComponent component) {
-        String startNode = component.startX + "," + component.startY;
-        String endNode = component.endX + "," + component.endY;
-        
-        // If the component is a voltmeter, find the component it's measuring
-        if (component instanceof ComponentsController.Voltmeter) {
-            ComponentsController.ImageComponent measuredComponent = findMeasuredComponent(component);
-            if (measuredComponent != null) {
-                startNode = measuredComponent.startX + "," + measuredComponent.startY;
-                endNode = measuredComponent.endX + "," + measuredComponent.endY;
-            }
-        }
-        
-        return nodeVoltages.getOrDefault(startNode, 0.0) - nodeVoltages.getOrDefault(endNode, 0.0);
+        // Calculate voltage using Ohm's Law: V = I * R
+        double current = getCurrentThrough(component);
+        double resistance = component.resistance;
+        return current * resistance;
     }
 
     // Helper method to find the component being measured by a voltmeter
@@ -591,18 +591,37 @@ public class CircuitAnalyzer {
 
     // Get current through a component
     public double getCurrentThrough(ComponentsController.ImageComponent component) {
-        String branchKey = component.startX + "," + component.startY + "->" + 
-                          component.endX + "," + component.endY;
-        return branchCurrents.getOrDefault(branchKey, 0.0);
+        // For a series circuit, current is the same through all components
+        // Calculate total resistance
+        double totalResistance = 0;
+        for (ComponentsController.Drawable comp : components) {
+            if (comp instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent imageComp = (ComponentsController.ImageComponent) comp;
+                if (imageComp instanceof ComponentsController.ResistorIEEE) {
+                    totalResistance += imageComp.resistance;
+                }
+            }
+        }
+
+        // Find the battery voltage
+        double batteryVoltage = 0;
+        for (ComponentsController.Drawable comp : components) {
+            if (comp instanceof ComponentsController.Battery) {
+                batteryVoltage = ((ComponentsController.Battery) comp).voltage;
+                break;
+            }
+        }
+
+        // Calculate current using Ohm's Law: I = V/R
+        return batteryVoltage / totalResistance;
     }
 
     // Get resistance of a component
-    public double getResistance(ComponentsController.ImageComponent component) {
-        if (component instanceof ComponentsController.ResistorIEEE) {
-            return component.resistance;
-        }
-        return 0.0;
+    public double getResistance(ComponentsController.ImageComponent comp) {
+        System.out.println("Resistance for " + comp.componentType + ": " + comp.resistance);
+        return comp.resistance;
     }
+
 
     // Helper method to check if a component is a power source
     private boolean isPowerSource(ComponentsController.ImageComponent component) {
@@ -691,7 +710,7 @@ public class CircuitAnalyzer {
 
 
         for (Edge currentEdge: comp.edges) {
-            if (currentEdge == currentPath.getLast()) {
+            if (!currentPath.isEmpty() && currentEdge.equals(currentPath.get(currentPath.size() - 1))) {
                 continue;
             }
 
@@ -856,13 +875,11 @@ public class CircuitAnalyzer {
         return path;
     }
 
-    private double getEffectiveResistance(ComponentsController.ImageComponent comp) {
-        if (comp instanceof ComponentsController.SPSTToggleSwitch) {
-            return ((ComponentsController.SPSTToggleSwitch) comp).isClosed() ?
-                    0.001 : // Closed switch resistance
-                    1e9;    // Open switch resistance
+    private double getEffectiveResistance(ComponentsController.Drawable component) {
+        if (component instanceof ComponentsController.ImageComponent) {
+            return ((ComponentsController.ImageComponent) component).getResistance();
         }
-        return comp.resistance;
+        return 0.0;
     }
 
     public void seriesAnalysis() {
@@ -924,8 +941,44 @@ public class CircuitAnalyzer {
         }
     }
 
+    public void printCircuitValues() {
+        // Find battery voltage
+        double batteryVoltage = 0;
+        for (ComponentsController.Drawable comp : components) {
+            if (comp instanceof ComponentsController.Battery) {
+                batteryVoltage = ((ComponentsController.Battery) comp).voltage;
+                break;
+            }
+        }
 
+        // Calculate total resistance
+        double totalResistance = 0;
+        for (ComponentsController.Drawable comp : components) {
+            if (comp instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent imageComp = (ComponentsController.ImageComponent) comp;
+                if (imageComp instanceof ComponentsController.ResistorIEEE) {
+                    totalResistance += imageComp.resistance;
+                }
+            }
+        }
 
+        // Calculate current
+        double current = batteryVoltage / totalResistance;
 
+        System.out.println("\nCircuit Values:");
+        System.out.println("Battery Voltage: " + batteryVoltage + " V");
+        System.out.println("Total Resistance: " + totalResistance + " Ω");
+        System.out.println("Circuit Current: " + current + " A");
 
+        // Print voltage across each resistor
+        for (ComponentsController.Drawable comp : components) {
+            if (comp instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent imageComp = (ComponentsController.ImageComponent) comp;
+                if (imageComp instanceof ComponentsController.ResistorIEEE) {
+                    double voltageAcross = current * imageComp.resistance;
+                    System.out.println("Voltage across " + imageComp.resistance + "Ω resistor: " + voltageAcross + " V");
+                }
+            }
+        }
+    }
 } 
