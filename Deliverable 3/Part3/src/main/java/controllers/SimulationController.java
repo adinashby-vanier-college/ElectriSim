@@ -25,6 +25,10 @@ import javafx.stage.Stage;
 import app.saveLoadExtender;
 import java.io.IOException;
 import java.util.*;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 
 public class SimulationController {
     // FXML Components
@@ -42,6 +46,7 @@ public class SimulationController {
     @FXML private TextArea feedbackText;
     @FXML private VBox keybindsVBox;
     @FXML private VBox helpVBox;
+    @FXML private HBox graphContainer;
 
 
     // Simulation State
@@ -93,6 +98,13 @@ public class SimulationController {
     boolean positiveConnected = false;
     boolean negativeConnected = false;
 
+    // Add these new fields at the top of the class
+    private static final int MAX_DATA_POINTS = 50; // Maximum number of data points to show
+    private static final long UPDATE_INTERVAL = 100; // Update interval in milliseconds
+    private Timer graphUpdateTimer;
+    private double currentTime = 0;
+    private Map<ComponentsController.ImageComponent, List<XYChart.Data<Number, Number>>> voltageHistory = new HashMap<>();
+    private Map<ComponentsController.ImageComponent, List<XYChart.Data<Number, Number>>> currentHistory = new HashMap<>();
 
     // Initialization
     @FXML
@@ -561,6 +573,11 @@ public class SimulationController {
         // Add to drawables list
         drawables.add(newComponent);
 
+        // Create graph button for the new component
+        if (newComponent instanceof ComponentsController.ImageComponent) {
+            createGraphButton((ComponentsController.ImageComponent) newComponent);
+        }
+
         // Remove any existing parameter controls before adding new ones
         if (newComponent.parameterControls != null) {
             parametersPane.getChildren().remove(newComponent.parameterControls);
@@ -899,12 +916,16 @@ public class SimulationController {
     @FXML
     private void handleVerifyCircuit(ActionEvent event) {
         verifyCircuit();
-        //updateCircuitAnalysis();
         temporaryAnalysis();
+        startGraphUpdates(); // Start the graph updates when circuit is verified
     }
 
     @FXML
     private void handleReset(ActionEvent event) {
+        stopGraphUpdates(); // Stop the graph updates when circuit is reset
+        currentTime = 0;
+        voltageHistory.clear();
+        currentHistory.clear();
         resetBuilder();
     }
 
@@ -1312,6 +1333,9 @@ public class SimulationController {
             // Store component for undo
             ComponentsController.ImageComponent componentToDelete = draggedExistingComponent;
 
+            // Remove the component's graph button
+            removeGraphButton(componentToDelete);
+
             // Remove the component
             drawables.remove(draggedExistingComponent);
 
@@ -1530,13 +1554,22 @@ public class SimulationController {
             if (totalResistanceSeries != 0) {
                 double currentSeries = sourceVolt / totalResistanceSeries;
 
+                // First pass: Update all components with their new current values
                 for (CircuitAnalyzerTest.CircuitGraph.Edge ed : path) {
                     if (ed.component instanceof ComponentsController.ImageComponent) {
                         ComponentsController.ImageComponent ic = (ComponentsController.ImageComponent) ed.component;
+                        
+                        // Set current for all components in the path
                         ic.setCurrent(currentSeries);
 
+                        // For resistors, calculate voltage drop
                         if (ic instanceof ComponentsController.ResistorIEEE) {
                             ic.setVoltage(ic.getResistance() * currentSeries);
+                        }
+
+                        // Debug: Print current value for battery
+                        if (ic instanceof ComponentsController.Battery) {
+                            System.out.println("Battery current after setting: " + ic.getCurrent());
                         }
 
                         addFeedbackMessage(
@@ -1548,10 +1581,256 @@ public class SimulationController {
                     }
                 }
 
+                // Second pass: Update all graph data after all components have their new values
+                for (CircuitAnalyzerTest.CircuitGraph.Edge ed : path) {
+                    if (ed.component instanceof ComponentsController.ImageComponent) {
+                        ComponentsController.ImageComponent ic = (ComponentsController.ImageComponent) ed.component;
+                        // Debug: Print current value for battery before graph update
+                        if (ic instanceof ComponentsController.Battery) {
+                            System.out.println("Battery current before graph update: " + ic.getCurrent());
+                        }
+                        // Update graph data immediately after setting the values
+                        updateGraphData(ic);
+                    }
+                }
+
                 addFeedbackMessage(
                         String.format("Req: %.2f Ω, I: %.2f A", totalResistanceSeries, currentSeries),
                         "info"
                 );
+            }
+        }
+    }
+
+    private void updateGraphData(ComponentsController.ImageComponent component) {
+        // Find the graph button for this component
+        for (Node node : graphContainer.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                VBox vbox = (VBox) button.getGraphic();
+                Label label = (Label) vbox.getChildren().get(0);
+                if (label.getText().startsWith(component.componentType)) {
+                    // Get the current value before updating
+                    double previousCurrent = component.getCurrent();
+                    
+                    // Update voltage graph
+                    LineChart<Number, Number> voltageChart = (LineChart<Number, Number>) vbox.getChildren().get(1);
+                    XYChart.Series<Number, Number> voltageSeries = voltageChart.getData().get(0);
+                    
+                    // Get or create history for this component
+                    List<XYChart.Data<Number, Number>> voltageData = voltageHistory.computeIfAbsent(component, k -> new ArrayList<>());
+                    
+                    // Add new data point
+                    voltageData.add(new XYChart.Data<>(currentTime, component.getVoltage()));
+                    
+                    // Update x-axis bounds to show the last 10 seconds
+                    NumberAxis voltageXAxis = (NumberAxis) voltageChart.getXAxis();
+                    double windowSize = 10.0; // 10 second window
+                    double lowerBound = Math.max(0, currentTime - windowSize);
+                    double upperBound = currentTime;
+                    
+                    // Remove data points that are outside the visible range
+                    voltageData.removeIf(data -> data.getXValue().doubleValue() < lowerBound);
+                    
+                    // Update the series with only visible data points
+                    voltageSeries.getData().setAll(voltageData);
+                    
+                    // Update axis bounds
+                    voltageXAxis.setLowerBound(lowerBound);
+                    voltageXAxis.setUpperBound(upperBound);
+
+                    // Update current graph if it exists
+                    if (vbox.getChildren().size() > 2) {
+                        LineChart<Number, Number> currentChart = (LineChart<Number, Number>) vbox.getChildren().get(3);
+                        XYChart.Series<Number, Number> currentSeries = currentChart.getData().get(0);
+                        
+                        // Get or create history for this component
+                        List<XYChart.Data<Number, Number>> currentData = currentHistory.computeIfAbsent(component, k -> new ArrayList<>());
+                        
+                        // Add new data point with the actual current value
+                        double currentValue = component.getCurrent();
+                        
+                        // Only print debug message if the current value has changed
+                        if (component instanceof ComponentsController.Battery && currentValue != previousCurrent) {
+                            System.out.println("Battery current changed from " + previousCurrent + " to " + currentValue);
+                        }
+                        
+                        currentData.add(new XYChart.Data<>(currentTime, currentValue));
+                        
+                        // Remove data points that are outside the visible range
+                        currentData.removeIf(data -> data.getXValue().doubleValue() < lowerBound);
+                        
+                        // Update the series with only visible data points
+                        currentSeries.getData().setAll(currentData);
+                        
+                        // Update axis bounds
+                        NumberAxis currentXAxis = (NumberAxis) currentChart.getXAxis();
+                        currentXAxis.setLowerBound(lowerBound);
+                        currentXAxis.setUpperBound(upperBound);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private void createGraphButton(ComponentsController.ImageComponent component) {
+        // Skip graphs for switches and ground elements
+        if (component instanceof ComponentsController.SPSTToggleSwitch ||
+            component instanceof ComponentsController.EarthGround  ||
+            component instanceof ComponentsController.Voltmeter ||
+            component instanceof ComponentsController.Ammeter ||
+            component instanceof ComponentsController.Ohmmeter   ||
+            component instanceof ComponentsController.Wattmeter) {
+            return;
+        }
+
+        // Check if this component should have dual graphs
+        boolean hasDualGraphs = component instanceof ComponentsController.ResistorIEEE ||
+                              component instanceof ComponentsController.PotentiometerIEEE ||
+                              component instanceof ComponentsController.Capacitor ||
+                              component instanceof ComponentsController.Inductor ||
+                              component instanceof ComponentsController.VoltageSource ||
+                              component instanceof ComponentsController.Battery;
+
+        Button graphButton = new Button();
+        graphButton.setPrefHeight(hasDualGraphs ? 500.0 : 264.0);
+        graphButton.setPrefWidth(437.0);
+        graphButton.getStyleClass().add("graph-button");
+        
+        VBox graphVBox = new VBox();
+        graphVBox.setPrefHeight(hasDualGraphs ? 490.0 : 270.0);
+        graphVBox.setPrefWidth(419.0);
+        graphVBox.getStyleClass().add("graph-vbox");
+        
+        // Create voltage graph
+        Label voltageLabel = new Label(component.componentType + " - Voltage vs Time");
+        voltageLabel.setAlignment(Pos.CENTER);
+        voltageLabel.setPrefHeight(17.0);
+        voltageLabel.setPrefWidth(510.0);
+        voltageLabel.getStyleClass().add("graph-label");
+        
+        NumberAxis voltageXAxis = new NumberAxis();
+        NumberAxis voltageYAxis = new NumberAxis();
+        voltageXAxis.setLabel("Time (s)");
+        voltageYAxis.setLabel("Voltage (V)");
+        voltageXAxis.setAutoRanging(false);
+        voltageXAxis.setLowerBound(0);
+        voltageXAxis.setUpperBound(10); // Initial window size of 10 seconds
+        
+        LineChart<Number, Number> voltageChart = new LineChart<>(voltageXAxis, voltageYAxis);
+        voltageChart.setPrefHeight(hasDualGraphs ? 200.0 : 229.0);
+        voltageChart.setPrefWidth(462.0);
+        voltageChart.getStyleClass().add("graph-chart");
+        voltageChart.setAnimated(false);
+        
+        // Create voltage series
+        XYChart.Series<Number, Number> voltageSeries = new XYChart.Series<>();
+        voltageSeries.setName("Voltage");
+        
+        // Add initial data point
+        voltageSeries.getData().add(new XYChart.Data<>(0, 0));
+        
+        voltageChart.getData().add(voltageSeries);
+        
+        graphVBox.getChildren().addAll(voltageLabel, voltageChart);
+
+        // Add current graph for components that need it
+        if (hasDualGraphs) {
+            Label currentLabel = new Label(component.componentType + " - Current vs Time");
+            currentLabel.setAlignment(Pos.CENTER);
+            currentLabel.setPrefHeight(17.0);
+            currentLabel.setPrefWidth(510.0);
+            currentLabel.getStyleClass().add("graph-label");
+            
+            NumberAxis currentXAxis = new NumberAxis();
+            NumberAxis currentYAxis = new NumberAxis();
+            currentXAxis.setLabel("Time (s)");
+            currentYAxis.setLabel("Current (A)");
+            currentXAxis.setAutoRanging(false);
+            currentXAxis.setLowerBound(0);
+            currentXAxis.setUpperBound(10); // Initial window size of 10 seconds
+            
+            LineChart<Number, Number> currentChart = new LineChart<>(currentXAxis, currentYAxis);
+            currentChart.setPrefHeight(200.0);
+            currentChart.setPrefWidth(462.0);
+            currentChart.getStyleClass().add("graph-chart");
+            currentChart.setAnimated(false);
+            
+            // Create current series
+            XYChart.Series<Number, Number> currentSeries = new XYChart.Series<>();
+            currentSeries.setName("Current");
+            
+            // Add initial data point
+            currentSeries.getData().add(new XYChart.Data<>(0, 0));
+            
+            currentChart.getData().add(currentSeries);
+            
+            graphVBox.getChildren().addAll(currentLabel, currentChart);
+        }
+        
+        graphButton.setGraphic(graphVBox);
+        graphContainer.getChildren().add(graphButton);
+    }
+
+    private void removeGraphButton(ComponentsController.ImageComponent component) {
+        // Find and remove the graph button for this component
+        for (Node node : graphContainer.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                VBox vbox = (VBox) button.getGraphic();
+                Label label = (Label) vbox.getChildren().get(0);
+                if (label.getText().startsWith(component.componentType)) {
+                    graphContainer.getChildren().remove(button);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void startGraphUpdates() {
+        if (graphUpdateTimer != null) {
+            graphUpdateTimer.cancel();
+        }
+        graphUpdateTimer = new Timer();
+        graphUpdateTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    currentTime += UPDATE_INTERVAL / 1000.0; // Convert to seconds
+                    // Only update graphs if the circuit is verified
+                    if (positiveConnected && negativeConnected) {
+                        updateAllGraphs();
+                    }
+                });
+            }
+        }, 0, UPDATE_INTERVAL);
+    }
+
+    private void stopGraphUpdates() {
+        if (graphUpdateTimer != null) {
+            graphUpdateTimer.cancel();
+            graphUpdateTimer = null;
+        }
+    }
+
+    private void updateAllGraphs() {
+        for (Node node : graphContainer.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                VBox vbox = (VBox) button.getGraphic();
+                Label label = (Label) vbox.getChildren().get(0);
+                
+                // Find the component for this graph
+                for (ComponentsController.Drawable drawable : drawables) {
+                    if (drawable instanceof ComponentsController.ImageComponent) {
+                        ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                        if (label.getText().startsWith(component.componentType)) {
+                            updateGraphData(component);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

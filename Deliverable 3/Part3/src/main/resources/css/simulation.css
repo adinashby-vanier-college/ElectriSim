@@ -77,7 +77,9 @@
 /* ---------------- GRAPH SECTION ---------------- */
 .graph-hbox {
     -fx-spacing: 10px;
-    -fx-alignment: center-left;
+    -fx-padding: 10px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-wrap-text: true;
 }
 
 .graph-button {
@@ -88,6 +90,7 @@
     -fx-background-radius: 5px;
     -fx-min-width: 400px;
     -fx-transition: background-color 0.3s ease;
+    -fx-margin: 5px;
 }
 
 .graph-button:hover {
@@ -98,17 +101,18 @@
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 14px;
     -fx-alignment: center;
+    -fx-padding: 5px;
 }
 
 .graph-vbox {
     -fx-alignment: center;
-    -fx-spacing: 5px;
+    -fx-spacing: 10px;
+    -fx-padding: 5px;
 }
 
 .graph-chart {
     -fx-background-color: #323232;
     -fx-pref-width: 500px;
-    -fx-pref-height: 300px;
     -fx-transition: background-color 0.3s ease;
 }
 
@@ -118,6 +122,15 @@
 
 .graph-chart .axis {
     -fx-tick-label-fill: #FFFFFF;
+    -fx-tick-mark-visible: true;
+    -fx-minor-tick-visible: true;
+    -fx-tick-label-font-size: 12px;
+}
+
+.graph-chart .axis-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
 }
 
 .graph-chart .chart-horizontal-grid-lines,
@@ -138,6 +151,23 @@
 
 .graph-chart .chart-plot-background {
     -fx-background-color: #323232;
+}
+
+.graph-chart .chart-legend {
+    -fx-background-color: transparent;
+    -fx-text-fill: #FFFFFF;
+}
+
+.graph-chart .chart-legend-item {
+    -fx-text-fill: #FFFFFF;
+}
+
+.graph-chart .chart-legend-item-symbol {
+    -fx-background-color: #D3D3D3;
+}
+
+.graph-button:hover .graph-chart .chart-legend-item-symbol {
+    -fx-background-color: #FFFFFF;
 }
 
 /* ---------------- SIMULATION LABELS ---------------- */
