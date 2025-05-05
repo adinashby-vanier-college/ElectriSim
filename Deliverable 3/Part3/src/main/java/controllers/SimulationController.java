@@ -350,6 +350,7 @@ public class SimulationController {
             rootPane.getScene().setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.ESCAPE || e.getCode() == KeyCode.E) {
                     if (draggedExistingComponent != null) {
+                        removeGraphButton(draggedExistingComponent);
                         drawables.remove(draggedExistingComponent);
                         parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
                         draggedExistingComponent = null;
@@ -397,6 +398,7 @@ public class SimulationController {
 
                                 case "Cut":
                                     if (draggedExistingComponent != null) {
+                                        removeGraphButton(draggedExistingComponent);
                                         copiedComponent = cloneComponent(draggedExistingComponent);
                                         drawables.remove(draggedExistingComponent);
                                         parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
@@ -405,6 +407,7 @@ public class SimulationController {
                                         redrawCanvas();
                                         addFeedbackMessage(copiedComponent.componentType + " cut!", "success");
                                     } else if (selectedComponent != null) {
+                                        removeGraphButton(selectedComponent);
                                         copiedComponent = cloneComponent(selectedComponent);
                                         drawables.remove(selectedComponent);
                                         parametersPane.getChildren().remove(selectedComponent.parameterControls);
@@ -684,6 +687,7 @@ public class SimulationController {
 
                     // Remove the component's parameter controls
                     ComponentsController.removeParameterControls(component, parametersPane);
+                    removeGraphButton(component);
 
                     // Remove any connected wires
                     removeConnectedWires(component);
@@ -1334,7 +1338,7 @@ public class SimulationController {
             ComponentsController.ImageComponent componentToDelete = draggedExistingComponent;
 
             // Remove the component's graph button
-            removeGraphButton(componentToDelete);
+            removeGraphButton(draggedExistingComponent);
 
             // Remove the component
             drawables.remove(draggedExistingComponent);

@@ -25,9 +25,6 @@
                         <Menu text="File">
                             <MenuItem onAction="#handleExit" text="Close" />
                         </Menu>
-                        <Menu text="Settings">
-                            <MenuItem onAction="#handleOpenSettings" text="Open" />
-                        </Menu>
                     </MenuBar>
                 </HBox>
             </top>
