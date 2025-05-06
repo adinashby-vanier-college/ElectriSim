@@ -1359,7 +1359,7 @@ public class SimulationController {
             newComponent.updateEndPoints();
 
             // Add parameter controls for the new component
-            ComponentsController.generateParameterControls(newComponent, parametersPane);
+            //ComponentsController.generateParameterControls(newComponent, parametersPane);
 
             // Create graph button for the new component
             createGraphButton(newComponent);
