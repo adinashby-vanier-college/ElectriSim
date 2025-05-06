@@ -689,11 +689,8 @@ public class SimulationController {
                     selectedImageHeight = component.height;
                     floatingComponentImage.setVisible(true);
 
-                    // Remove the component from the drawables list
                     iterator.remove();
-
-                    // Remove the component's parameter controls
-                    ComponentsController.removeParameterControls(component, parametersPane);
+                    parametersPane.getChildren().remove(component.parameterControls);
                     removeGraphButton(component);
 
                     // Remove any connected wires
@@ -938,7 +935,11 @@ public class SimulationController {
         voltageHistory.clear();
         currentHistory.clear();
         resetBuilder();
+
+        // Clear all graphs
+        graphContainer.getChildren().clear();
     }
+
 
     private void resetBuilder() {
         drawables.clear();
@@ -1403,9 +1404,9 @@ public class SimulationController {
             // Remove the component
             drawables.remove(draggedExistingComponent);
 
-            parametersPane.getChildren().remove(draggedExistingComponent.parameterControls);
-            removeConnectedWires(draggedExistingComponent);
-
+            parametersPane.getChildren().remove(componentToDelete.parameterControls);
+            removeGraphButton(componentToDelete);
+            removeConnectedWires(componentToDelete);
 
             draggedExistingComponent = null;
             // Add to undo stack
@@ -1897,15 +1898,16 @@ public class SimulationController {
     }
 
     private void removeGraphButton(ComponentsController.ImageComponent component) {
-        // Find and remove the graph button for this component
-        for (Node node : graphContainer.getChildren()) {
-            if (node instanceof Button) {
-                Button button = (Button) node;
+        Iterator<Node> iterator = graphContainer.getChildren().iterator();
+        while (iterator.hasNext()) {
+            Node node = iterator.next();
+            if (node instanceof Button button) {
                 VBox vbox = (VBox) button.getGraphic();
-                Label label = (Label) vbox.getChildren().get(0);
-                if (label.getText().startsWith(component.componentType)) {
-                    graphContainer.getChildren().remove(button);
-                    break;
+                if (vbox != null && !vbox.getChildren().isEmpty() && vbox.getChildren().get(0) instanceof Label label) {
+                    if (label.getText().startsWith(component.componentType)) {
+                        iterator.remove();
+                        break;
+                    }
                 }
             }
         }
