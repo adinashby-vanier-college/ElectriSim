@@ -1338,8 +1338,45 @@ public class SimulationController {
                     ", Redo stack size: " + redoStack.size());
         }
     }
-    @FXML private void handleCopy(ActionEvent event) {}
-    @FXML private void handlePaste(ActionEvent event) {}
+    @FXML private void handleCopy(ActionEvent event) {
+        if (selectedComponent != null) {
+            copiedComponent = cloneComponent(selectedComponent);
+            addFeedbackMessage("Component copied to clipboard", "success");
+        } else if (draggedExistingComponent != null) {
+            copiedComponent = cloneComponent(draggedExistingComponent);
+            addFeedbackMessage("Component copied to clipboard", "success");
+        } else {
+            addFeedbackMessage("No component selected to copy", "error");
+        }
+    }
+    @FXML private void handlePaste(ActionEvent event) {
+        if (copiedComponent != null) {
+            // Clone the copied component
+            ComponentsController.ImageComponent newComponent = cloneComponent(copiedComponent);
+            // Offset the position so it's not on top of the original
+            newComponent.x += 20;
+            newComponent.y += 20;
+            newComponent.updateEndPoints();
+
+            // Add parameter controls for the new component
+            ComponentsController.generateParameterControls(newComponent, parametersPane);
+
+            // Create graph button for the new component
+            createGraphButton(newComponent);
+            // Create graph button for the new component
+            createGraphButton(newComponent);
+            // Add to drawables and update UI
+            drawables.add(newComponent);
+            if (!isUndoRedoOperation) {
+                undoStack.push(new AddComponentAction(drawables, parametersPane, this, newComponent));
+                redoStack.clear();
+            }
+            redrawCanvas();
+            addFeedbackMessage("Component pasted successfully", "success");
+        } else {
+            addFeedbackMessage("No component in clipboard", "error");
+        }
+    }
     @FXML private void handleDelete(ActionEvent event) {
         if (selectedWire != null) {
             // Store wire for undo
@@ -1382,11 +1419,68 @@ public class SimulationController {
             //updateCircuitAnalysis();
         }
     }
-    @FXML private void handleSelectAll(ActionEvent event) {}
+    @FXML private void handleSelectAll(ActionEvent event) {
+        // Select the first available component (if any)
+        for (ComponentsController.Drawable drawable : drawables) {
+            if (drawable instanceof ComponentsController.ImageComponent) {
+                ComponentsController.ImageComponent component = (ComponentsController.ImageComponent) drawable;
+                selectedComponent = component;
+                // Visually indicate selection
+                floatingComponentImage.setImage(component.image);
+                floatingComponentImage.setFitWidth(component.width);
+                floatingComponentImage.setFitHeight(component.height);
+                floatingComponentImage.setRotate(component.rotation);
+                currentRotation = component.rotation;
+                selectedImageWidth = component.width;
+                selectedImageHeight = component.height;
+                floatingComponentImage.setVisible(true);
+                redrawCanvas();
+                break; // Only select the first one found
+            }
+        }
+    }
     @FXML private void handleColor(ActionEvent event) {}
     @FXML private void handleName(ActionEvent event) {}
-    @FXML private void handleMaximizeGraph(ActionEvent event) {}
-    @FXML private void handleMinimizeGraph(ActionEvent event) {}
+    @FXML private void handleMaximizeGraph(ActionEvent event) {
+        if (graphContainer != null) {
+            // Store the current size and position
+            graphContainer.setPrefWidth(Double.MAX_VALUE);
+            graphContainer.setPrefHeight(Double.MAX_VALUE);
+
+            // Make the graph container take up the full space
+            graphContainer.setMaxWidth(Double.MAX_VALUE);
+            graphContainer.setMaxHeight(Double.MAX_VALUE);
+
+            // Adjust the layout to take up more space
+            mainPane.setRight(graphContainer);
+
+            // Update the button text
+            Button maximizeButton = (Button) event.getSource();
+            maximizeButton.setText("Minimize Graph");
+
+            addFeedbackMessage("Graph maximized", "info");
+        }
+    }
+    @FXML private void handleMinimizeGraph(ActionEvent event) {
+        if (graphContainer != null) {
+            // Restore default size
+            graphContainer.setPrefWidth(437.0);
+            graphContainer.setPrefHeight(500.0);
+
+            // Reset max constraints
+            graphContainer.setMaxWidth(437.0);
+            graphContainer.setMaxHeight(500.0);
+
+            // Restore original layout
+            mainPane.setRight(null);
+
+            // Update the button text
+            Button minimizeButton = (Button) event.getSource();
+            minimizeButton.setText("Maximize Graph");
+
+            addFeedbackMessage("Graph minimized", "info");
+        }
+    }
     @FXML public void handleOpenSettings(ActionEvent event) {
         settingsOverlay.setVisible(true);
     }
