@@ -83,6 +83,7 @@ public class SimulationController {
     boolean positiveConnected = false;
     boolean negativeConnected = false;
 
+    String output = "";
 
     // Initialization
     @FXML
@@ -668,10 +669,21 @@ public class SimulationController {
 
     }
 
+    private Set<ComponentsController.Drawable> totalVisited = new HashSet<>();
+
+    private void addUpAddTheComponents () {
+        for (ComponentsController.Drawable currentComponent: drawables) {
+            double startX, startY, endX, endY;
+            if (!totalVisited.contains(currentComponent)) {
+            }
+        }
+    }
+
 
 
     private boolean traverseCircuit(double startX, double startY, double initialX, double initialY, ComponentsController.Drawable currentDraw, Set<ComponentsController.Drawable> visited) {
         // If we've reached the initial point and visited at least one component, we've found a closed circuit
+        totalVisited = visited;
         if (positiveConnected && negativeConnected) {
             addFeedbackMessage("Found closed circuit! Reached initial point.", "success");
             return true;
@@ -1226,11 +1238,14 @@ public class SimulationController {
                         String message = "The info of the following component: " + ((ComponentsController.ImageComponent) ed.component).componentType + " from node " + ed.from.id +" to node " +ed.to.id
                                 + " has resistance of " + ed.component.getResistance() + ", " + " current of " + ed.component.getCurrent() + " and voltage of " + ed.component.getVoltage();
                         addFeedbackMessage(message,"info");
+                        output = output + "\n" + message;
 
                     }
                 }
             }
             String message = "The Req of the main line is: " + totalResistanceSeries + " and current flowing on it is: " + currentSeries;
+            output = output + "\n" + message;
+            System.out.println(output);
             addFeedbackMessage(message, "info");
 
         }

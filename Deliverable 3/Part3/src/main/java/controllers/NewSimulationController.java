@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 
 public class NewSimulationController {
 
+    private String filePath;
     @FXML
     private TextField simulationNameField;
 
@@ -58,13 +59,13 @@ public class NewSimulationController {
 
     public void handleNewSimulation(ActionEvent event) {
         String simulationName = simulationNameField.getText().trim();
-
         if (simulationName.isEmpty()) {
             errorLabel.setText("Error: Simulation name is required.");
             errorLabel.setStyle("-fx-text-fill: red;");
         } else {
             errorLabel.setText("");
             System.out.println("Starting new simulation: " + simulationName);
+            filePath = "src/main/resources/json/" + simulationName + ".json";
             switchRoot("/fxml/simulation.fxml", event);
         }
     }
@@ -77,11 +78,12 @@ public class NewSimulationController {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
+            SimulationController controller = loader.getController();
+            controller.setFile(filePath);
+            System.out.println(filePath);
             scene.setRoot(root);
-
             stage.setFullScreen(true);
 
         } catch (IOException e) {

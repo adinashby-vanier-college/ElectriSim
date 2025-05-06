@@ -23,7 +23,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import app.saveLoadExtender;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Path;
 import java.util.*;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.CategoryAxis;
@@ -50,6 +55,7 @@ public class SimulationController {
 
 
     // Simulation State
+    private String currentFile;
     private static final double EPSILON = 1e-6; //For more accurate double comparison
     private final List<ComponentsController.Drawable> drawables = new ArrayList<>();
     private final double gridSize = 20; // Grid size for snapping
@@ -91,6 +97,7 @@ public class SimulationController {
 
     private CircuitAnalyzerTest.CircuitGraph CG = new CircuitAnalyzerTest.CircuitGraph();
 
+    private String outPut;
     //Checking simulation status
     boolean hasVoltmeter = false;
     boolean hasAmmeter = false;
@@ -111,11 +118,9 @@ public class SimulationController {
     public void initialize() {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefWidth(newVal.doubleValue()));
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> mainPane.setPrefHeight(newVal.doubleValue()));
-
         Group zoomGroup = new Group();
         zoomGroup.getChildren().add(canvasContainer);
         scrollPane.setContent(zoomGroup);
-
         setupKeybindsSection();
         setupHelpSection();
         createBuilder();
@@ -124,12 +129,14 @@ public class SimulationController {
         setupFloatingImage();
         setupCanvasClickPlacement();
         setupWireDrawing();
-
         // Initialize circuit analyzer
         circuitAnalyzer = new CircuitAnalyzer(drawables);
-
         // Store this instance in the parametersPane properties
         parametersPane.getProperties().put("simulationController", this);
+    }
+
+    public void setUpWithFile() {
+        importingSave();
     }
 
     private void setupKeybindsSection() {
@@ -976,7 +983,9 @@ public class SimulationController {
                     //This is the node for negative end
                     CG.addNode(numberOfComp+"",battStartX,battStartY,battEndX,battEndY);
                     System.out.println("Main Branch:");
+                    outPut = outPut + "\nMain Branch:";
                     System.out.println("Node "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created (- end)");
+                    outPut = outPut + "\nNode "+ CircuitAnalyzerTest.CircuitGraph.nodes.get(numberOfComp+"").id +" is created (- end)";
                     break;
                 }
             }
@@ -984,21 +993,25 @@ public class SimulationController {
 
         if (powerSupply == null) {
             addFeedbackMessage("No power supply found in the circuit.", "error");
+            outPut = outPut + "\nNo power supply found in the circuit.";
             return false;
         }
 
         // Start traversal from the power supply
 
         addFeedbackMessage("Starting circuit verification from power supply...", "info");
+        outPut = outPut + "\nStarting circuit verification from power supply...";
         Set<ComponentsController.Drawable> visited = new HashSet<>();
         boolean isClosed = traverseCircuit(powerSupply.startX, powerSupply.startY,
                 powerSupply.startX, powerSupply.startY, powerSupply,visited);
 
         if (isClosed) {
             addFeedbackMessage("Circuit is closed! Found a complete path.", "success");
+            outPut = outPut + "\nCircuit is closed! Found a complete path.";
             return true;
         } else {
             addFeedbackMessage("Circuit is open! No complete path found.", "error");
+            outPut = outPut + "\nCircuit is open! No complete path found.";
             return false;
         }
 
@@ -1008,6 +1021,7 @@ public class SimulationController {
         // If we've reached the initial point and visited at least one component, we've found a closed circuit
         if (positiveConnected && negativeConnected) {
             addFeedbackMessage("Found closed circuit! Reached initial point.", "success");
+            outPut = outPut + "\nFound closed circuit! Reached initial point.";
             return true;
         }
         /*
@@ -1261,16 +1275,17 @@ public class SimulationController {
     }
 
 
-
-    @FXML private void handleSave(ActionEvent event) {}
-    @FXML private void handleSaveAndExit(ActionEvent event) { System.exit(0); }
     @FXML private void handleExportJSON(ActionEvent event) {
-        String filename = "src/main/resources/json/save1.json";
+        String filename = currentFile;
         sl.jsonWriter(filename, drawables);
     }
     @FXML private void handleExportCSV(ActionEvent event) {
+       importingSave();
+    }
+
+    private void importingSave () {
         GraphicsContext gc = builder.getGraphicsContext2D();
-        String filename = "src/main/resources/json/save1.json";
+        String filename = currentFile;
         resetBuilder();
         for (ComponentsController.Drawable draw: sl.jsonReader(filename)) {
             if (draw instanceof ComponentsController.ImageComponent) {
@@ -1286,12 +1301,20 @@ public class SimulationController {
                 drawables.add(draw);
                 draw.draw(gc);
             }
-
         }
         System.out.println(drawables.toString());
     }
-    @FXML private void handleExportText(ActionEvent event) {}
-    @FXML private void handleExportImage(ActionEvent event) {}
+    @FXML private void handleExportText(ActionEvent event) {
+        try {
+            String data = outPut;
+            Path outputPath = Path.of("src/main/resources/txt/debuggingLog.txt");
+            FileWriter writer = new FileWriter(outputPath.toFile());
+            writer.write(data);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @FXML private void handleExit(ActionEvent event) { System.exit(0); }
     @FXML private void handleUndo(ActionEvent event) {
         if (!undoStack.isEmpty()) {
@@ -1540,6 +1563,8 @@ public class SimulationController {
             }
         }
     }
+
+    String output;
 
     private void temporaryAnalysis() {
         if (positiveConnected && negativeConnected) {
@@ -1837,5 +1862,9 @@ public class SimulationController {
                 }
             }
         }
+    }
+
+    public void setFile(String filePath) {
+        currentFile = filePath;
     }
 }
