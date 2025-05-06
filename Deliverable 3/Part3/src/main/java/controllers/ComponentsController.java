@@ -263,7 +263,7 @@ public class ComponentsController {
             ComboBox<String> stateComboBox = new ComboBox<>();
             stateComboBox.getItems().addAll("Open", "Closed");
             stateComboBox.setValue(switch_.isClosed ? "Closed" : "Open");
-            stateComboBox.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: #FFFFFF;");
+            stateComboBox.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000;");
             stateComboBox.setCellFactory(lv -> new ListCell<String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
